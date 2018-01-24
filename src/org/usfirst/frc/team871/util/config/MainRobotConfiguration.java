@@ -1,4 +1,4 @@
-package org.usfirst.frc.team871.tools;
+package org.usfirst.frc.team871.util.config;
 
 import com.kauailabs.navx.frc.AHRS;
 

@@ -1,4 +1,4 @@
-package org.usfirst.frc.team871.tools;
+package org.usfirst.frc.team871.util;
 
 /**
  * sets time and then waits

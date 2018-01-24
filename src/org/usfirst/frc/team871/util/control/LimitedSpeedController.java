@@ -1,4 +1,6 @@
-package org.usfirst.frc.team871.tools;
+package org.usfirst.frc.team871.util.control;
+
+import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
 import edu.wpi.first.wpilibj.SpeedController;
 

@@ -1,4 +1,4 @@
-package org.usfirst.frc.team871.tools;
+package org.usfirst.frc.team871.util.joystick;
 
 /**
  * Maps all the physical buttons on the XBox 360 controller to thier button
@@ -51,6 +51,9 @@ public enum XBoxButtons {
      */
     RIGHTSTICK(10);
 
+	/**
+	 * the value
+	 */
     private int value;
 
     XBoxButtons(int num) {
@@ -60,7 +63,7 @@ public enum XBoxButtons {
     /**
      * Returns the mapping to the button number in software.
      * 
-     * @return Int containing the button number
+     * @return int containing the button number
      */
     int getValue() {
         return value;

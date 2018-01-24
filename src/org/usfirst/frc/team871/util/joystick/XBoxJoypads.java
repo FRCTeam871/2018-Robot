@@ -1,4 +1,4 @@
-package org.usfirst.frc.team871.tools;
+package org.usfirst.frc.team871.util.joystick;
 
 /**
  * Maps the physical joypads to their POV numbers in software.

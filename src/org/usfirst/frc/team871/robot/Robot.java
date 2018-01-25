@@ -4,6 +4,7 @@
 package org.usfirst.frc.team871.robot;
 
 import org.usfirst.frc.team871.subsystems.DriveTrain;
+import org.usfirst.frc.team871.subsystems.Grabber;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
 import org.usfirst.frc.team871.util.joystick.ButtonTypes;
@@ -18,6 +19,7 @@ public class Robot extends IterativeRobot {
 	private DriveTrain drive;
 	private IRobotConfiguration config;
 	private EnhancedXBoxController xbox;
+	private Grabber grabber;
 	
 	@Override
 	public void robotInit() {
@@ -26,6 +28,7 @@ public class Robot extends IterativeRobot {
 		drive = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
 		xbox.setButtonMode(XBoxButtons.START, ButtonTypes.TOGGLE);
 		xbox.setButtonMode(XBoxButtons.BACK, ButtonTypes.RISING);
+		grabber = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
 	}
 
 	@Override
@@ -45,10 +48,16 @@ public class Robot extends IterativeRobot {
 		} else {
 			drive.driveFieldOriented(xbox.getValue(XBoxAxes.LEFTX), xbox.getValue(XBoxAxes.LEFTY), xbox.getValue(XBoxAxes.RIGHTX));
 		}
-		
 		if (xbox.getValue(XBoxButtons.BACK)) {
 			drive.resetGyro();
 		}
+		if(xbox.getValue(XBoxButtons.A)) {
+			grabber.toggleGrabber();
+		}
+		if(xbox.getValue(XBoxButtons.B)) {
+			grabber.ejectCube();
+		}
+		
 	}
 
 	@Override

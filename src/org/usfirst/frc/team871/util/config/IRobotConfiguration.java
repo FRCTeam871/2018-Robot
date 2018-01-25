@@ -4,6 +4,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedController;
 
 public interface IRobotConfiguration {	
@@ -17,5 +18,7 @@ public interface IRobotConfiguration {
 	public DigitalInput getCubeDetector();
 	public Encoder getEncoderUp();
 	public Encoder getEncoderBtm();
+	public Solenoid getGrabPiston();
+	public Solenoid getEjectPiston();
 	
 }

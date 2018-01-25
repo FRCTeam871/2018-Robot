@@ -5,6 +5,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 
@@ -25,7 +26,8 @@ public class MainRobotConfiguration implements IRobotConfiguration{
 	private final DigitalInput cubeDetect;
 	private final Encoder encoderBtm;
 	private final Encoder encoderUp;
-
+	private final Solenoid grabPiston;
+	private final Solenoid ejectPiston;
 	
 	private MainRobotConfiguration() {
 		//TODO get actual pins!
@@ -39,7 +41,8 @@ public class MainRobotConfiguration implements IRobotConfiguration{
 		cubeDetect   = new DigitalInput(-1);//TODO: Find port#
 		encoderUp    = new Encoder(-1,-1);  //TODO: Find port#
 		encoderBtm   = new Encoder(-1,-1);  //TODO: Find port#
-		
+		grabPiston   = new Solenoid(-1);
+		ejectPiston  = new Solenoid(-1);
 		
 	}
 	/**
@@ -98,6 +101,16 @@ public class MainRobotConfiguration implements IRobotConfiguration{
 	@Override
 	public SpeedController getLiftMotorUp() {
 		return liftMotorUp;
+	}
+	@Override
+	public Solenoid getGrabPiston() {
+		// TODO Auto-generated method stub
+		return grabPiston;
+	}
+	@Override
+	public Solenoid getEjectPiston() {
+		// TODO Auto-generated method stub
+		return ejectPiston;
 	}
 	
 }

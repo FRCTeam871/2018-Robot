@@ -1,7 +1,7 @@
 package org.usfirst.frc.team871.subsystems;
 
+import org.usfirst.frc.team871.util.PIDControl;
 import org.usfirst.frc.team871.util.control.LimitedSpeedController;
-import org.usfirst.frc.team871.util.sensor.DigitalLimitSwitch;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
@@ -11,6 +11,7 @@ public class SubLift {
 	private DigitalInput upperLimit;
 	private DigitalInput lowerLimit;
 	private Encoder encoder;
+	private PIDControl pid;
 	
 	public SubLift(LimitedSpeedController liftMotor) {
 		this.liftMotor = liftMotor;

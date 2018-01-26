@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj.Talon;
  * Contains all var*ables of robör 
  *                 *
  *******************/
-public class MainRobotConfiguration implements IRobotConfiguration{
-	private static MainRobotConfiguration config = null;
+public enum MainRobotConfiguration implements IRobotConfiguration {
+	DEFAULT;
 	
 	private final SpeedController frontLeft;
 	private final SpeedController rearLeft;
@@ -31,26 +31,19 @@ public class MainRobotConfiguration implements IRobotConfiguration{
 	
 	private MainRobotConfiguration() {
 		//TODO get actual pins!
-		frontLeft    = new Talon(0);
-		frontRight   = new Talon(1);
-		rearLeft     = new Talon(2);
-		rearRight    = new Talon(3);
-		liftMotorUp  = new Talon(4);
-		liftMotorBtm = new Talon(4);
+		frontLeft    = new Talon(-1); //TODO: Find port#
+		frontRight   = new Talon(-1); //TODO: Find port#
+		rearLeft     = new Talon(-1); //TODO: Find port#
+		rearRight    = new Talon(-1); //TODO: Find port#
+		liftMotorUp  = new Talon(-1); //TODO: Find port#
+		liftMotorBtm = new Talon(-1); //TODO: Find port#
 		gyro         = new AHRS(Port.kMXP); //TODO: Find port#
 		cubeDetect   = new DigitalInput(-1);//TODO: Find port#
 		encoderUp    = new Encoder(-1,-1);  //TODO: Find port#
 		encoderBtm   = new Encoder(-1,-1);  //TODO: Find port#
-		grabPiston   = new Solenoid(-1);
-		ejectPiston  = new Solenoid(-1);
+		grabPiston   = new Solenoid(-1); //TODO: Find port#
+		ejectPiston  = new Solenoid(-1); //TODO: Find port#
 		
-	}
-	/**
-	 * 
-	 * @return singleton of config that contains all robot objects
-	 */
-	public static IRobotConfiguration getConfiguration() {
-		return config != null ? config : (config = new MainRobotConfiguration());
 	}
 	
 	@Override

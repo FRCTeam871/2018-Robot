@@ -24,7 +24,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		xbox = new EnhancedXBoxController(0);
-		config = MainRobotConfiguration.getConfiguration();
+		config = MainRobotConfiguration.DEFAULT;
 		drive = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
 		xbox.setButtonMode(XBoxButtons.START, ButtonTypes.TOGGLE);
 		xbox.setButtonMode(XBoxButtons.BACK, ButtonTypes.RISING);

@@ -1,10 +1,11 @@
 
-//TODO: MAKE VARS AN INTERFACE THAT CAN  SWICTH BETWEEN EACH ROBOT INTERFACES
+//TODO: MAKE VARS AN INTERFACE THAT CAN SWICTH BETWEEN EACH ROBOT INTERFACES
 
 package org.usfirst.frc.team871.robot;
 
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.Grabber;
+import org.usfirst.frc.team871.subsystems.SubLift;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
 import org.usfirst.frc.team871.util.joystick.ButtonTypes;
@@ -21,14 +22,16 @@ public class Robot extends IterativeRobot {
 	private EnhancedXBoxController xbox;
 	private Grabber grabber;
 	
+	
 	@Override
 	public void robotInit() {
 		xbox = new EnhancedXBoxController(0);
-		config = MainRobotConfiguration.getConfiguration();
+		config = MainRobotConfiguration.DEFAULT;
 		drive = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
 		xbox.setButtonMode(XBoxButtons.START, ButtonTypes.TOGGLE);
 		xbox.setButtonMode(XBoxButtons.BACK, ButtonTypes.RISING);
 		grabber = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
+		
 	}
 
 	@Override

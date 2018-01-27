@@ -21,4 +21,5 @@ public interface IRobotConfiguration {
 	public Solenoid getGrabPiston();
 	public Solenoid getEjectPiston();
 	
+	
 }

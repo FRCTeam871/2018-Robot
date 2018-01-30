@@ -1,15 +1,25 @@
 package org.usfirst.frc.team871.subsystems;
 
-import org.usfirst.frc.team871.robot.CompositeLimitedSpeedController;
+import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 
 import edu.wpi.first.wpilibj.Encoder;
-
+/**
+ * This class controls both parts of the lift
+ * @author Team871
+ *
+ */
 public class SuperLift {
 	private SubLift upperLift;
 	private SubLift lowerLift;
 	private final int baseHeight = -1; //TODO find this one
 	private SetpointHeights lifterHeight;
-	
+	/**
+	 * 
+	 * @param upperLiftMotor The Motor that controls the upper part of the lift
+	 * @param upperEncoder Measures the distance of the upper part of the lift
+	 * @param lowerLiftMotor The Motor that controls the lower part of the lift
+	 * @param lowerEncoder Measures the distance of the lower part of the lift
+	 */
 	public SuperLift(CompositeLimitedSpeedController upperLiftMotor,  
 			Encoder upperEncoder, 
 			CompositeLimitedSpeedController lowerLiftMotor, 
@@ -21,7 +31,10 @@ public class SuperLift {
 		lifterHeight = SetpointHeights.GROUND;
 		
 	}
-	
+	/**
+	 * Controls the speed of the lift on the superLift
+	 * @param speed The speed of the lift
+	 */
 	public void moveLift(double speed) {
 		upperLift.setEnablePID(false);
 		lowerLift.setEnablePID(false);
@@ -29,37 +42,55 @@ public class SuperLift {
 		lowerLift.moveLift(speed);
 		lifterHeight = SetpointHeights.MANUAL;
 	}
-	
+	/**
+	 * Resets the encoder for the upper and lower lift
+	 */
 	public void resetEncoder() {
 		upperLift.resetEncoder();
 		lowerLift.resetEncoder();
 	}
-	
+	/**
+	 * 
+	 * @param setPoint sets the height of the lift in inches above the floor 
+	 */
 	public void setHeight(double setPoint) {
 		setPoint -= baseHeight;
 		setPoint = setPoint/2;
 		upperLift.setHeight(setPoint);
 		lowerLift.setHeight(setPoint);
 	}
-	
+	/**
+	 * Moves the lifter to the highest setpoint
+	 */
 	public void setTop() {
 		lifterHeight = SetpointHeights.SCALE_HIGH;
 	}
-	
+	/**
+	 * Moves the lifter to the lowest setpoint
+	 */
 	public void setBottom() {
 		lifterHeight = SetpointHeights.GROUND;
 	}
-	
+	/**
+	 * gets the height of the grabber off the ground in inches
+	 * @return returns the height of the grabber off the ground in inches
+	 */
 	public int getHeight() {
 		return (upperLift.getHeight()+lowerLift.getHeight()+baseHeight);
 	}
-	
+	/**
+	 * Enables PID in the upper and lower lifts
+	 */
 	public void setEnablePID() {
 		upperLift.setEnablePID(true);
 		lowerLift.setEnablePID(true);
 		
 	}
-	
+	/**
+	 * Describes all states of the lifts
+	 * @author Team871
+	 *
+	 */
 	private enum SetpointHeights{
 		GROUND(-1),
 		LOW_SWITCH(-1),
@@ -67,14 +98,20 @@ public class SuperLift {
 		SCALE_MID(-1),
 		SCALE_HIGH(-1),
 		MANUAL(-1);
-		
+		/**
+		 * Describes the height of the setpoint in inches
+		 */
 		int height;
 		
 		private SetpointHeights(int height) {
 			this.height = height;
 		}
 	}
-	
+	/**
+	 * Increments the setpoint of the lift
+	 * This method cannot increment from higher than the highest setpoint
+	 * Manual will always set to the highest available state 
+	 */
 	public void increaseSetpoint() {
 		switch(lifterHeight) {
 			case SCALE_HIGH:
@@ -106,7 +143,11 @@ public class SuperLift {
 		}
 		setHeight(lifterHeight.height);
 	}
-	
+	/**
+	 * Decrements the setpoint of the lift
+	 * This method cannot decrement from lower than the ground setpoint'
+	 * Manual case will always set to the nearest lowest state 
+	 */
 	public void decreaseSetpoint() {
 		
 		switch(lifterHeight) {

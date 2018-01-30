@@ -11,6 +11,7 @@ import org.usfirst.frc.team871.subsystems.Grabber;
 import org.usfirst.frc.team871.subsystems.SuperLift;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
+import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 import org.usfirst.frc.team871.util.joystick.ButtonTypes;
 import org.usfirst.frc.team871.util.joystick.EnhancedXBoxController;
 import org.usfirst.frc.team871.util.joystick.XBoxAxes;

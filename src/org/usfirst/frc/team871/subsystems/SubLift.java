@@ -1,23 +1,34 @@
 package org.usfirst.frc.team871.subsystems;
 
 
-import org.usfirst.frc.team871.robot.CompositeLimitedSpeedController;
+import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
-
+/**
+ * This class controls one part of the lift
+ * @author Team871
+ *
+ */
 public class SubLift {
 	private CompositeLimitedSpeedController liftMotor;
 	private Encoder encoder;
 	private PIDController pid;
-	
+	/**
+	 * Controls the bottom part of the lift
+	 * @param liftMotor the motor that controls the lift 
+	 * @param encoder Measures the distance of the bottom part of the lift
+	 */
 	public SubLift(CompositeLimitedSpeedController liftMotor, Encoder encoder) {
 		this.liftMotor = liftMotor;
 		this.encoder = encoder;
 		
 		pid = new PIDController(1,1,1, encoder, liftMotor);
 	}
-	
+	/**
+	 * Controls the speed of the lift
+	 * @param speed How fast the lift moves
+	 */
 	public void moveLift(double speed) {
 		liftMotor.set(speed);
 	}
@@ -37,7 +48,10 @@ public class SubLift {
 			return false;
 		}
 	}
-	
+	/**
+	 * Gets the height of the encoder
+	 * @return returns the distance of the encoder
+	 */
 	public int getHeight() {
 		return (int) encoder.getDistance();
 	}

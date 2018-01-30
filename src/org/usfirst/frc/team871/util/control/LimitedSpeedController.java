@@ -5,10 +5,10 @@ import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 import edu.wpi.first.wpilibj.SpeedController;
 
 public class LimitedSpeedController implements SpeedController {
-    SpeedController motor;
+    private SpeedController motor;
 
-    ILimitSwitch upper;
-    ILimitSwitch lower;
+    private ILimitSwitch upper;
+    private ILimitSwitch lower;
 
     public LimitedSpeedController(SpeedController motor, ILimitSwitch upper, ILimitSwitch lower, boolean inverted) {
         this.motor = motor;
@@ -64,5 +64,13 @@ public class LimitedSpeedController implements SpeedController {
     public void stopMotor() {
         motor.stopMotor();
     }
-
+    
+    public ILimitSwitch getUpperLimit() {
+    	return upper;
+    }
+    
+    public ILimitSwitch getLowerLimit() {
+    	return lower;
+    	//DORIAN CODED THIS!!!!!
+    }
 }

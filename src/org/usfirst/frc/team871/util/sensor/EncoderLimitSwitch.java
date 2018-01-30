@@ -9,7 +9,7 @@ public class EncoderLimitSwitch implements ILimitSwitch {
 	
 	Encoder input;
 	
-	public EncoderLimitSwitch(Encoder input, int threshHold,boolean triggerAboveThreshHold) {
+	public EncoderLimitSwitch(Encoder input, int threshHold, boolean triggerAboveThreshHold) {
 		this.input = input;
 		this.threshHold = threshHold;
 		this.triggerAboveThreshHold = triggerAboveThreshHold;
@@ -25,10 +25,6 @@ public class EncoderLimitSwitch implements ILimitSwitch {
 	
 	@Override
 	public boolean isAtLimit() {
-		if(triggerAboveThreshHold) {
-			return input.get() > threshHold;
-		} else {
-			return input.get() < threshHold;
-		}
+		return triggerAboveThreshHold ? input.get() > threshHold : input.get() < threshHold;
 	}
 }

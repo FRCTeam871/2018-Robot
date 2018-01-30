@@ -29,7 +29,9 @@ public class Grabber {
 		return cubeSensor.get();
 	}
 	
+	//open it up, push it out, retract the piston
 	public void ejectCube() {
+		toggleGrabber();
 		ejectPiston.set(true);
 		Timer tim = new Timer();
 		tim.schedule(new TimerTask() {

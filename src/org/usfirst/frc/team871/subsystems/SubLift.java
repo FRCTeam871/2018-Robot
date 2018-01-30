@@ -1,23 +1,18 @@
 package org.usfirst.frc.team871.subsystems;
 
-import org.usfirst.frc.team871.util.PIDControl;
-import org.usfirst.frc.team871.util.control.LimitedSpeedController;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+import org.usfirst.frc.team871.robot.CompositeLimitedSpeedController;
+
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 
 public class SubLift {
-	private LimitedSpeedController liftMotor;
-	private DigitalInput upperLimit;
-	private DigitalInput lowerLimit;
+	private CompositeLimitedSpeedController liftMotor;
 	private Encoder encoder;
 	private PIDController pid;
 	
-	public SubLift(LimitedSpeedController liftMotor, DigitalInput upperLimit, DigitalInput lowerLimit, Encoder encoder) {
+	public SubLift(CompositeLimitedSpeedController liftMotor, Encoder encoder) {
 		this.liftMotor = liftMotor;
-		this.upperLimit = upperLimit;
-		this.lowerLimit = lowerLimit;
 		this.encoder = encoder;
 		
 		pid = new PIDController(1,1,1, encoder, liftMotor);
@@ -34,13 +29,17 @@ public class SubLift {
 	 * 
 	 */
 	public boolean resetEncoder() {
-		if(lowerLimit.get()) {
+		if(liftMotor.isAtLowerLimit()) {
 			encoder.reset();
 			return true;
 		} else {
 			liftMotor.set(-1);
 			return false;
 		}
+	}
+	
+	public int getHeight() {
+		return (int) encoder.getDistance();
 	}
 	/**
 	 * It used to set the set point of the lifter. This is a value in inches.
@@ -52,7 +51,7 @@ public class SubLift {
 	/**
 	 * Enables and disables the PID. 
 	 */
-	public void setEnable(boolean enable) {
+	public void setEnablePID(boolean enable) {
 		
 		if(enable) {
 			pid.enable();

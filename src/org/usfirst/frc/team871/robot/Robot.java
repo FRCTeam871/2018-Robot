@@ -14,6 +14,9 @@ import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 import org.usfirst.frc.team871.util.joystick.ButtonTypes;
 import org.usfirst.frc.team871.util.joystick.EnhancedXBoxController;
+import org.usfirst.frc.team871.util.joystick.IControlScheme;
+import org.usfirst.frc.team871.util.joystick.InitialControlScheme;
+import org.usfirst.frc.team871.util.joystick.POVDirections;
 import org.usfirst.frc.team871.util.joystick.XBoxAxes;
 import org.usfirst.frc.team871.util.joystick.XBoxButtons;
 import org.usfirst.frc.team871.util.sensor.EncoderLimitSwitch;
@@ -25,26 +28,16 @@ public class Robot extends IterativeRobot {
 		
 	private DriveTrain drive;
 	private IRobotConfiguration config;
-	private EnhancedXBoxController xbox;
-	private EnhancedXBoxController xbox2;
 	private Grabber grabber;
 	private SuperLift lift;
+	private IControlScheme controls;
 	
 	@Override
 	public void robotInit() {
-		xbox = new EnhancedXBoxController(0);
-		xbox2 = new EnhancedXBoxController(1);
+		
+		controls = InitialControlScheme.DEFAULT;
 		config = MainRobotConfiguration.DEFAULT;
 		drive = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
-		xbox.setButtonMode(XBoxButtons.START, ButtonTypes.TOGGLE);
-		xbox.setButtonMode(XBoxButtons.BACK, ButtonTypes.RISING);
-		xbox2.setButtonMode(XBoxButtons.A, ButtonTypes.RISING);
-		xbox2.setButtonMode(XBoxButtons.B, ButtonTypes.RISING);
-		xbox2.setButtonMode(XBoxButtons.LBUMPER, ButtonTypes.RISING);
-		xbox2.setButtonMode(XBoxButtons.RBUMPER, ButtonTypes.RISING);
-		
-		
-		
 		grabber = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
 		
 		
@@ -76,37 +69,37 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		if(xbox.getValue(XBoxButtons.START)) {
-			drive.driveRobotOriented(xbox.getValue(XBoxAxes.LEFTX), xbox.getValue(XBoxAxes.LEFTY), xbox.getValue(XBoxAxes.RIGHTX));
+		if(controls.getToggleOrientationButton()) {
+			drive.driveRobotOriented(controls.getXAxis(), controls.getYAxis(), controls.getRotationAxis());
 		} else {
-			drive.driveFieldOriented(xbox.getValue(XBoxAxes.LEFTX), xbox.getValue(XBoxAxes.LEFTY), xbox.getValue(XBoxAxes.RIGHTX));
+			drive.driveFieldOriented(controls.getXAxis(), controls.getYAxis(), controls.getRotationAxis());
 		}
-		if(xbox.getValue(XBoxButtons.BACK)) {
+		if(controls.getResetGyroButton()) {
 			drive.resetGyro();
 		}
-		if(xbox2.getValue(XBoxButtons.A)) {
+		if(controls.getToggleGrabberButton()) {
 			grabber.toggleGrabber();
 		}
-		if(xbox2.getValue(XBoxButtons.B)) {
+		if(controls.getCubeEjectButton()) {
 			grabber.ejectCube();
 		}
 		
-		if(xbox2.getValue(XBoxButtons.LBUMPER)) {
+		if(controls.getDecreaseSetpointButton()) {
 			lift.decreaseSetpoint();
 		}
-		if(xbox2.getValue(XBoxButtons.RBUMPER)) {
+		if(controls.getIncreaseSetpointButton()) {
 			lift.increaseSetpoint();
 		}
 		
-		if(xbox2.getValue(XBoxAxes.TRIGGER) != 0) {
-			lift.moveLift(xbox2.getValue(XBoxAxes.TRIGGER));
+		if(controls.getLiftAxis() != 0) {
+			lift.moveLift(controls.getLiftAxis());
 		}
 		
-		if(xbox2.getPOV() < 46 && xbox2.getPOV() > 314) {
+		if(controls.getPOV() ==  POVDirections.UP || controls.getPOV() ==  POVDirections.UP_RIGHT || controls.getPOV() ==  POVDirections.UP_LEFT) {
 			lift.setTop();
 		}
 		
-		if(xbox2.getPOV() < 226 && xbox2.getPOV() > 134) {
+		if(controls.getPOV() ==  POVDirections.DOWN || controls.getPOV() ==  POVDirections.DOWN_RIGHT || controls.getPOV() ==  POVDirections.DOWN_LEFT) {
 			lift.setBottom();
 		}
 		

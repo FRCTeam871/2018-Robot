@@ -28,7 +28,7 @@ public class EnhancedXBoxController extends Joystick {
 
     ButtonTypes[] buttonMode;// Each element is the emulated type of the
                              // corresponding button.
-
+    final int joyPad = 1;
     /**
      * Creates a new Enhanced Controller on the specified port.
      * 
@@ -208,26 +208,59 @@ public class EnhancedXBoxController extends Joystick {
 
         return adjustedValue;
     }
-
+    
     /**
-     * Reads the value of the specified joypad.
-     * 
-     * @param pad
-     *            The joypad to read
-     * @return Int containing the angle of the angle of the joypad. It will be a
-     *         multiple of 45 degrees representing the position that was
-     *         pressed. -1 will be returned if nothing was pressed.
-     */
-    public int getValue(XBoxJoypads pad) {
-        /*
-         * Gets the joypad value. Returns an int representing the angle in
-         * degrees about the top of the pad of the position of the direction
-         * pressed. Will only ever be multiples of 45 or -1 if nothing is being
-         * pressed.
-         */
-        return super.getPOV(pad.getValue());
-    }
-
+	 * @deprecated Use getEnhancedPOV.
+	 * 
+	 */
+	public int getPOV(int pov) {
+		return super.getPOV();
+	}
+	
+	/**
+	 * @deprecated Use getEnhancedPOV.
+	 * 
+	 */
+	public int getPOV() {
+		return super.getPOV(0);
+	}
+    
+    public POVDirections getEnhancedPOV() {
+    	POVDirections dir = POVDirections.NEUTRAL; 
+    	
+    	switch(super.getPOV(0)) {
+    		case 0:
+    			dir = POVDirections.UP;
+    			break;
+    		case 45:
+    			dir = POVDirections.UP_RIGHT;
+    			break;
+    		case 90:
+    			dir = POVDirections.RIGHT;
+    			break;
+    		case 135:
+    			dir = POVDirections.DOWN_RIGHT;
+    			break;
+    		case 180:
+    			dir = POVDirections.DOWN;
+    			break;
+    		case 225:
+    			dir = POVDirections.DOWN_LEFT;
+    			break;
+    		case 270:
+    			dir = POVDirections.LEFT;
+    			break;
+    		case 315:
+    			dir = POVDirections.UP_LEFT;
+    			break;
+    		case -1:
+    			dir = POVDirections.NEUTRAL;
+    			break;
+    	}
+        return dir;
+    
+    	}
+    
     /**
      * Reads the raw value of the specified button. This method does not respect
      * emulated types.

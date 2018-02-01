@@ -1,4 +1,10 @@
-package org.usfirst.frc.team871.util.joystick;
+package org.usfirst.frc.team871.util.config;
+
+import org.usfirst.frc.team871.util.joystick.ButtonTypes;
+import org.usfirst.frc.team871.util.joystick.EnhancedXBoxController;
+import org.usfirst.frc.team871.util.joystick.POVDirections;
+import org.usfirst.frc.team871.util.joystick.XBoxAxes;
+import org.usfirst.frc.team871.util.joystick.XBoxButtons;
 
 public enum InitialControlScheme implements IControlScheme{
 	DEFAULT;

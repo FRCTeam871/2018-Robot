@@ -1,20 +1,24 @@
 package org.usfirst.frc.team871.util;
 
 /**
- * sets time and then waits
+ * Is used to determine when the time is up
+ * @author Team871
+ *
  */
 public class StopWatch {
-    /**
-     * lets you know the time
-     */
+    
     private long appriseTime;
-
+    /**
+     * sets the time at which the timer will be up
+     * @param waitTime The amount of time the timer waits until being up 
+     */
     public StopWatch(long waitTime) {
         appriseTime = System.currentTimeMillis() + waitTime;
     }
 
     /**
-     * let's you know if the time has passed
+     * Determines if the wait time is up
+     * @return Returns true if the appriseTime has passed
      */
     public boolean timeUp() {
         return (appriseTime <= System.currentTimeMillis());

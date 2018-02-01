@@ -4,12 +4,24 @@ import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
 import edu.wpi.first.wpilibj.SpeedController;
 
+/**
+ * This class is able to control the motor with the use of limit switches
+ * @author Team871
+ *
+ */
 public class LimitedSpeedController implements SpeedController {
     private SpeedController motor;
 
     private ILimitSwitch upper;
     private ILimitSwitch lower;
-
+    
+    /**
+     *
+     * @param motor The speed controller being limited
+     * @param upper The upper limit switch
+     * @param lower The lower limit switch
+     * @param inverted Determines if the speed controller output should be negated
+     */
     public LimitedSpeedController(SpeedController motor, ILimitSwitch upper, ILimitSwitch lower, boolean inverted) {
         this.motor = motor;
         this.upper = upper;
@@ -18,6 +30,12 @@ public class LimitedSpeedController implements SpeedController {
         motor.setInverted(inverted);
     }
 
+    /**
+     * The motor is not inverted by default
+     * @param motor The speed controller being limited
+     * @param upper The upper limit switch
+     * @param lower The lower limit switch
+     */
     public LimitedSpeedController(SpeedController motor, ILimitSwitch upper, ILimitSwitch lower) {
         this.motor = motor;
         this.upper = upper;
@@ -65,12 +83,19 @@ public class LimitedSpeedController implements SpeedController {
         motor.stopMotor();
     }
     
+    /**
+     * 
+     * @return Returns the upper limit
+     */
     public ILimitSwitch getUpperLimit() {
     	return upper;
     }
     
+    /**
+     * 
+     * @return Returns the lower limit
+     */
     public ILimitSwitch getLowerLimit() {
     	return lower;
-    	//DORIAN CODED THIS!!!!!
     }
 }

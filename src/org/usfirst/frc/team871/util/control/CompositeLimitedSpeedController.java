@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
 import edu.wpi.first.wpilibj.SpeedController;
-
+/**
+ * Uses speed controllers while using microswitches and encoders as limit switches
+ * @author Team871
+ *
+ */
 public class CompositeLimitedSpeedController implements SpeedController {
 
 	private SpeedController motor;
@@ -13,7 +17,13 @@ public class CompositeLimitedSpeedController implements SpeedController {
 	private ArrayList<ILimitSwitch> upperLimitss;
 	private ArrayList<ILimitSwitch> lowerLimitss;
 	
-	
+	/**
+	 * 
+	 * @param motor The speed controller being limited
+	 * @param upperLimitss Arraylist of upper limit switches
+	 * @param lowerLimitss Arraylist of lower limit switches
+	 * @param inverted Determines if the speed controller output should be negated
+	 */
 	public CompositeLimitedSpeedController(SpeedController motor, ArrayList<ILimitSwitch> upperLimitss, ArrayList<ILimitSwitch> lowerLimitss, boolean inverted) {
 		this.motor = motor;
 		this.upperLimitss = upperLimitss;
@@ -22,6 +32,12 @@ public class CompositeLimitedSpeedController implements SpeedController {
 		motor.setInverted(inverted);
 	}
 	
+	/**
+	 * The motor is not inverted by default
+	 * @param motor The speed controller being limited
+	 * @param upperLimitss Arraylist of upper limit switches
+	 * @param lowerLimitss Arraylist of lower limit switches
+	 */
 	public CompositeLimitedSpeedController(SpeedController motor, ArrayList<ILimitSwitch> upperLimitss, ArrayList<ILimitSwitch> lowerLimitss) {
 		this.motor = motor;
 		this.upperLimitss = upperLimitss;
@@ -29,7 +45,7 @@ public class CompositeLimitedSpeedController implements SpeedController {
 		
 		motor.setInverted(false);
 	}
-
+	
 	@Override
 	public void pidWrite(double output) {
 		set(output);
@@ -69,14 +85,26 @@ public class CompositeLimitedSpeedController implements SpeedController {
 		motor.stopMotor();
 	}
 	
+	/**
+	 * 
+	 * @return Returns the upper limit switches in an arrayList
+	 */
 	public ArrayList<ILimitSwitch> getUpperSensor() {
 		return upperLimitss;
 	}
 	
+	/**
+	 * 
+	 * @return Returns the lower limit switches in an arrayList
+	 */
 	public ArrayList<ILimitSwitch> getLowerSensor() {
 		return lowerLimitss;
 	}
 
+	/**
+	 * 
+	 * @return Returns true if an upperLimit has been reached
+	 */
 	public boolean isAtUpperLimit() {
 		boolean upperLimit = false;
 		for(ILimitSwitch upperSwitch : upperLimitss) {
@@ -85,6 +113,10 @@ public class CompositeLimitedSpeedController implements SpeedController {
 		return upperLimit;
 	}
 	
+	/**
+	 * 
+	 * @return Returns true if a lowerLimit has been reached
+	 */
 	public boolean isAtLowerLimit() {
 		boolean lowerLimit = false;
 		for(ILimitSwitch lowerSwitch : lowerLimitss) {

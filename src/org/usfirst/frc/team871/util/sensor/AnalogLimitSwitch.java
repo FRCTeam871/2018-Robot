@@ -2,33 +2,52 @@ package org.usfirst.frc.team871.util.sensor;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 
+/**
+ * A limit switch that uses analog sensors
+ * @author Team871
+ *
+ */
 public class AnalogLimitSwitch implements ILimitSwitch {
-    boolean triggerAboveThreshhold;
+    private boolean triggerAboveThreshold;
 
-    double threshhold;
+    private double threshold;
 
-    AnalogInput input;
+    private AnalogInput input;
 
-    public AnalogLimitSwitch(AnalogInput input, double threshhold, boolean triggerAboveThreshhold) {
+    /**
+     * 
+     * @param input The analog sensors that are used
+     * @param threshold The limit
+     * @param triggerAboveThreshold True for upper limit sensor and false for lower limit sensor.
+     */
+    public AnalogLimitSwitch(AnalogInput input, double threshold, boolean triggerAboveThreshold) {
         this.input = input;
-        this.threshhold = threshhold;
-        this.triggerAboveThreshhold = triggerAboveThreshhold;
+        this.threshold = threshold;
+        this.triggerAboveThreshold = triggerAboveThreshold;
     }
 
-    public void setThreshhold(double threshhold) {
-        this.threshhold = threshhold;
+    /**
+     * 
+     * @param threshold The limit
+     */
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
     }
 
-    public void setTrigger(boolean triggerAboveThreshhold) {
-        this.triggerAboveThreshhold = triggerAboveThreshhold;
+    /**
+     * 
+     * @param triggerAboveThreshold True for upper limit sensor and false for lower limit sensor.
+     */
+    public void setTrigger(boolean triggerAboveThreshold) {
+        this.triggerAboveThreshold = triggerAboveThreshold;
     }
 
     @Override
     public boolean isAtLimit() {
-        if (triggerAboveThreshhold) {
-            return input.getVoltage() > threshhold;
+        if (triggerAboveThreshold) {
+            return input.getVoltage() > threshold;
         } else {
-            return input.getVoltage() < threshhold;
+            return input.getVoltage() < threshold;
         }
     }
 }

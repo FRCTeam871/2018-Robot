@@ -42,7 +42,19 @@ public class DriveTrain extends MecanumDrive{
 		driveCartesian(y, x, r);
 	}
 	
+	
+	/**
+	 * resets gyro yaw to 0 at current yaw
+	 */
 	public void resetGyro() {
 		gyro.zeroYaw();
+	}
+	
+	/**
+	 * 
+	 * @return -s the gyro for use elsewhere
+	 */
+	public AHRS getGyro() {
+		return gyro;
 	}
 }

@@ -46,4 +46,11 @@ public class PIDReadWrite implements PIDSource, PIDOutput{
 		this.pidIn = error;
 	}
 
+	/**
+	 * 
+	 * @return output from the PID calculation
+	 */
+	public double getPIDOut() {
+		return pidOut;
+	}
 }

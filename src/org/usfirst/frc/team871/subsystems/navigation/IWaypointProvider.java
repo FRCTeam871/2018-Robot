@@ -9,4 +9,6 @@ public interface IWaypointProvider {
 	public boolean hasNext();
 	
 	public List<Waypoint> getAvailableWaypoints();
+	
+	public int getIndex();
 }

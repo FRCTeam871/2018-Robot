@@ -1,6 +1,7 @@
 package org.usfirst.frc.team871.util.config;
 
 import org.usfirst.frc.team871.util.sensor.DigitalLimitSwitch;
+import org.usfirst.frc.team871.util.sensor.EnhancedGyro;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -43,7 +44,7 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 		rearRight    = new Talon(-1); //TODO: Find port#
 		liftMotorUp  = new Talon(-1); //TODO: Find port#
 		liftMotorBtm = new Talon(-1); //TODO: Find port#
-		gyro         = new AHRS(Port.kMXP); //TODO: Find port#
+		gyro         = new EnhancedGyro(Port.kMXP); //TODO: Find port#
 		cubeDetect   = new DigitalInput(-1);//TODO: Find port#
 		encoderUp    = new Encoder(-1,-1);  //TODO: Find port#
 		encoderUp.setDistancePerPulse(-1);  //TODO: get ratio

@@ -1,6 +1,6 @@
 package org.usfirst.frc.team871.util.control;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
@@ -10,11 +10,11 @@ public class CompositeLimitedSpeedController implements SpeedController {
 
 	private SpeedController motor;
 	
-	private ArrayList<ILimitSwitch> upperLimitss;
-	private ArrayList<ILimitSwitch> lowerLimitss;
+	private List<ILimitSwitch> upperLimitss;
+	private List<ILimitSwitch> lowerLimitss;
 	
 	
-	public CompositeLimitedSpeedController(SpeedController motor, ArrayList<ILimitSwitch> upperLimitss, ArrayList<ILimitSwitch> lowerLimitss, boolean inverted) {
+	public CompositeLimitedSpeedController(SpeedController motor, List<ILimitSwitch> upperLimitss, List<ILimitSwitch> lowerLimitss, boolean inverted) {
 		this.motor = motor;
 		this.upperLimitss = upperLimitss;
 		this.lowerLimitss = lowerLimitss;
@@ -22,7 +22,7 @@ public class CompositeLimitedSpeedController implements SpeedController {
 		motor.setInverted(inverted);
 	}
 	
-	public CompositeLimitedSpeedController(SpeedController motor, ArrayList<ILimitSwitch> upperLimitss, ArrayList<ILimitSwitch> lowerLimitss) {
+	public CompositeLimitedSpeedController(SpeedController motor, List<ILimitSwitch> upperLimitss, List<ILimitSwitch> lowerLimitss) {
 		this.motor = motor;
 		this.upperLimitss = upperLimitss;
 		this.lowerLimitss = lowerLimitss;
@@ -69,11 +69,11 @@ public class CompositeLimitedSpeedController implements SpeedController {
 		motor.stopMotor();
 	}
 	
-	public ArrayList<ILimitSwitch> getUpperSensor() {
+	public List<ILimitSwitch> getUpperSensor() {
 		return upperLimitss;
 	}
 	
-	public ArrayList<ILimitSwitch> getLowerSensor() {
+	public List<ILimitSwitch> getLowerSensor() {
 		return lowerLimitss;
 	}
 

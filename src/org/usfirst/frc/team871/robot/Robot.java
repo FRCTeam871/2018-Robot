@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.Grabber;
-import org.usfirst.frc.team871.subsystems.SuperLift;
+import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
 import org.usfirst.frc.team871.util.config.IControlScheme;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.config.InitialControlScheme;
@@ -37,7 +37,6 @@ public class Robot extends IterativeRobot {
 		config = MainRobotConfiguration.DEFAULT;
 		drive = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
 		grabber = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
-		
 		
 		ArrayList<ILimitSwitch> upperUpperLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getupperUpperLimit(), new EncoderLimitSwitch(config.getEncoderUp(), -1, true)));
 		ArrayList<ILimitSwitch> upperLowerLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getupperLowerLimit(), new EncoderLimitSwitch(config.getEncoderUp(), -1, false)));

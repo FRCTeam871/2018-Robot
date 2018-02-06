@@ -6,9 +6,9 @@ import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
 import edu.wpi.first.wpilibj.SpeedController;
 /**
- * Uses speed controllers while using microswitches and encoders as limit switches
+ * Uses speed controllers while using microswitches and encoders as limit switches.<br>
+ * TODO: change this class so that it extends LimitedSpeedController and uses a composite limit switch instead.
  * @author Team871
- *
  */
 public class CompositeLimitedSpeedController implements SpeedController {
 
@@ -63,6 +63,7 @@ public class CompositeLimitedSpeedController implements SpeedController {
 		} else {
 			motor.set(speed);
 		}
+		
 	}
 
 	@Override
@@ -86,7 +87,6 @@ public class CompositeLimitedSpeedController implements SpeedController {
 	}
 	
 	/**
-	 * 
 	 * @return Returns the upper limit switches in an arrayList
 	 */
 	public ArrayList<ILimitSwitch> getUpperSensor() {
@@ -94,7 +94,6 @@ public class CompositeLimitedSpeedController implements SpeedController {
 	}
 	
 	/**
-	 * 
 	 * @return Returns the lower limit switches in an arrayList
 	 */
 	public ArrayList<ILimitSwitch> getLowerSensor() {
@@ -102,27 +101,17 @@ public class CompositeLimitedSpeedController implements SpeedController {
 	}
 
 	/**
-	 * 
 	 * @return Returns true if an upperLimit has been reached
 	 */
 	public boolean isAtUpperLimit() {
-		boolean upperLimit = false;
-		for(ILimitSwitch upperSwitch : upperLimitss) {
-			upperLimit |= upperSwitch.isAtLimit();
-		}
-		return upperLimit;
+		return upperLimitss.stream().anyMatch(ILimitSwitch::isAtLimit);
 	}
 	
 	/**
-	 * 
 	 * @return Returns true if a lowerLimit has been reached
 	 */
 	public boolean isAtLowerLimit() {
-		boolean lowerLimit = false;
-		for(ILimitSwitch lowerSwitch : lowerLimitss) {
-			lowerLimit |= lowerSwitch.isAtLimit();
-		}
-		return lowerLimit;
+		return lowerLimitss.stream().anyMatch(ILimitSwitch::isAtLimit);
 	}
 	
 }

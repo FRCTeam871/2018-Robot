@@ -1,6 +1,6 @@
 package org.usfirst.frc.team871.util.control;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
@@ -14,8 +14,8 @@ public class CompositeLimitedSpeedController implements SpeedController {
 
 	private SpeedController motor;
 	
-	private ArrayList<ILimitSwitch> upperLimitss;
-	private ArrayList<ILimitSwitch> lowerLimitss;
+	private List<ILimitSwitch> upperLimitss;
+	private List<ILimitSwitch> lowerLimitss;
 	
 	/**
 	 * 
@@ -24,7 +24,7 @@ public class CompositeLimitedSpeedController implements SpeedController {
 	 * @param lowerLimitss Arraylist of lower limit switches
 	 * @param inverted Determines if the speed controller output should be negated
 	 */
-	public CompositeLimitedSpeedController(SpeedController motor, ArrayList<ILimitSwitch> upperLimitss, ArrayList<ILimitSwitch> lowerLimitss, boolean inverted) {
+	public CompositeLimitedSpeedController(SpeedController motor, List<ILimitSwitch> upperLimitss, List<ILimitSwitch> lowerLimitss, boolean inverted) {
 		this.motor = motor;
 		this.upperLimitss = upperLimitss;
 		this.lowerLimitss = lowerLimitss;
@@ -38,7 +38,7 @@ public class CompositeLimitedSpeedController implements SpeedController {
 	 * @param upperLimitss Arraylist of upper limit switches
 	 * @param lowerLimitss Arraylist of lower limit switches
 	 */
-	public CompositeLimitedSpeedController(SpeedController motor, ArrayList<ILimitSwitch> upperLimitss, ArrayList<ILimitSwitch> lowerLimitss) {
+	public CompositeLimitedSpeedController(SpeedController motor, List<ILimitSwitch> upperLimitss, List<ILimitSwitch> lowerLimitss) {
 		this.motor = motor;
 		this.upperLimitss = upperLimitss;
 		this.lowerLimitss = lowerLimitss;
@@ -89,14 +89,14 @@ public class CompositeLimitedSpeedController implements SpeedController {
 	/**
 	 * @return Returns the upper limit switches in an arrayList
 	 */
-	public ArrayList<ILimitSwitch> getUpperSensor() {
+	public List<ILimitSwitch> getUpperSensor() {
 		return upperLimitss;
 	}
 	
 	/**
 	 * @return Returns the lower limit switches in an arrayList
 	 */
-	public ArrayList<ILimitSwitch> getLowerSensor() {
+	public List<ILimitSwitch> getLowerSensor() {
 		return lowerLimitss;
 	}
 

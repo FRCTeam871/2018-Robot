@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.PIDController;
 public class SubLift {
 	private CompositeLimitedSpeedController liftMotor;
 	private Encoder encoder;
-	private PIDController pid;
+	private PIDController pidPosition;
 	
 	/**
 	 * Controls the bottom part of the lift
@@ -23,7 +23,7 @@ public class SubLift {
 		this.liftMotor = liftMotor;
 		this.encoder = encoder;
 		
-		pid = new PIDController(1,1,1, encoder, liftMotor);
+		pidPosition = new PIDController(0, 0, 0, encoder, liftMotor);
 	}
 	
 	/**
@@ -32,9 +32,7 @@ public class SubLift {
 	 * @param speed How fast the lift moves
 	 */
 	protected void moveLift(double speed) {
-		pid.disable();
-		liftMotor.set(speed);
-		
+		pidPosition.disable();
 		resetEncoder();
 	}
 	
@@ -59,19 +57,27 @@ public class SubLift {
 	}
 	
 	/**
+	 * Gets the velocity of the encoder.
+	 * @return returns the velocity of the encoder
+	 */
+	protected double getVelocity() {
+		return encoder.getRate();
+	}
+	
+	/**
 	 * It used to set the set point of the lifter. This is a value in inches.<br>
 	 * <marquee>Enables the PID.</marquee>
 	 */
 	protected void setHeight(double setPoint) {
-		pid.enable();
-		pid.setSetpoint(setPoint);
+		pidPosition.enable();
+		pidPosition.setSetpoint(setPoint);
 	}
 	
 	/**
 	 * Enables and disables the PID.
 	 */
 	protected void setEnablePID(boolean enable) {
-		pid.setEnabled(enable);
+		pidPosition.setEnabled(enable);
 	}
 	
 }

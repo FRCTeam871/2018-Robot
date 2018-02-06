@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
  * Drive class used for driving mecanum drive with additional features.
  * @author Not Jack Langhorn
  */
-public class DriveTrain extends MecanumDrive{
+public class DriveTrain extends MecanumDrive {
 	
 	private final AHRS gyro;
 	/**

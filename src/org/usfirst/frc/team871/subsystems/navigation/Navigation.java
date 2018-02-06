@@ -23,6 +23,7 @@ public class Navigation {
 	
 	private double distThreshold;
 	
+	private Coordinate initialPos;
 	private Waypoint currentLocation;
 	private Waypoint nextWaypoint;
 	
@@ -44,6 +45,7 @@ public class Navigation {
 		this.waypointProvider = waypointProvider;
 		this.drive = drive;
 		this.navX = this.drive.getGyro();
+		this.initialPos = startLocation;
 		
 		distThreshold = 6.0;
 		
@@ -64,6 +66,7 @@ public class Navigation {
 		
 		updateLocation();//updates location
 	}
+
 	/**
 	 * Is called on loop during autonomous phase
 	 */
@@ -73,7 +76,7 @@ public class Navigation {
 			updateLocation();
 			//We are done... do something?
 		}
-		else if(true){ //TODO: have a doNavigate boolean
+		else if(true){ //TODO: have a doNavigate boolean 
 			double distance  = getDistance(currentLocation, nextWaypoint);
 			double direction = getAngle(currentLocation, nextWaypoint);
 			double angle     = nextWaypoint.getAngle();
@@ -89,7 +92,7 @@ public class Navigation {
 			double rotation = anglePIDInterface.pidGet();//how much we need to rotate to be at the desired angle
 			
 			drive.drivePolar(magnitude, direction, rotation);
-			updateLocation(magnitude);
+			updateLocation();
 			
 			if(distance < distThreshold) {//If we are at the waypoint, do the action
 				//TODO: Action handler here
@@ -101,30 +104,35 @@ public class Navigation {
 		}
 		
 	}
+	
 	/**
-	 * Updates current location, angle, and speed of the robot
+	 * Updates current location, angle, and speed of the robot from displace sensor
 	 * @param speed
 	 */
-	private void updateLocation(double speed) {
-		Coordinate location = displaceSense.getDisplacement();
-		
-		currentLocation.setX(location.getX());
-		currentLocation.setY(location.getY());
-		currentLocation.setAngle(navX.getYaw());
-		currentLocation.setSpeed(speed);
-		
-	}
-	
 	private void updateLocation() {
-		updateLocation(0);
+		Coordinate location = displaceSense.getDisplacement();
+		double velo = (Math.pow(displaceSense.getVelocity().getX(), 2) + Math.pow(displaceSense.getVelocity().getY(), 2)); 
+		
+		currentLocation.setX(location.getX() + initialPos.getX());
+		currentLocation.setY(location.getY() + initialPos.getY());
+		currentLocation.setAngle(navX.getYaw());
+		currentLocation.setSpeed(velo);
+		
 	}
 	
+	/**
+	 * Gets distance between two waypoints 
+	 * @param waypoint1 First waypoint
+	 * @param waypoint2 Second Waypoint
+	 * @return
+	 */
 	private double getDistance(Waypoint waypoint1, Waypoint waypoint2) {
 
 		double distance = 0;
 		
 		distance = Math.sqrt(Math.pow(waypoint1.getX(), 2) + Math.pow(waypoint1.getY(), 2)) ;
 		//pathagaras theorem- a^2 +b^2 = c^2
+		//^ Larry spelled it that way so we are going to keep it to shame him
 		return distance;
 	}
 	

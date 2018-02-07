@@ -12,11 +12,11 @@ import edu.wpi.first.wpilibj.PIDSourceType;
  */
 public class SubLift {
 	
-	private static final double MAX_VELOCITY = 1; //inches per second
+	private static final double MAX_VELOCITY = 6; //inches per second
 	private CompositeLimitedSpeedController liftMotor;
 	private Encoder encoder;
 	private PIDController pidDisplacement;
-	private PIDController pidRate;
+	private PIDController pidRate; // TODO: make the displacement one use velocity
 	
 	/**
 	 * Controls the bottom part of the lift
@@ -30,7 +30,7 @@ public class SubLift {
 		this.encoder.setPIDSourceType(PIDSourceType.kDisplacement);
 		
 		pidDisplacement = new PIDController(0, 0, 0, encoder, liftMotor);
-		pidRate = new PIDController(0, 0, 0, encoder, liftMotor);
+		pidRate = new PIDController(0.2360, 0.000420, 0.0666, encoder, liftMotor);
 		pidRate.disable();
 	}
 	
@@ -79,6 +79,7 @@ public class SubLift {
 	 * <marquee>Enables the PID.</marquee>
 	 */
 	protected void setHeight(double setPoint) {
+		pidRate.disable();
 		pidDisplacement.enable();
 		pidDisplacement.setSetpoint(setPoint);
 	}

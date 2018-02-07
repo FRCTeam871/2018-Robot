@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 
 /*******************
- * Contains all var*ables of robör 
+ * Contains all var*ables of robor 
  *                 *
  *******************/
 public enum MainRobotConfiguration implements IRobotConfiguration {

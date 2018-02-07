@@ -66,17 +66,19 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		if(controls.getToggleOrientationButton()) {
-			drive.driveRobotOriented(controls.getXAxis(), controls.getYAxis(), controls.getRotationAxis());
-		} else {
-			drive.driveFieldOriented(controls.getXAxis(), controls.getYAxis(), controls.getRotationAxis());
-		}
+//		if(controls.getToggleOrientationButton()) {
+//			drive.driveRobotOriented(controls.getXAxis(), controls.getYAxis(), controls.getRotationAxis());
+//		} else {
+//			drive.driveFieldOriented(controls.getXAxis(), controls.getYAxis(), controls.getRotationAxis());
+//		}
 		if(controls.getResetGyroButton()) {
 			drive.resetGyro();
 		}
+		
 		if(controls.getToggleGrabberButton()) {
 			grabber.toggleGrabber();
 		}
+		
 		if(controls.getCubeEjectButton()) {
 			grabber.ejectCube();
 		}
@@ -84,13 +86,14 @@ public class Robot extends IterativeRobot {
 		if(controls.getDecreaseSetpointButton()) {
 			lift.decreaseSetpoint();
 		}
+		
 		if(controls.getIncreaseSetpointButton()) {
 			lift.increaseSetpoint();
 		}
 		
-		if(controls.getLiftAxis() != 0) {
-			lift.moveLift(controls.getLiftAxis());
-		}
+//		if(controls.getLiftAxis() != 0) {
+		lift.moveLift(controls.getLiftAxis());
+//		}
 		
 		if(controls.getPOV() ==  POVDirections.UP || controls.getPOV() ==  POVDirections.UP_RIGHT || controls.getPOV() ==  POVDirections.UP_LEFT) {
 			lift.setTop();

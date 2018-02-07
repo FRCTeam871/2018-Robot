@@ -5,8 +5,8 @@ import org.usfirst.frc.team871.util.sensor.DigitalLimitSwitch;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedController;
 /**
  * Used to fetch robot components. Implementations of this interface can be swapped out for different robots
@@ -88,12 +88,12 @@ public interface IRobotConfiguration {
 	 * The piston of the grabber of the robot
 	 * @return
 	 */
-	public Solenoid getGrabPiston();
+	public DoubleSolenoid getGrabPiston();
 	/**
 	 * The eject piston of the grabber of the robot
 	 * @return
 	 */
-	public Solenoid getEjectPiston();
+	public DoubleSolenoid getEjectPiston();
 	
 	
 }

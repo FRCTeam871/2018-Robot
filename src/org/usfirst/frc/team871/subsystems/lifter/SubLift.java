@@ -31,6 +31,8 @@ public class SubLift {
 		
 		pidDisplacement = new PIDController(0, 0, 0, encoder, liftMotor);
 		pidRate = new PIDController(0.2360, 0.000420, 0.0666, encoder, liftMotor);
+		pidRate.setOutputRange(-1, 1);
+		pidRate.setInputRange(-MAX_VELOCITY, MAX_VELOCITY);
 		pidRate.disable();
 	}
 	

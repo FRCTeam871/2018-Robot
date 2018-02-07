@@ -2,14 +2,15 @@ package org.usfirst.frc.team871.util.config;
 
 import org.usfirst.frc.team871.util.sensor.DigitalLimitSwitch;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C.Port;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Talon;
 
 /*******************
  * Contains all var*ables of robor 
@@ -28,8 +29,8 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 	private final DigitalInput cubeDetect;
 	private final Encoder encoderBtm; // 256 ticks/rot
 	private final Encoder encoderUp; // 256 ticks/rot
-	private final Solenoid grabPiston;
-	private final Solenoid ejectPiston;
+	private final DoubleSolenoid grabPiston;
+	private final DoubleSolenoid ejectPiston;
 	private final DigitalLimitSwitch upperUpperLimit;
 	private final DigitalLimitSwitch upperLowerLimit;
 	private final DigitalLimitSwitch lowerUpperLimit;
@@ -37,35 +38,36 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 	
 	private MainRobotConfiguration() {
 		//TODO get actual pins!
-		frontLeft    = new Talon(-1); //TODO: Find port#
-		frontRight   = new Talon(-1); //TODO: Find port#
-		rearLeft     = new Talon(-1); //TODO: Find port#
-		rearRight    = new Talon(-1); //TODO: Find port#
-		liftMotorUp  = new Talon(-1); //TODO: Find port#
-		liftMotorBtm = new Talon(-1); //TODO: Find port#
+
+		frontLeft    = new WPI_VictorSPX(12); //TODO: Find port#
+		frontRight   = new WPI_VictorSPX(10); //TODO: Find port#
+		rearLeft     = new WPI_VictorSPX(13); //TODO: Find port#
+		rearRight    = new WPI_VictorSPX(11); //TODO: Find port#
+		liftMotorUp  = new WPI_TalonSRX(1); //TODO: Find port#
+		liftMotorBtm = new WPI_TalonSRX(0); //TODO: Find port#
 		gyro         = new AHRS(Port.kMXP); //TODO: Find port#
-		cubeDetect   = new DigitalInput(-1);//TODO: Find port#
+		cubeDetect   = new DigitalInput(20);//TODO: Find port#
 		
-		encoderUp    = new Encoder(-1,-1);  //TODO: Find port#
+		encoderUp    = new Encoder(4,5);  //TODO: Find port#
 		// diam = 1.6
 		// circum = diam * PI
 		// ticksPerPulse = 256
 		// distPerPulse = circum / ticksPerPulse
 		encoderUp.setDistancePerPulse(0.019634954084936);
 		
-		encoderBtm   = new Encoder(-1,-1);  //TODO: Find port#
+		encoderBtm   = new Encoder(6,7);  //TODO: Find port#
 		// diam = 1.6
 		// circum = diam * PI
 		// ticksPerPulse = 256
 		// distPerPulse = circum / ticksPerPulse
 		encoderBtm.setDistancePerPulse(0.019634954084936);
 		
-		grabPiston   = new Solenoid(-1); //TODO: Find port#
-		ejectPiston  = new Solenoid(-1); //TODO: Find port#
-		upperUpperLimit = new DigitalLimitSwitch(new DigitalInput(-1)); //TODO: Find port#
-		upperLowerLimit = new DigitalLimitSwitch(new DigitalInput(-1)); //TODO: Find port#
-		lowerUpperLimit = new DigitalLimitSwitch(new DigitalInput(-1)); //TODO: Find port#
-		lowerLowerLimit = new DigitalLimitSwitch(new DigitalInput(-1)); //TODO: Find port#
+		grabPiston   = new DoubleSolenoid(0, 1); //TODO: Find port#
+		ejectPiston  = new DoubleSolenoid(2, 3); //TODO: Find port#
+		upperUpperLimit = new DigitalLimitSwitch(new DigitalInput(2)); //TODO: Find port#
+		upperLowerLimit = new DigitalLimitSwitch(new DigitalInput(3)); //TODO: Find port#
+		lowerUpperLimit = new DigitalLimitSwitch(new DigitalInput(0)); //TODO: Find port#
+		lowerLowerLimit = new DigitalLimitSwitch(new DigitalInput(1)); //TODO: Find port#
 		
 	}
 	
@@ -119,12 +121,12 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 		return liftMotorUp;
 	}
 	@Override
-	public Solenoid getGrabPiston() {
+	public DoubleSolenoid getGrabPiston() {
 		// TODO Auto-generated method stub
 		return grabPiston;
 	}
 	@Override
-	public Solenoid getEjectPiston() {
+	public DoubleSolenoid getEjectPiston() {
 		// TODO Auto-generated method stub
 		return ejectPiston;
 	}

@@ -27,7 +27,7 @@ public class Navigation {
 	private Waypoint currentLocation;
 	private Waypoint nextWaypoint;
 	
-	private PIDReadWrite distancePIDInterface;//TODO: Fix to standardize naming scheme for Final variables
+	private PIDReadWrite distancePIDInterface;
 	private final double DIST_KP;
 	private final double DIST_KI;
 	private final double DIST_KD;
@@ -39,7 +39,13 @@ public class Navigation {
 	private final double ANGLE_KD;
 	private PIDController anglePID;
 		
-	
+	/**
+	 * 
+	 * @param displaceSense
+	 * @param waypointProvider
+	 * @param drive
+	 * @param startLocation
+	 */
 	public Navigation(IDisplacementSensor displaceSense, IWaypointProvider waypointProvider, DriveTrain drive, Coordinate startLocation) {
 		this.displaceSense    = displaceSense;
 		this.waypointProvider = waypointProvider;
@@ -57,6 +63,9 @@ public class Navigation {
 		DIST_KD = 0.0;
 		distancePIDInterface = new PIDReadWrite(PIDSourceType.kDisplacement);
 		distancePID          = new PIDController(DIST_KP, DIST_KI, DIST_KD, distancePIDInterface, distancePIDInterface);
+		distancePID.setSetpoint(0);//The distance that we want to be away from the waypoint is zero
+		distancePID.setOutputRange(-1, 1);
+		
 		//Move angle PID things to drive class in a heading hold method
 		ANGLE_KP = 0.0;
 		ANGLE_KI = 0.0;
@@ -68,7 +77,7 @@ public class Navigation {
 	}
 
 	/**
-	 * Is called on loop during autonomous phase
+	 * Is called on loop during autonomous phase to navigate to differing locations
 	 */
 	public void navigate() {
 		
@@ -81,9 +90,8 @@ public class Navigation {
 			double direction = getAngle(currentLocation, nextWaypoint);
 			double angle     = nextWaypoint.getAngle();
 			
-			distancePID.setSetpoint(0);//The distance that we want to be away from the waypoint is zero
+			//Setpoint is 0
 			distancePIDInterface.errorWrite(distance);//Distance between waypoint and current location
-			distancePID.setOutputRange(-1, 1);
 			double magnitude = (distancePIDInterface.pidGet()*nextWaypoint.getSpeed());
 			
 			anglePID.setSetpoint(angle);//Angle the robot needs to hold
@@ -110,11 +118,11 @@ public class Navigation {
 	 * @param speed
 	 */
 	private void updateLocation() {
-		Coordinate location = displaceSense.getDisplacement();
-		double velo = (Math.pow(displaceSense.getVelocity().getX(), 2) + Math.pow(displaceSense.getVelocity().getY(), 2)); 
+		Coordinate location = displaceSense.getDisplacement_in();//displacement in inches
+		double velo = Math.sqrt(Math.pow(displaceSense.getVelocity().getX(), 2) + Math.pow(displaceSense.getVelocity().getY(), 2)); //combines both velo components to the velocity
 		
 		currentLocation.setX(location.getX() + initialPos.getX());
-		currentLocation.setY(location.getY() + initialPos.getY());
+		currentLocation.setY(location.getY() + initialPos.getY());//Uses our fun enhanced gyro class. Fix this. We arent using it. We misunderstood the gyro class.
 		currentLocation.setAngle(navX.getYaw());
 		currentLocation.setSpeed(velo);
 		

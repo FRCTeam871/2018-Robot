@@ -1,5 +1,7 @@
 package org.usfirst.frc.team871.subsystems.navigation.actions;
 
+import org.usfirst.frc.team871.robot.Robot;
+
 public class NullAction implements IAction{
 	
 
@@ -17,15 +19,15 @@ public class NullAction implements IAction{
 	public void execute() {	
 		dont();
 	}
-
-	@Override
-	public void init() {
-		dont();		
-	}
-
 	
 	public void dont() {
 		return;
+	}
+
+	@Override
+	public void init(Robot robot) {
+		dont();
+		
 	}
 	
 }

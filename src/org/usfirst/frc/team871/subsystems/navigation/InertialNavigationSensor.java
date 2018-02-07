@@ -40,6 +40,12 @@ public class InertialNavigationSensor extends Thread implements IDisplacementSen
 
 	   }
 	 
+	 /**
+	  * 
+	  * @param xAccel_m_s2 X component of acceleration in m/s^2
+	  * @param yAccel_m_s2 Y component of acceleration in m/s^2
+	  * @param updateRate_hz Poling rate in hertz. 
+	  */
 	 private void updateDisplace_m_s2(double xAccel_m_s2, double yAccel_m_s2, int updateRate_hz){
 	        double sampleTime = 1.0 / updateRate_hz;
 
@@ -55,6 +61,12 @@ public class InertialNavigationSensor extends Thread implements IDisplacementSen
 	        this.lastVeloComponets = curVeloComponents;
 	   }
 	 
+	 /**
+	  * 
+	  * @param xAccel_m_s2 X component of acceleration in g's
+	  * @param yAccel_m_s2 Y component of acceleration in g's
+	  * @param updateRate_hz Poling rate in hertz. 
+	  */
 	 private void updateDisplace_g(double xAccel_g, double yAccel_g, int updateRate_hz){
 	        double accelGrav =  9.80665;
 
@@ -70,11 +82,6 @@ public class InertialNavigationSensor extends Thread implements IDisplacementSen
 	   }
 
 	 @Override
-	 public Coordinate getDisplacement(){
-	        return displacementComponets;
-	 }
-
-	 @Override
 	 public Coordinate getVelocity(){
 	        return lastVeloComponets;
 	    }
@@ -82,5 +89,19 @@ public class InertialNavigationSensor extends Thread implements IDisplacementSen
 	   public Waypoint getCurrentPos(){
 
 	        return currentPos;
-	   }  
+	   }
+
+	@Override
+	public Coordinate getDisplacement_m() {
+		return displacementComponets;
+	}
+
+	@Override
+	public Coordinate getDisplacement_in() {
+		// TODO Auto-generated method stub
+		double mToIn = 39.37008;
+		double xIn = displacementComponets.getX() * mToIn;//x comp to inches
+		double yIn = displacementComponets.getY() * mToIn;//y comp to inches
+		return new Coordinate (xIn, yIn);
+	}  
 }

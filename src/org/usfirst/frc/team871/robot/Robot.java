@@ -3,8 +3,9 @@ package org.usfirst.frc.team871.robot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-import org.usfirst.frc.team871.subsystems.DriveTrain;
+import org.usfirst.frc.team871.subsystems.DriveTrain;	
 import org.usfirst.frc.team871.subsystems.Grabber;
 import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
 import org.usfirst.frc.team871.util.config.IControlScheme;
@@ -12,11 +13,7 @@ import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.config.InitialControlScheme;
 import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
-import org.usfirst.frc.team871.util.joystick.ButtonTypes;
-import org.usfirst.frc.team871.util.joystick.EnhancedXBoxController;
 import org.usfirst.frc.team871.util.joystick.POVDirections;
-import org.usfirst.frc.team871.util.joystick.XBoxAxes;
-import org.usfirst.frc.team871.util.joystick.XBoxButtons;
 import org.usfirst.frc.team871.util.sensor.EncoderLimitSwitch;
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
@@ -38,11 +35,10 @@ public class Robot extends IterativeRobot {
 		drive = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
 		grabber = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
 		
-		ArrayList<ILimitSwitch> upperUpperLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getupperUpperLimit(), new EncoderLimitSwitch(config.getEncoderUp(), -1, true)));
-		ArrayList<ILimitSwitch> upperLowerLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getupperLowerLimit(), new EncoderLimitSwitch(config.getEncoderUp(), -1, false)));
-		ArrayList<ILimitSwitch> lowerUpperLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getlowerUpperLimit(), new EncoderLimitSwitch(config.getEncoderBtm(), -1, true)));
-		ArrayList<ILimitSwitch> lowerLowerLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getlowerLowerLimit(), new EncoderLimitSwitch(config.getEncoderBtm(), -1, false)));
-		
+		List<ILimitSwitch> upperUpperLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getupperUpperLimit(), new EncoderLimitSwitch(config.getEncoderUp(), -1, true)));
+		List<ILimitSwitch> upperLowerLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getupperLowerLimit(), new EncoderLimitSwitch(config.getEncoderUp(), -1, false)));
+		List<ILimitSwitch> lowerUpperLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getlowerUpperLimit(), new EncoderLimitSwitch(config.getEncoderBtm(), -1, true)));
+		List<ILimitSwitch> lowerLowerLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getlowerLowerLimit(), new EncoderLimitSwitch(config.getEncoderBtm(), -1, false)));
 		
 		CompositeLimitedSpeedController limitedSpeedControllerUp = new CompositeLimitedSpeedController(config.getLiftMotorUp(), 
 				upperUpperLimits, upperLowerLimits);

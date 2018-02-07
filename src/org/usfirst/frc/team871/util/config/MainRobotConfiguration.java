@@ -39,14 +39,14 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 	private MainRobotConfiguration() {
 		//TODO get actual pins!
 
-		frontLeft    = new WPI_VictorSPX(12); //TODO: Find port#
-		frontRight   = new WPI_VictorSPX(10); //TODO: Find port#
-		rearLeft     = new WPI_VictorSPX(13); //TODO: Find port#
-		rearRight    = new WPI_VictorSPX(11); //TODO: Find port#
-		liftMotorUp  = new WPI_TalonSRX(1); //TODO: Find port#
-		liftMotorBtm = new WPI_TalonSRX(0); //TODO: Find port#
-		gyro         = new AHRS(Port.kMXP); //TODO: Find port#
-		cubeDetect   = new DigitalInput(20);//TODO: Find port#
+		frontLeft    = new WPI_VictorSPX(12);
+		frontRight   = new WPI_VictorSPX(10);
+		rearLeft     = new WPI_VictorSPX(13);
+		rearRight    = new WPI_VictorSPX(11);
+		liftMotorUp  = new WPI_TalonSRX(1);
+		liftMotorBtm = new WPI_TalonSRX(0);
+		gyro         = new AHRS(Port.kMXP);
+		cubeDetect   = new DigitalInput(20); //TODO: Find port#
 		
 		encoderUp    = new Encoder(4,5);  //TODO: Find port#
 		// diam = 1.6
@@ -62,8 +62,8 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 		// distPerPulse = circum / ticksPerPulse
 		encoderBtm.setDistancePerPulse(0.019634954084936);
 		
-		grabPiston   = new DoubleSolenoid(0, 1); //TODO: Find port#
-		ejectPiston  = new DoubleSolenoid(2, 3); //TODO: Find port#
+		grabPiston   = new DoubleSolenoid(0, 1);
+		ejectPiston  = new DoubleSolenoid(2, 3);
 		upperUpperLimit = new DigitalLimitSwitch(new DigitalInput(2)); //TODO: Find port#
 		upperLowerLimit = new DigitalLimitSwitch(new DigitalInput(3)); //TODO: Find port#
 		lowerUpperLimit = new DigitalLimitSwitch(new DigitalInput(0)); //TODO: Find port#

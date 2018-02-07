@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+
 /**
  * Drive class used for driving mecanum drive with additional features.
  * @author Not Jack Langhorn
@@ -14,8 +15,6 @@ public class DriveTrain extends MecanumDrive implements PIDOutput{
 	
 	private PIDController headingPID;
 	private double pidRotation = 0;
-
-	
 	private final AHRS gyro;
 	
 	/**

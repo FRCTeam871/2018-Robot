@@ -6,12 +6,13 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 /**
  * Drive class used for driving mecanum drive with additional features.
  * @author Not Jack Langhorn
  */
-public class DriveTrain extends MecanumDrive implements PIDOutput{
+public class DriveTrain extends MecanumDrive implements PIDOutput {
 	
 	private PIDController headingPID;
 	private double pidRotation = 0;
@@ -33,6 +34,11 @@ public class DriveTrain extends MecanumDrive implements PIDOutput{
 		headingPID.setInputRange(-180, 180);
 		headingPID.setOutputRange(-1, 1);
 		headingPID.setContinuous();
+		
+		setName("DriveTrain", "Main Drive");
+		headingPID.setName("DriveTrain", "Heading PID");
+		LiveWindow.add(headingPID);
+		LiveWindow.add(this);
 	}
 	
 	/**

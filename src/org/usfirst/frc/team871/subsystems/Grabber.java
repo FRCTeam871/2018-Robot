@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 /**
  * Grabber class that is used for controlling the grabber. 
@@ -27,6 +28,14 @@ public class Grabber {
 		this.grabPiston = grabPiston;
 		this.ejectPiston = ejectPiston;
 		this.cubeSensor = cubeSensor;
+		
+		grabPiston.setName("Grabber", "Grab Piston");
+		ejectPiston.setName("Grabber", "Eject Piston");
+		cubeSensor.setName("Grabber", "Cube Sensor");
+		
+		LiveWindow.add(grabPiston);
+		LiveWindow.add(ejectPiston);
+		LiveWindow.add(cubeSensor);
 	}
 	
 	/**

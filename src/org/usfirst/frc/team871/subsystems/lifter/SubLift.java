@@ -5,6 +5,7 @@ import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 /**
  * This class controls one part of the lift
@@ -18,12 +19,14 @@ public class SubLift {
 	private PIDController pidDisplacement;
 	private PIDController pidRate; // TODO: make the displacement one use velocity
 	
+	private ControlMode currentMode = null;
+	
 	/**
 	 * Controls the bottom part of the lift
 	 * @param liftMotor the motor that controls the lift 
 	 * @param encoder Measures the distance of the bottom part of the lift
 	 */
-	protected SubLift(CompositeLimitedSpeedController liftMotor, Encoder encoder) {
+	protected SubLift(String name, CompositeLimitedSpeedController liftMotor, Encoder encoder) {
 		this.liftMotor = liftMotor;
 		this.encoder = encoder;
 		
@@ -34,6 +37,34 @@ public class SubLift {
 		pidRate.setOutputRange(-1, 1);
 		pidRate.setInputRange(-MAX_VELOCITY, MAX_VELOCITY);
 		pidRate.disable();
+		
+		pidDisplacement.setName("Lifter", name+" - Displacement PID");
+		pidRate.setName("Lifter", name+" - RatePid");
+		liftMotor.setName("Lifter", name+" - Motor");
+		encoder.setName("Lifter", name+"- Encoder");
+		
+		LiveWindow.add(pidDisplacement);
+		LiveWindow.add(pidRate);
+		LiveWindow.add(liftMotor);
+		LiveWindow.add(encoder);
+	}
+	
+	private void ensureMode(ControlMode mode) {
+		if(currentMode == mode) {
+			return;
+		}
+		
+		currentMode = mode;
+		switch(mode) {
+			case Position:
+				pidRate.disable();
+				pidDisplacement.enable();
+				break;
+			case Velocity:
+				pidDisplacement.disable();
+				pidRate.enable();			
+				break;
+		}
 	}
 	
 	/**
@@ -42,21 +73,21 @@ public class SubLift {
 	 * @param speed How fast the lift moves (-1 to 1)
 	 */
 	protected void moveLift(double speed) {
-		pidDisplacement.disable();
-		pidRate.enable();
+		ensureMode(ControlMode.Velocity);
 		pidRate.setSetpoint(speed * MAX_VELOCITY);
-		resetEncoder();
+		maybeResetEncoder();
 	}
 	
 	/**
 	 * Resets the encoder if it's at the lower limit.
 	 * @return returns true if encoder is successfully reset
 	 */
-	protected boolean resetEncoder() {
+	protected boolean maybeResetEncoder() {
 		if(liftMotor.isAtLowerLimit()) {
 			encoder.reset();
 			return true;
 		}
+		
 		return false;
 	}
 	
@@ -81,16 +112,7 @@ public class SubLift {
 	 * <marquee>Enables the PID.</marquee>
 	 */
 	protected void setHeight(double setPoint) {
-		pidRate.disable();
-		pidDisplacement.enable();
+		ensureMode(ControlMode.Position);
 		pidDisplacement.setSetpoint(setPoint);
 	}
-	
-	/**
-	 * Enables and disables the PID.
-	 */
-	protected void setEnablePID(boolean enable) {
-		pidDisplacement.setEnabled(enable);
-	}
-	
 }

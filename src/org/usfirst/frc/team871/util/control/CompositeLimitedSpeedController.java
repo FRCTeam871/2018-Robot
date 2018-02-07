@@ -4,18 +4,20 @@ import java.util.List;
 
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
+import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.SendableBase;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 /**
  * Uses speed controllers while using microswitches and encoders as limit switches.<br>
  * TODO: change this class so that it extends LimitedSpeedController and uses a composite limit switch instead.
  * @author Team871
  */
-public class CompositeLimitedSpeedController implements SpeedController {
-
+public class CompositeLimitedSpeedController extends SendableBase implements SpeedController, Sendable {
 	private SpeedController motor;
-	
 	private List<ILimitSwitch> upperLimitss;
 	private List<ILimitSwitch> lowerLimitss;
+	private boolean yoloMode = false;
 	
 	/**
 	 * 
@@ -104,14 +106,55 @@ public class CompositeLimitedSpeedController implements SpeedController {
 	 * @return Returns true if an upperLimit has been reached
 	 */
 	public boolean isAtUpperLimit() {
-		return upperLimitss.stream().anyMatch(ILimitSwitch::isAtLimit);
+		return !yoloMode && upperLimitss.stream().anyMatch(ILimitSwitch::isAtLimit);
 	}
 	
 	/**
 	 * @return Returns true if a lowerLimit has been reached
 	 */
 	public boolean isAtLowerLimit() {
-		return lowerLimitss.stream().anyMatch(ILimitSwitch::isAtLimit);
+		return !yoloMode && lowerLimitss.stream().anyMatch(ILimitSwitch::isAtLimit);
+	}
+	
+	/**
+	 * Are limits disabled?
+	 */
+	public boolean isYoloMode() {
+		return yoloMode;
+	}
+	
+	/**
+	 * Enable or disable all limits -- Hence YOLO mode.
+	 */
+	public void setYoloMode(boolean shouldYolo) {
+		yoloMode = shouldYolo;
+	}
+
+	@Override
+	public void initSendable(SendableBuilder builder) {
+		builder.addBooleanArrayProperty("Upper Limits", () -> {
+			final boolean[] bools = new boolean[upperLimitss.size()];
+			for(int i = 0; i<upperLimitss.size(); i++) {
+				bools[i] = upperLimitss.get(i).isAtLimit();
+			}
+			
+			return bools;
+		}, null);
+		
+		builder.addBooleanArrayProperty("Lower Limits", () -> {
+			final boolean[] bools = new boolean[lowerLimitss.size()];
+			for(int i = 0; i<lowerLimitss.size(); i++) {
+				bools[i] = lowerLimitss.get(i).isAtLimit();
+			}
+			
+			return bools;
+		}, null);
+		
+		builder.addBooleanProperty("isAtUpperLimit", this::isAtUpperLimit, null);
+		builder.addBooleanProperty("isAtLowerLimit", this::isAtLowerLimit, null);
+		builder.addBooleanProperty("inverted", this::getInverted, this::setInverted);
+		builder.addDoubleProperty("speed", this::get, this::set);
+		builder.addBooleanProperty("yoloMode", this::isYoloMode, this::setYoloMode);
 	}
 	
 }

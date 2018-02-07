@@ -17,6 +17,29 @@ public class SuperLift {
 	private SetpointHeights lifterHeight;
 
 	/**
+	 * Describes all states of the lifts
+	 * 
+	 * @author Team871
+	 */
+	private enum SetpointHeights {
+		GROUND		((0 * 12) + 0.00),
+		LOW_SWITCH	((1 * 12) + 6.75),
+		SCALE_LOW	((6 * 12) + 4.00),
+		SCALE_MID	((5 * 12) + 4.00),
+		SCALE_HIGH	((4 * 12) + 4.00),
+		MANUAL		(0);
+		
+		/**
+		 * Describes the height of the setpoint in inches
+		 */
+		double height;
+
+		private SetpointHeights(double height) {
+			this.height = height;
+		}
+	}
+	
+	/**
 	 * 
 	 * @param upperLiftMotor
 	 *            The Motor that controls the upper part of the lift
@@ -30,11 +53,10 @@ public class SuperLift {
 	public SuperLift(CompositeLimitedSpeedController upperLiftMotor, Encoder upperEncoder,
 			CompositeLimitedSpeedController lowerLiftMotor, Encoder lowerEncoder) {
 
-		upperLift = new SubLift(upperLiftMotor, upperEncoder);
-		lowerLift = new SubLift(lowerLiftMotor, lowerEncoder);
+		upperLift = new SubLift("Upper", upperLiftMotor, upperEncoder);
+		lowerLift = new SubLift("Lower", lowerLiftMotor, lowerEncoder);
 
 		lifterHeight = SetpointHeights.GROUND;
-
 	}
 
 	/**
@@ -46,14 +68,6 @@ public class SuperLift {
 		upperLift.moveLift(speed);
 		lowerLift.moveLift(speed);
 		lifterHeight = SetpointHeights.MANUAL;
-	}
-	
-	/**
-	 * Resets the encoder for the upper and lower lift
-	 */
-	public void resetEncoder() {
-		upperLift.resetEncoder();
-		lowerLift.resetEncoder();
 	}
 
 	/**
@@ -88,37 +102,6 @@ public class SuperLift {
 	 */
 	public double getHeight() {
 		return upperLift.getHeight() + lowerLift.getHeight() + baseHeight;
-	}
-
-	/**
-	 * Enables PID in the upper and lower lifts
-	 */
-	public void setEnablePID() {
-		upperLift.setEnablePID(true);
-		lowerLift.setEnablePID(true);
-	}
-
-	/**
-	 * Describes all states of the lifts
-	 * 
-	 * @author Team871
-	 */
-	private enum SetpointHeights {
-		GROUND		((0 * 12) + 0.00),
-		LOW_SWITCH	((1 * 12) + 6.75),
-		SCALE_LOW	((6 * 12) + 4.00),
-		SCALE_MID	((5 * 12) + 4.00),
-		SCALE_HIGH	((4 * 12) + 4.00),
-		MANUAL		(0);
-		
-		/**
-		 * Describes the height of the setpoint in inches
-		 */
-		double height;
-
-		private SetpointHeights(double height) {
-			this.height = height;
-		}
 	}
 
 	/**

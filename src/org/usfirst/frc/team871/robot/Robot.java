@@ -46,8 +46,6 @@ public class Robot extends IterativeRobot {
 				lowerUpperLimits, lowerLowerLimits);
 		
 		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm());
-		
-		
 	}
 
 	@Override

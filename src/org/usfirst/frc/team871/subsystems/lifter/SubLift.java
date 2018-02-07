@@ -29,12 +29,6 @@ public class SubLift {
 		
 		this.encoder.setPIDSourceType(PIDSourceType.kDisplacement);
 		
-		// diam = 1.6
-		// circum = diam * PI
-		// ticksPerPulse = 256
-		// distPerPulse = circum / ticksPerPulse
-		this.encoder.setDistancePerPulse(0.019634954084936);
-		
 		pidDisplacement = new PIDController(0, 0, 0, encoder, liftMotor);
 		pidRate = new PIDController(0, 0, 0, encoder, liftMotor);
 		pidRate.disable();

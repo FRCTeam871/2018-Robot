@@ -40,8 +40,7 @@ public class SuperLift {
 	/**
 	 * Controls the speed of the lift on the superLift
 	 * 
-	 * @param speed
-	 *            The speed of the lift
+	 * @param speed The speed of the lift
 	 */
 	public void moveLift(double speed) {
 		upperLift.moveLift(speed);
@@ -59,12 +58,11 @@ public class SuperLift {
 
 	/**
 	 * 
-	 * @param setPoint
-	 *            sets the height of the lift in inches above the floor
+	 * @param setPoint Sets the height of the lift in inches above the floor
 	 */
 	public void setHeight(double setPoint) {
 		setPoint -= baseHeight;
-		setPoint = setPoint / 2;
+		setPoint /= 2;
 		upperLift.setHeight(setPoint);
 		lowerLift.setHeight(setPoint);
 	}
@@ -104,10 +102,15 @@ public class SuperLift {
 	 * Describes all states of the lifts
 	 * 
 	 * @author Team871
-	 *
 	 */
 	private enum SetpointHeights {
-		GROUND(-1), LOW_SWITCH(-1), SCALE_LOW(-1), SCALE_MID(-1), SCALE_HIGH(-1), MANUAL(-1);
+		GROUND		((0 * 12) + 0.00),
+		LOW_SWITCH	((1 * 12) + 6.75),
+		SCALE_LOW	((6 * 12) + 4.00),
+		SCALE_MID	((5 * 12) + 4.00),
+		SCALE_HIGH	((4 * 12) + 4.00),
+		MANUAL		(0);
+		
 		/**
 		 * Describes the height of the setpoint in inches
 		 */

@@ -4,15 +4,19 @@ import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDSourceType;
 
 /**
  * This class controls one part of the lift
  * @author Team871
  */
 public class SubLift {
+	
+	private static final double MAX_VELOCITY = 6; //inches per second
 	private CompositeLimitedSpeedController liftMotor;
 	private Encoder encoder;
-	private PIDController pid;
+	private PIDController pidDisplacement;
+	private PIDController pidRate; // TODO: make the displacement one use velocity
 	
 	/**
 	 * Controls the bottom part of the lift
@@ -23,18 +27,22 @@ public class SubLift {
 		this.liftMotor = liftMotor;
 		this.encoder = encoder;
 		
-		pid = new PIDController(1,1,1, encoder, liftMotor);
+		this.encoder.setPIDSourceType(PIDSourceType.kDisplacement);
+		
+		pidDisplacement = new PIDController(0, 0, 0, encoder, liftMotor);
+		pidRate = new PIDController(0.2360, 0.000420, 0.0666, encoder, liftMotor);
+		pidRate.disable();
 	}
 	
 	/**
 	 * Controls the speed of the lift.<br>
 	 * <marquee>Disables the PID.</marquee>
-	 * @param speed How fast the lift moves
+	 * @param speed How fast the lift moves (-1 to 1)
 	 */
 	protected void moveLift(double speed) {
-		pid.disable();
-		liftMotor.set(speed);
-		
+		pidDisplacement.disable();
+		pidRate.enable();
+		pidRate.setSetpoint(speed * MAX_VELOCITY);
 		resetEncoder();
 	}
 	
@@ -59,19 +67,28 @@ public class SubLift {
 	}
 	
 	/**
+	 * Gets the velocity of the encoder.
+	 * @return returns the velocity of the encoder
+	 */
+	protected double getVelocity() {
+		return encoder.getRate();
+	}
+	
+	/**
 	 * It used to set the set point of the lifter. This is a value in inches.<br>
 	 * <marquee>Enables the PID.</marquee>
 	 */
 	protected void setHeight(double setPoint) {
-		pid.enable();
-		pid.setSetpoint(setPoint);
+		pidRate.disable();
+		pidDisplacement.enable();
+		pidDisplacement.setSetpoint(setPoint);
 	}
 	
 	/**
 	 * Enables and disables the PID.
 	 */
 	protected void setEnablePID(boolean enable) {
-		pid.setEnabled(enable);
+		pidDisplacement.setEnabled(enable);
 	}
 	
 }

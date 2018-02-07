@@ -26,8 +26,8 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 	private final SpeedController liftMotorBtm;
 	private final AHRS gyro;
 	private final DigitalInput cubeDetect;
-	private final Encoder encoderBtm;
-	private final Encoder encoderUp;
+	private final Encoder encoderBtm; // 256 ticks/rot
+	private final Encoder encoderUp; // 256 ticks/rot
 	private final Solenoid grabPiston;
 	private final Solenoid ejectPiston;
 	private final DigitalLimitSwitch upperUpperLimit;
@@ -45,10 +45,21 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 		liftMotorBtm = new Talon(-1); //TODO: Find port#
 		gyro         = new AHRS(Port.kMXP); //TODO: Find port#
 		cubeDetect   = new DigitalInput(-1);//TODO: Find port#
+		
 		encoderUp    = new Encoder(-1,-1);  //TODO: Find port#
-		encoderUp.setDistancePerPulse(-1);  //TODO: get ratio
+		// diam = 1.6
+		// circum = diam * PI
+		// ticksPerPulse = 256
+		// distPerPulse = circum / ticksPerPulse
+		encoderUp.setDistancePerPulse(0.019634954084936);
+		
 		encoderBtm   = new Encoder(-1,-1);  //TODO: Find port#
-		encoderBtm.setDistancePerPulse(-1); //TODO: get ratio
+		// diam = 1.6
+		// circum = diam * PI
+		// ticksPerPulse = 256
+		// distPerPulse = circum / ticksPerPulse
+		encoderBtm.setDistancePerPulse(0.019634954084936);
+		
 		grabPiston   = new Solenoid(-1); //TODO: Find port#
 		ejectPiston  = new Solenoid(-1); //TODO: Find port#
 		upperUpperLimit = new DigitalLimitSwitch(new DigitalInput(-1)); //TODO: Find port#

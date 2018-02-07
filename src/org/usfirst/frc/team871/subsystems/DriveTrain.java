@@ -30,6 +30,9 @@ public class DriveTrain extends MecanumDrive implements PIDOutput{
 		this.gyro = gyro;
 		
 		headingPID = new PIDController(0, 0, 0, gyro, this);
+		headingPID.setInputRange(-180, 180);
+		headingPID.setOutputRange(-1, 1);
+		headingPID.setContinuous();
 	}
 	
 	/**
@@ -68,7 +71,6 @@ public class DriveTrain extends MecanumDrive implements PIDOutput{
 	/**
 	 * @param heading - the heading hold, in degrees
 	 */
-	// TODO: TODO: TODO: TODO: Make it do the wrappy thing so if it's at 359 and you try to go to 0 it doesn't go all the way around.
 	public void setHeadingHold(double heading) {
 		headingPID.setSetpoint(heading);
 	}

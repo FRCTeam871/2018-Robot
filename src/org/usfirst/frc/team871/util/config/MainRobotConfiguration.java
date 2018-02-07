@@ -26,8 +26,8 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 	private final SpeedController liftMotorBtm;
 	private final AHRS gyro;
 	private final DigitalInput cubeDetect;
-	private final Encoder encoderBtm;
-	private final Encoder encoderUp;
+	private final Encoder encoderBtm; // 256 ticks/rot
+	private final Encoder encoderUp; // 256 ticks/rot
 	private final Solenoid grabPiston;
 	private final Solenoid ejectPiston;
 	private final DigitalLimitSwitch upperUpperLimit;

@@ -132,23 +132,18 @@ public class CompositeLimitedSpeedController extends SendableBase implements Spe
 
 	@Override
 	public void initSendable(SendableBuilder builder) {
-		builder.addBooleanArrayProperty("Upper Limits", () -> {
-			final boolean[] bools = new boolean[upperLimitss.size()];
-			for(int i = 0; i<upperLimitss.size(); i++) {
-				bools[i] = upperLimitss.get(i).isAtLimit();
-			}
-			
-			return bools;
-		}, null);
+		builder.setSmartDashboardType("CompositeLimitedSpeedController");
+		builder.setSafeState(this::stopMotor);
+
+		for(int i = 0; i<upperLimitss.size(); i++) {
+			final ILimitSwitch limit = upperLimitss.get(i);
+			builder.addBooleanProperty("ul"+i, () -> limit.isAtLimit(), null);
+		}
 		
-		builder.addBooleanArrayProperty("Lower Limits", () -> {
-			final boolean[] bools = new boolean[lowerLimitss.size()];
-			for(int i = 0; i<lowerLimitss.size(); i++) {
-				bools[i] = lowerLimitss.get(i).isAtLimit();
-			}
-			
-			return bools;
-		}, null);
+		for(int i = 0; i<lowerLimitss.size(); i++) {
+			final ILimitSwitch limit = lowerLimitss.get(i);
+			builder.addBooleanProperty("ll"+i, () -> limit.isAtLimit(), null);
+		}
 		
 		builder.addBooleanProperty("isAtUpperLimit", this::isAtUpperLimit, null);
 		builder.addBooleanProperty("isAtLowerLimit", this::isAtLowerLimit, null);

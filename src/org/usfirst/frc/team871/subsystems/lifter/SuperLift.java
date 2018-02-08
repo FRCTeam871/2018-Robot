@@ -1,8 +1,14 @@
 package org.usfirst.frc.team871.subsystems.lifter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.SendableBase;
+import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 
 /**
  * This class controls both parts of the lift
@@ -10,11 +16,12 @@ import edu.wpi.first.wpilibj.Encoder;
  * @author Team871
  *
  */
-public class SuperLift {
+public class SuperLift extends SendableBase implements Sendable {
 	private SubLift upperLift;
 	private SubLift lowerLift;
 	private final int baseHeight = -1; // TODO find this one
 	private SetpointHeights lifterHeight;
+	private final Map<SetpointHeights, Double> setpointVals = new HashMap<>();
 
 	/**
 	 * Describes all states of the lifts
@@ -22,21 +29,12 @@ public class SuperLift {
 	 * @author Team871
 	 */
 	private enum SetpointHeights {
-		GROUND		((0 * 12) + 0.00),
-		LOW_SWITCH	((1 * 12) + 6.75),
-		SCALE_LOW	((6 * 12) + 4.00),
-		SCALE_MID	((5 * 12) + 4.00),
-		SCALE_HIGH	((4 * 12) + 4.00),
-		MANUAL		(0);
-		
-		/**
-		 * Describes the height of the setpoint in inches
-		 */
-		double height;
-
-		private SetpointHeights(double height) {
-			this.height = height;
-		}
+		GROUND,
+		LOW_SWITCH,
+		SCALE_LOW,
+		SCALE_MID,
+		SCALE_HIGH,
+		MANUAL
 	}
 	
 	/**
@@ -57,6 +55,21 @@ public class SuperLift {
 		lowerLift = new SubLift("Lower", lowerLiftMotor, lowerEncoder);
 
 		lifterHeight = SetpointHeights.GROUND;
+		
+		setName("SuperLift");
+		addChild(upperLift);
+		addChild(lowerLift);
+		
+		configureSetpoints();
+	}
+	
+	private void configureSetpoints() {
+		setpointVals.put(SetpointHeights.GROUND		,(0.0 * 12.0) + 0.00);
+		setpointVals.put(SetpointHeights.LOW_SWITCH	,(1.0 * 12.0) + 6.75);
+		setpointVals.put(SetpointHeights.SCALE_LOW	,(6.0 * 12.0) + 4.00);
+		setpointVals.put(SetpointHeights.SCALE_MID	,(5.0 * 12.0) + 4.00);
+		setpointVals.put(SetpointHeights.SCALE_HIGH	,(4.0 * 12.0) + 4.00);
+		setpointVals.put(SetpointHeights.MANUAL		,0.0);	
 	}
 
 	/**
@@ -127,11 +140,11 @@ public class SuperLift {
 			lifterHeight = SetpointHeights.LOW_SWITCH;
 			break;
 		case MANUAL:
-			if (getHeight() < SetpointHeights.LOW_SWITCH.height) {
+			if (getHeight() < setpointVals.get(SetpointHeights.LOW_SWITCH)) {
 				lifterHeight = SetpointHeights.LOW_SWITCH;
-			} else if (getHeight() < SetpointHeights.SCALE_LOW.height) {
+			} else if (getHeight() < setpointVals.get(SetpointHeights.SCALE_LOW)) {
 				lifterHeight = SetpointHeights.SCALE_LOW;
-			} else if (getHeight() < SetpointHeights.SCALE_MID.height) {
+			} else if (getHeight() < setpointVals.get(SetpointHeights.SCALE_MID)) {
 				lifterHeight = SetpointHeights.SCALE_MID;
 			} else {
 				lifterHeight = SetpointHeights.SCALE_HIGH;
@@ -139,7 +152,7 @@ public class SuperLift {
 			break;
 		}
 		
-		setHeight(lifterHeight.height);
+		setHeight(setpointVals.get(lifterHeight));
 	}
 
 	/**
@@ -166,18 +179,27 @@ public class SuperLift {
 			lifterHeight = SetpointHeights.SCALE_MID;
 			break;
 		case MANUAL:
-			if (getHeight() > SetpointHeights.SCALE_MID.height) {
+			if (getHeight() > setpointVals.get(SetpointHeights.SCALE_MID)) {
 				lifterHeight = SetpointHeights.SCALE_MID;
-			} else if (getHeight() > SetpointHeights.SCALE_LOW.height) {
+			} else if (getHeight() > setpointVals.get(SetpointHeights.SCALE_LOW)) {
 				lifterHeight = SetpointHeights.SCALE_LOW;
-			} else if (getHeight() > SetpointHeights.LOW_SWITCH.height) {
+			} else if (getHeight() > setpointVals.get(SetpointHeights.LOW_SWITCH)) {
 				lifterHeight = SetpointHeights.LOW_SWITCH;
 			} else {
 				lifterHeight = SetpointHeights.GROUND;
 			}
 			break;
 		}
-		setHeight(lifterHeight.height);
+		setHeight(setpointVals.get(lifterHeight));
+	}
+
+	@Override
+	public void initSendable(SendableBuilder builder) {
+		builder.setSmartDashboardType("SuperLift");
+		builder.addStringProperty("currentSetpoint", () -> lifterHeight.toString(), null);
+		setpointVals.forEach((k, v) -> {
+			builder.addDoubleProperty(k.toString(), () -> setpointVals.get(k), val -> setpointVals.put(k,  val));
+		});
 	}
 
 }

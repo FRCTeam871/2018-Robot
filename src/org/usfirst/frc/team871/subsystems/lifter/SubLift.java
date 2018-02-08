@@ -5,13 +5,17 @@ import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.SendableBase;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 /**
  * This class controls one part of the lift
  * @author Team871
  */
-public class SubLift {
+public class SubLift extends SendableBase implements Sendable {
 	
 	private static final double MAX_VELOCITY = 6; //inches per second
 	private CompositeLimitedSpeedController liftMotor;
@@ -38,15 +42,11 @@ public class SubLift {
 		pidRate.setInputRange(-MAX_VELOCITY, MAX_VELOCITY);
 		pidRate.disable();
 		
-		pidDisplacement.setName("Lifter", name+" - Displacement PID");
-		pidRate.setName("Lifter", name+" - RatePid");
-		liftMotor.setName("Lifter", name+" - Motor");
-		encoder.setName("Lifter", name+"- Encoder");
-		
-		LiveWindow.add(pidDisplacement);
-		LiveWindow.add(pidRate);
-		LiveWindow.add(liftMotor);
-		LiveWindow.add(encoder);
+		setName("Lifter-"+name);
+		addChild(pidDisplacement);
+		addChild(pidRate);
+		addChild(liftMotor);
+		addChild(encoder);
 	}
 	
 	private void ensureMode(ControlMode mode) {
@@ -114,5 +114,19 @@ public class SubLift {
 	protected void setHeight(double setPoint) {
 		ensureMode(ControlMode.Position);
 		pidDisplacement.setSetpoint(setPoint);
+	}
+
+	@Override
+	public void initSendable(SendableBuilder builder) {
+		builder.setSmartDashboardType("SubLift");
+		builder.setSafeState(() -> {
+			pidRate.disable();
+			pidDisplacement.disable();
+			liftMotor.stopMotor();
+		});
+		
+		builder.addStringProperty("Mode", currentMode::toString, null);
+		builder.addDoubleProperty("vError", pidRate::getError, null);
+		builder.addDoubleProperty("dError", pidDisplacement::getError, null);
 	}
 }

@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
  * @author Team871
  *
  */
-public class SuperLift extends SendableBase implements Sendable {
+public class  SuperLift extends SendableBase implements Sendable {
 	private SubLift upperLift;
 	private SubLift lowerLift;
 	private final int baseHeight = -1; // TODO find this one
@@ -38,7 +38,6 @@ public class SuperLift extends SendableBase implements Sendable {
 	}
 	
 	/**
-	 * 
 	 * @param upperLiftMotor
 	 *            The Motor that controls the upper part of the lift
 	 * @param upperEncoder
@@ -55,10 +54,10 @@ public class SuperLift extends SendableBase implements Sendable {
 		lowerLift = new SubLift("Lower", lowerLiftMotor, lowerEncoder);
 
 		lifterHeight = SetpointHeights.GROUND;
-		
-		setName("SuperLift");
+
 		addChild(upperLift);
 		addChild(lowerLift);
+		setName("SuperLift", "SuperLift");
 		
 		configureSetpoints();
 	}
@@ -197,9 +196,7 @@ public class SuperLift extends SendableBase implements Sendable {
 	public void initSendable(SendableBuilder builder) {
 		builder.setSmartDashboardType("SuperLift");
 		builder.addStringProperty("currentSetpoint", () -> lifterHeight.toString(), null);
-		setpointVals.forEach((k, v) -> {
-			builder.addDoubleProperty(k.toString(), () -> setpointVals.get(k), val -> setpointVals.put(k,  val));
-		});
+		setpointVals.forEach((k, v) -> builder.addDoubleProperty(k.toString(), () -> setpointVals.get(k), val -> setpointVals.put(k,  val)));
 		
 		builder.addDoubleProperty("height", this::getHeight, this::setHeight);
 		builder.addDoubleProperty("speed", null, this::moveLift);

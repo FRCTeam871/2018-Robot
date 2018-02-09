@@ -36,7 +36,7 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 	private final DigitalLimitSwitch lowerUpperLimit;
 	private final DigitalLimitSwitch lowerLowerLimit;
 	
-	private MainRobotConfiguration() {
+	MainRobotConfiguration() {
 		//TODO get actual pins!
 
 		frontLeft    = new WPI_VictorSPX(12);
@@ -120,11 +120,13 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 	public SpeedController getLiftMotorUp() {
 		return liftMotorUp;
 	}
+
 	@Override
 	public DoubleSolenoid getGrabPiston() {
 		// TODO Auto-generated method stub
 		return grabPiston;
 	}
+
 	@Override
 	public DoubleSolenoid getEjectPiston() {
 		// TODO Auto-generated method stub
@@ -154,5 +156,4 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 		// TODO Auto-generated method stub
 		return lowerLowerLimit;
 	}
-	
 }

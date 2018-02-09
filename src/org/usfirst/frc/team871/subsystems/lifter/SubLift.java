@@ -20,33 +20,27 @@ public class SubLift extends SendableBase implements Sendable {
 	private static final double MAX_VELOCITY = 6; //inches per second
 	private CompositeLimitedSpeedController liftMotor;
 	private Encoder encoder;
-	private PIDController pidDisplacement;
-	private PIDController pidRate; // TODO: make the displacement one use velocity
-	
-	private ControlMode currentMode = null;
+	private PIDController pid;
+	private ControlMode currentMode = ControlMode.Startup;
 	
 	/**
 	 * Controls the bottom part of the lift
 	 * @param liftMotor the motor that controls the lift 
 	 * @param encoder Measures the distance of the bottom part of the lift
 	 */
-	protected SubLift(String name, CompositeLimitedSpeedController liftMotor, Encoder encoder) {
+	SubLift(String name, CompositeLimitedSpeedController liftMotor, Encoder encoder) {
 		this.liftMotor = liftMotor;
 		this.encoder = encoder;
-		
-		this.encoder.setPIDSourceType(PIDSourceType.kDisplacement);
-		
-		pidDisplacement = new PIDController(0, 0, 0, encoder, liftMotor);
-		pidRate = new PIDController(0.2360, 0.000420, 0.0666, encoder, liftMotor);
-		pidRate.setOutputRange(-1, 1);
-		pidRate.setInputRange(-MAX_VELOCITY, MAX_VELOCITY);
-		pidRate.disable();
-		
-		setName("Lifter-"+name);
-		addChild(pidDisplacement);
-		addChild(pidRate);
+
+		pid = new PIDController(0, 0, 0, encoder, liftMotor);
+		pid.setOutputRange(-1, 1);
+		pid.disable();
+
+		LiveWindow.add(pid);
+		addChild(pid);
 		addChild(liftMotor);
 		addChild(encoder);
+		setName("Lifter-"+name);
 	}
 	
 	private void ensureMode(ControlMode mode) {
@@ -55,16 +49,20 @@ public class SubLift extends SendableBase implements Sendable {
 		}
 		
 		currentMode = mode;
+		pid.disable();
 		switch(mode) {
 			case Position:
-				pidRate.disable();
-				pidDisplacement.enable();
+			    pid.setPID(0,0,0);
+			    pid.setInputRange(0, 0);
+                encoder.setPIDSourceType(PIDSourceType.kDisplacement);
 				break;
 			case Velocity:
-				pidDisplacement.disable();
-				pidRate.enable();			
+			    pid.setPID(0,0,0, 0);
+			    pid.setInputRange(-MAX_VELOCITY, MAX_VELOCITY);
+                encoder.setPIDSourceType(PIDSourceType.kRate);
 				break;
 		}
+		pid.enable();
 	}
 	
 	/**
@@ -74,7 +72,7 @@ public class SubLift extends SendableBase implements Sendable {
 	 */
 	protected void moveLift(double speed) {
 		ensureMode(ControlMode.Velocity);
-		pidRate.setSetpoint(speed * MAX_VELOCITY);
+		pid.setSetpoint(speed * MAX_VELOCITY);
 		maybeResetEncoder();
 	}
 	
@@ -82,7 +80,7 @@ public class SubLift extends SendableBase implements Sendable {
 	 * Resets the encoder if it's at the lower limit.
 	 * @return returns true if encoder is successfully reset
 	 */
-	protected boolean maybeResetEncoder() {
+	private boolean maybeResetEncoder() {
 		if(liftMotor.isAtLowerLimit()) {
 			encoder.reset();
 			return true;
@@ -113,20 +111,19 @@ public class SubLift extends SendableBase implements Sendable {
 	 */
 	protected void setHeight(double setPoint) {
 		ensureMode(ControlMode.Position);
-		pidDisplacement.setSetpoint(setPoint);
+		pid.setSetpoint(setPoint);
+		maybeResetEncoder();
 	}
 
 	@Override
 	public void initSendable(SendableBuilder builder) {
 		builder.setSmartDashboardType("SubLift");
 		builder.setSafeState(() -> {
-			pidRate.disable();
-			pidDisplacement.disable();
+			pid.disable();
 			liftMotor.stopMotor();
 		});
 		
 		builder.addStringProperty("Mode", currentMode::toString, null);
-		builder.addDoubleProperty("vError", pidRate::getError, null);
-		builder.addDoubleProperty("dError", pidDisplacement::getError, null);
+		builder.addDoubleProperty("error", pid::getError, null);
 	}
 }

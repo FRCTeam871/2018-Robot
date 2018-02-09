@@ -10,69 +10,57 @@ import org.usfirst.frc.team871.util.joystick.POVDirections;
 public interface IControlScheme {
 	
 	/**
-	 * 
 	 * @return Returns true if the toggle orientation button is pressed
 	 */
-	public boolean getToggleOrientationButton();
+	boolean getToggleOrientationButton();
 	
 	/**
-	 * 
 	 * @return Returns true if the reset gyro button is pressed
 	 */
-	public boolean getResetGyroButton();
+	boolean getResetGyroButton();
 	
 	/**
-	 * 
 	 * @return Returns true if the toggle grabber button is pressed
 	 */
-	public boolean getToggleGrabberButton();
+	boolean getToggleGrabberButton();
 	
 	/**
-	 * 
 	 * @return Returns true if the cube eject button is pressed
 	 */
-	public boolean getCubeEjectButton();
+	boolean getCubeEjectButton();
 	
 	/**
-	 * 
 	 * @return Returns true if the decrease setpoint button is pressed
 	 */
-	public boolean getDecreaseSetpointButton();
+	boolean getDecreaseSetpointButton();
 	
 	/**
-	 * 
 	 * @return Returns true if the increase setpoint button is pressed
 	 */
-	public boolean getIncreaseSetpointButton();
+	boolean getIncreaseSetpointButton();
 	
 	/**
-	 * 
 	 * @return Returns the lift axis value
 	 */
-	public double getLiftAxis();
+	double getLiftAxis();
 	
 	/**
-	 * 
 	 * @return Returns the x-axis value
 	 */
-	public double getXAxis();
+	double getXAxis();
 	
 	/**
-	 * 
 	 * @return Returns the y-axis value
 	 */
-	public double getYAxis();
+	double getYAxis();
 	
 	/**
-	 * 
 	 * @return Returns the rotation axis value
 	 */
-	public double getRotationAxis();
+	double getRotationAxis();
 	
 	/**
-	 * 
 	 * @return Returns the POV direction as a POVDirection
 	 */
-	public POVDirections getPOV();
-		
+	POVDirections getPOV();
 }

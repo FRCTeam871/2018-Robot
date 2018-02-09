@@ -12,7 +12,7 @@ public enum InitialControlScheme implements IControlScheme{
 	private EnhancedXBoxController xbox;
 	private EnhancedXBoxController xbox2;
 	
-	private InitialControlScheme() {
+	InitialControlScheme() {
 		xbox = new EnhancedXBoxController(0);
 		xbox2 = new EnhancedXBoxController(1);
 		xbox.setButtonMode(XBoxButtons.START, ButtonTypes.TOGGLE);

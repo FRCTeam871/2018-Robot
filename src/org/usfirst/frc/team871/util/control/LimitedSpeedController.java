@@ -59,8 +59,6 @@ public class LimitedSpeedController implements SpeedController {
         } else {
             motor.set(speed);
         }
-        
-        
     }
 
     @Override

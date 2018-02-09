@@ -29,7 +29,6 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
-		
 		controls = InitialControlScheme.DEFAULT;
 		config = MainRobotConfiguration.DEFAULT;
 		drive = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());

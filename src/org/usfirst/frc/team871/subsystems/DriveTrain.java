@@ -34,11 +34,13 @@ public class DriveTrain extends MecanumDrive implements PIDOutput {
 		headingPID.setInputRange(-180, 180);
 		headingPID.setOutputRange(-1, 1);
 		headingPID.setContinuous();
-		
-		setName("DriveTrain", "Main Drive");
-		headingPID.setName("DriveTrain", "Heading PID");
+
+		headingPID.setName("Heading PID");
 		LiveWindow.add(headingPID);
-		LiveWindow.add(this);
+		addChild(headingPID);
+		addChild(gyro);
+
+		setName("DriveTrain", "DriveTrain");
 	}
 	
 	/**

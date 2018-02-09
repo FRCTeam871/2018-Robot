@@ -17,8 +17,10 @@ public class CompositeLimitedSpeedController extends SendableBase implements Spe
 	private SpeedController motor;
 	private List<ILimitSwitch> upperLimitss;
 	private List<ILimitSwitch> lowerLimitss;
-	private boolean yoloMode = false;
-	
+	private boolean yoloMode = true;
+
+	private static int instanceCnt = 0;
+
 	/**
 	 * 
 	 * @param motor The speed controller being limited
@@ -32,6 +34,8 @@ public class CompositeLimitedSpeedController extends SendableBase implements Spe
 		this.lowerLimitss = lowerLimitss;
 		
 		motor.setInverted(inverted);
+		addChild(motor);
+		setName("CLSC", ++instanceCnt);
 	}
 	
 	/**
@@ -41,11 +45,7 @@ public class CompositeLimitedSpeedController extends SendableBase implements Spe
 	 * @param lowerLimitss Arraylist of lower limit switches
 	 */
 	public CompositeLimitedSpeedController(SpeedController motor, List<ILimitSwitch> upperLimitss, List<ILimitSwitch> lowerLimitss) {
-		this.motor = motor;
-		this.upperLimitss = upperLimitss;
-		this.lowerLimitss = lowerLimitss;
-		
-		motor.setInverted(false);
+		this(motor, upperLimitss, lowerLimitss, false);
 	}
 	
 	@Override
@@ -137,12 +137,12 @@ public class CompositeLimitedSpeedController extends SendableBase implements Spe
 
 		for(int i = 0; i<upperLimitss.size(); i++) {
 			final ILimitSwitch limit = upperLimitss.get(i);
-			builder.addBooleanProperty("ul"+i, () -> limit.isAtLimit(), null);
+			builder.addBooleanProperty("ul"+i, limit::isAtLimit, null);
 		}
 		
 		for(int i = 0; i<lowerLimitss.size(); i++) {
 			final ILimitSwitch limit = lowerLimitss.get(i);
-			builder.addBooleanProperty("ll"+i, () -> limit.isAtLimit(), null);
+			builder.addBooleanProperty("ll"+i, limit::isAtLimit, null);
 		}
 		
 		builder.addBooleanProperty("isAtUpperLimit", this::isAtUpperLimit, null);
@@ -151,5 +151,4 @@ public class CompositeLimitedSpeedController extends SendableBase implements Spe
 		builder.addDoubleProperty("speed", this::get, this::set);
 		builder.addBooleanProperty("yoloMode", this::isYoloMode, this::setYoloMode);
 	}
-	
 }

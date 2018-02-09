@@ -200,6 +200,9 @@ public class SuperLift extends SendableBase implements Sendable {
 		setpointVals.forEach((k, v) -> {
 			builder.addDoubleProperty(k.toString(), () -> setpointVals.get(k), val -> setpointVals.put(k,  val));
 		});
+		
+		builder.addDoubleProperty("height", this::getHeight, this::setHeight);
+		builder.addDoubleProperty("speed", null, this::moveLift);
 	}
 
 }

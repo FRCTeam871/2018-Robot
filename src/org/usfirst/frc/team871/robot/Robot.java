@@ -60,9 +60,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		if(controls.getToggleOrientationButton()) {
-			drive.driveRobotOriented(controls.getYAxis(), controls.getXAxis(), controls.getRotationAxis());
+			drive.driveRobotOriented(controls.getYAxis(), -controls.getXAxis(), controls.getRotationAxis());
 		} else {
-			drive.driveFieldOriented(controls.getYAxis(), controls.getXAxis(), controls.getRotationAxis());
+			drive.driveFieldOriented(controls.getYAxis(), -controls.getXAxis(), controls.getRotationAxis());
 		}
 		if(controls.getResetGyroButton()) {
 			drive.resetGyro();

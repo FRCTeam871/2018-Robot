@@ -52,8 +52,7 @@ public class DriveTrain extends MecanumDrive implements PIDOutput {
 	 * @param r Rotation of the Robot 
 	 */
 	public void driveFieldOriented(double x, double y, double r) {
-		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0), gyro.getAngle());
-		System.out.println(gyro.getAngle());
+		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0), -gyro.getAngle());
 	}
 	
 	/**

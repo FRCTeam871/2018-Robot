@@ -17,7 +17,7 @@ public class CompositeLimitedSpeedController extends SendableBase implements Spe
 	private SpeedController motor;
 	private List<ILimitSwitch> upperLimitss;
 	private List<ILimitSwitch> lowerLimitss;
-	private boolean yoloMode = true;
+	private boolean yoloMode = false;
 
 	private static int instanceCnt = 0;
 
@@ -28,24 +28,13 @@ public class CompositeLimitedSpeedController extends SendableBase implements Spe
 	 * @param lowerLimitss Arraylist of lower limit switches
 	 * @param inverted Determines if the speed controller output should be negated
 	 */
-	public CompositeLimitedSpeedController(SpeedController motor, List<ILimitSwitch> upperLimitss, List<ILimitSwitch> lowerLimitss, boolean inverted) {
+	public CompositeLimitedSpeedController(SpeedController motor, List<ILimitSwitch> upperLimitss, List<ILimitSwitch> lowerLimitss) {
 		this.motor = motor;
 		this.upperLimitss = upperLimitss;
 		this.lowerLimitss = lowerLimitss;
 		
-		motor.setInverted(inverted);
 		addChild(motor);
 		setName("CLSC", ++instanceCnt);
-	}
-	
-	/**
-	 * The motor is not inverted by default
-	 * @param motor The speed controller being limited
-	 * @param upperLimitss Arraylist of upper limit switches
-	 * @param lowerLimitss Arraylist of lower limit switches
-	 */
-	public CompositeLimitedSpeedController(SpeedController motor, List<ILimitSwitch> upperLimitss, List<ILimitSwitch> lowerLimitss) {
-		this(motor, upperLimitss, lowerLimitss, false);
 	}
 	
 	@Override
@@ -148,7 +137,7 @@ public class CompositeLimitedSpeedController extends SendableBase implements Spe
 		builder.addBooleanProperty("isAtUpperLimit", this::isAtUpperLimit, null);
 		builder.addBooleanProperty("isAtLowerLimit", this::isAtLowerLimit, null);
 		builder.addBooleanProperty("inverted", this::getInverted, this::setInverted);
-		builder.addDoubleProperty("speed", this::get, this::set);
+		builder.addDoubleProperty("speed", this::get, null);
 		builder.addBooleanProperty("yoloMode", this::isYoloMode, this::setYoloMode);
 	}
 }

@@ -45,29 +45,40 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 		rearRight    = new WPI_VictorSPX(11);
 		liftMotorUp  = new WPI_TalonSRX(1);
 		liftMotorBtm = new WPI_TalonSRX(0);
+		liftMotorBtm.setInverted(true);
 		gyro         = new AHRS(Port.kMXP);
 		cubeDetect   = new DigitalInput(20); //TODO: Find port#
 		
-		encoderUp    = new Encoder(4,5);  //TODO: Find port#
-		// diam = 1.6
-		// circum = diam * PI
-		// ticksPerPulse = 256
-		// distPerPulse = circum / ticksPerPulse
-		encoderUp.setDistancePerPulse(0.019634954084936);
+		//41 26.5
 		
-		encoderBtm   = new Encoder(6,7);  //TODO: Find port#
+		encoderUp    = new Encoder(6,7);  //TODO: Find port#
 		// diam = 1.6
 		// circum = diam * PI
 		// ticksPerPulse = 256
 		// distPerPulse = circum / ticksPerPulse
-		encoderBtm.setDistancePerPulse(0.019634954084936);
+//		encoderUp.setDistancePerPulse(0.019634954084936);
+//		encoderUp.setDistancePerPulse(1);
+		encoderUp.setDistancePerPulse(41 / 1682.75);
+		
+		//1682.75 41in
+		
+		encoderBtm   = new Encoder(4,5);  //TODO: Find port#
+		// diam = 1.6
+		// circum = diam * PI
+		// ticksPerPulse = 256
+		// distPerPulse = circum / ticksPerPulse
+//		encoderBtm.setDistancePerPulse(0.019634954084936);
+//		encoderBtm.setDistancePerPulse(1);
+		encoderBtm.setDistancePerPulse(41 / 1865.75);
+		encoderBtm.setReverseDirection(true);
+		//1865.75 41
 		
 		grabPiston   = new DoubleSolenoid(0, 1);
 		ejectPiston  = new DoubleSolenoid(2, 3);
-		upperUpperLimit = new DigitalLimitSwitch(new DigitalInput(2)); //TODO: Find port#
-		upperLowerLimit = new DigitalLimitSwitch(new DigitalInput(3)); //TODO: Find port#
-		lowerUpperLimit = new DigitalLimitSwitch(new DigitalInput(0)); //TODO: Find port#
-		lowerLowerLimit = new DigitalLimitSwitch(new DigitalInput(1)); //TODO: Find port#
+		upperUpperLimit = new DigitalLimitSwitch(new DigitalInput(2), true); //TODO: Find port#
+		upperLowerLimit = new DigitalLimitSwitch(new DigitalInput(3), true); //TODO: Find port#
+		lowerUpperLimit = new DigitalLimitSwitch(new DigitalInput(0), true); //TODO: Find port#
+		lowerLowerLimit = new DigitalLimitSwitch(new DigitalInput(1), true); //TODO: Find port#
 		
 	}
 	

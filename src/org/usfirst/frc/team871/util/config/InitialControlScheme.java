@@ -17,10 +17,18 @@ public enum InitialControlScheme implements IControlScheme{
 		xbox2 = new EnhancedXBoxController(1);
 		xbox.setButtonMode(XBoxButtons.START, ButtonTypes.TOGGLE);
 		xbox.setButtonMode(XBoxButtons.BACK, ButtonTypes.RISING);
+		xbox.setAxisDeadband(XBoxAxes.LEFTX, 0.2);
+		xbox.setAxisDeadband(XBoxAxes.LEFTY, 0.2);
+		xbox.setAxisDeadband(XBoxAxes.RIGHTX, 0.2);
+		xbox.setAxisDeadband(XBoxAxes.RIGHTY, 0.2);
 		xbox2.setButtonMode(XBoxButtons.A, ButtonTypes.RISING);
 		xbox2.setButtonMode(XBoxButtons.B, ButtonTypes.RISING);
 		xbox2.setButtonMode(XBoxButtons.LBUMPER, ButtonTypes.RISING);
 		xbox2.setButtonMode(XBoxButtons.RBUMPER, ButtonTypes.RISING);
+		xbox2.setAxisDeadband(XBoxAxes.LEFTX, 0.2);
+		xbox2.setAxisDeadband(XBoxAxes.LEFTY, 0.2);
+		xbox2.setAxisDeadband(XBoxAxes.RIGHTX, 0.2);
+		xbox2.setAxisDeadband(XBoxAxes.RIGHTY, 0.2);
 	}
 	@Override
 	public boolean getToggleOrientationButton() {

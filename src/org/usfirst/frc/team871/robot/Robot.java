@@ -34,10 +34,10 @@ public class Robot extends IterativeRobot {
 		drive = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
 		grabber = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
 		
-		List<ILimitSwitch> upperUpperLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getupperUpperLimit(), new EncoderLimitSwitch(config.getEncoderUp(), -1, true)));
-		List<ILimitSwitch> upperLowerLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getupperLowerLimit(), new EncoderLimitSwitch(config.getEncoderUp(), -1, false)));
-		List<ILimitSwitch> lowerUpperLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getlowerUpperLimit(), new EncoderLimitSwitch(config.getEncoderBtm(), -1, true)));
-		List<ILimitSwitch> lowerLowerLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getlowerLowerLimit(), new EncoderLimitSwitch(config.getEncoderBtm(), -1, false)));
+		List<ILimitSwitch> upperUpperLimits = Arrays.asList(config.getupperUpperLimit());
+		List<ILimitSwitch> upperLowerLimits = Arrays.asList(config.getupperLowerLimit());
+		List<ILimitSwitch> lowerUpperLimits = Arrays.asList(config.getlowerUpperLimit());
+		List<ILimitSwitch> lowerLowerLimits = Arrays.asList(config.getlowerLowerLimit());
 		
 		CompositeLimitedSpeedController limitedSpeedControllerUp = new CompositeLimitedSpeedController(config.getLiftMotorUp(), 
 				upperUpperLimits, upperLowerLimits);
@@ -59,11 +59,11 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopPeriodic() {
-//		if(controls.getToggleOrientationButton()) {
-//			drive.driveRobotOriented(controls.getXAxis(), controls.getYAxis(), controls.getRotationAxis());
-//		} else {
-//			drive.driveFieldOriented(controls.getXAxis(), controls.getYAxis(), controls.getRotationAxis());
-//		}
+		if(controls.getToggleOrientationButton()) {
+			drive.driveRobotOriented(controls.getYAxis(), controls.getXAxis(), controls.getRotationAxis());
+		} else {
+			drive.driveFieldOriented(controls.getYAxis(), controls.getXAxis(), controls.getRotationAxis());
+		}
 		if(controls.getResetGyroButton()) {
 			drive.resetGyro();
 		}
@@ -85,7 +85,7 @@ public class Robot extends IterativeRobot {
 		}
 		
 //		if(controls.getLiftAxis() != 0) {
-		lift.moveLift(controls.getLiftAxis());
+//		lift.moveLift(controls.getLiftAxis());
 //		}
 		
 		if(controls.getPOV() ==  POVDirections.UP || controls.getPOV() ==  POVDirections.UP_RIGHT || controls.getPOV() ==  POVDirections.UP_LEFT) {

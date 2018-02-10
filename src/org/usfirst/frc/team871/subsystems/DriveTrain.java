@@ -34,11 +34,13 @@ public class DriveTrain extends MecanumDrive implements PIDOutput {
 		headingPID.setInputRange(-180, 180);
 		headingPID.setOutputRange(-1, 1);
 		headingPID.setContinuous();
-
+		headingPID.disable();
+		gyro.setName("DriveTrain", "Gyro");
 		headingPID.setName("Heading PID");
 		LiveWindow.add(headingPID);
-		addChild(headingPID);
-		addChild(gyro);
+		LiveWindow.add(gyro);
+//		addChild(headingPID);
+//		addChild(gyro);
 
 		setName("DriveTrain", "DriveTrain");
 	}
@@ -51,6 +53,7 @@ public class DriveTrain extends MecanumDrive implements PIDOutput {
 	 */
 	public void driveFieldOriented(double x, double y, double r) {
 		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0), gyro.getAngle());
+		System.out.println(gyro.getAngle());
 	}
 	
 	/**

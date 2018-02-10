@@ -18,7 +18,10 @@ public class WaypointProvider extends ArrayList<Waypoint> implements IWaypointPr
 
 	@Override
 	public boolean hasNext() {
-		if(super.size() == index) return false;	
+		if(super.size() == index) {
+			return false;	
+		}
+		
 		return true;
 		
 	}

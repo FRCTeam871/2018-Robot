@@ -194,4 +194,16 @@ public class SuperLift {
 		setHeight(lifterHeight.height);
 	}
 
+	public boolean isAtSetpoint(double Setpoint) {
+		double height = this.getHeight();
+		double max = height+1.0;
+		double min = height-1.0;
+		
+		if((height < max) && (height > min)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }

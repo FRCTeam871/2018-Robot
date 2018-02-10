@@ -12,22 +12,30 @@ public class NullAction implements IAction{
 
 	@Override
 	public void abort() {	
-		
+		dont();
 	}
 
 	@Override
 	public void execute() {	
 		dont();
 	}
-	
-	public void dont() {
-		return;
-	}
 
 	@Override
 	public void init(Robot robot) {
 		dont();
 		
+	}
+
+	@Override
+	public void halt() {	
+		dont();
+	}
+	
+	/**
+	 * It don'ts
+	 */
+	public void dont() {
+		return;
 	}
 	
 }

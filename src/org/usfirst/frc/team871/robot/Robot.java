@@ -20,6 +20,8 @@ import org.usfirst.frc.team871.util.joystick.XBoxButtons;
 import org.usfirst.frc.team871.util.sensor.EncoderLimitSwitch;
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 
 public class Robot extends IterativeRobot {
@@ -29,14 +31,17 @@ public class Robot extends IterativeRobot {
 	private Grabber grabber;
 	private SuperLift lift;
 	private IControlScheme controls;
+	private AHRS navX;
 	
 	@Override
 	public void robotInit() {
 		
 		controls = InitialControlScheme.DEFAULT;
-		config = MainRobotConfiguration.DEFAULT;
-		drive = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
-		grabber = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
+		config   = MainRobotConfiguration.DEFAULT;
+		navX     = config.getGyroscope();
+		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), navX);
+		grabber  = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
+		
 		
 		ArrayList<ILimitSwitch> upperUpperLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getupperUpperLimit(), new EncoderLimitSwitch(config.getEncoderUp(), -1, true)));
 		ArrayList<ILimitSwitch> upperLowerLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getupperLowerLimit(), new EncoderLimitSwitch(config.getEncoderUp(), -1, false)));
@@ -105,5 +110,18 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		
+	}
+	
+	
+	public Grabber getGrabber() {
+		return this.grabber;
+	}
+	
+	public SuperLift getLift() {
+		return this.lift;
+	}
+	
+	public AHRS getNavx() {
+		return this.navX;
 	}
 }

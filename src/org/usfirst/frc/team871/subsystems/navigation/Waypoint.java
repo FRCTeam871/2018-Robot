@@ -14,6 +14,7 @@ public class Waypoint extends Coordinate{
 	private double speed;
 	private double angle;
 	private IAction action;
+	private boolean isSpeedConstant;
 	
 	public Waypoint(double xVal, double yVal, double angle, double speed, IAction action) {
 		super(xVal, yVal);
@@ -53,6 +54,10 @@ public class Waypoint extends Coordinate{
 	
 	public IAction getAction() {
 		return this.action;
+	}
+	
+	public boolean getIsSpeedConstant() {
+		return this.isSpeedConstant;
 	}
 	
 }

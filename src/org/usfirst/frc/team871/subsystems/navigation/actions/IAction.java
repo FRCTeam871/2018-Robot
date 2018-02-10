@@ -4,11 +4,28 @@ import org.usfirst.frc.team871.robot.Robot;
 
 public interface IAction {
 	
-	public boolean isComplete();
+	/**
+	 * @param robot object so that the Action can read states
+	 */
+	public void init(Robot robot);
 	
-	public void abort();
-	
+	/**
+	 * continue performing the Action
+	 */
 	public void execute();
 	
-	public void init(Robot robot);
+	/**
+	 * @return if the Action is complete with its task
+	 */
+	public boolean isComplete();
+	
+	/**
+	 * Force stop all action (Nuclear Option)
+	 */
+	public void abort();
+	
+	/**
+	 * Ask the Action to finish up ASAP
+	 */
+	public void halt();
 }

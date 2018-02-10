@@ -2,6 +2,7 @@ package org.usfirst.frc.team871.subsystems.navigation;
 
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.navigation.actions.NullAction;
+import org.usfirst.frc.team871.util.StaticCoordinateCalculation;
 import org.usfirst.frc.team871.util.control.PIDReadWrite;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -14,14 +15,14 @@ import edu.wpi.first.wpilibj.PIDSourceType;
  * We feel this is more clear to understand than a robot oriented system, which would require shifting the entire path for each starting position.
  * @author Team871
  */
-public class Navigation {
+public class Navigation{
 //TODO more documentation
 	private DriveTrain drive;
 	private AHRS navX;
 	private IDisplacementSensor displaceSense;
 	private IWaypointProvider waypointProvider;
 	
-	private double distThreshold;
+	private StaticCoordinateCalculation coordCalc;
 	
 	private Coordinate initialPos;
 	private Waypoint currentLocation;
@@ -32,13 +33,9 @@ public class Navigation {
 	private final double DIST_KI;
 	private final double DIST_KD;
 	private PIDController distancePID;
+			
+	private double DIST_THRESHOLD;
 	
-	private PIDReadWrite anglePIDInterface;
-	private final double ANGLE_KP;
-	private final double ANGLE_KI;
-	private final double ANGLE_KD;
-	private PIDController anglePID;
-		
 	/**
 	 * 
 	 * @param displaceSense
@@ -53,10 +50,12 @@ public class Navigation {
 		this.navX = this.drive.getGyro();
 		this.initialPos = startLocation;
 		
-		distThreshold = 6.0;
+		coordCalc = new StaticCoordinateCalculation();
 		
 		currentLocation = new Waypoint(0.0, 0.0, 0.0, 0.0, new NullAction());
 		nextWaypoint    = new Waypoint(0.0, 0.0, 0.0, 0.0, new NullAction());
+		
+		DIST_THRESHOLD = 6.0;
 		
 		DIST_KP = 0.0;
 		DIST_KI = 0.0;
@@ -65,13 +64,6 @@ public class Navigation {
 		distancePID          = new PIDController(DIST_KP, DIST_KI, DIST_KD, distancePIDInterface, distancePIDInterface);
 		distancePID.setSetpoint(0);//The distance that we want to be away from the waypoint is zero
 		distancePID.setOutputRange(-1, 1);
-		
-		//Move angle PID things to drive class in a heading hold method
-		ANGLE_KP = 0.0;
-		ANGLE_KI = 0.0;
-		ANGLE_KD = 0.0;
-		anglePIDInterface = new PIDReadWrite(PIDSourceType.valueOf("Heading"));
-		anglePID          = new PIDController(ANGLE_KP, ANGLE_KI, ANGLE_KD, anglePIDInterface, anglePIDInterface);
 		
 		updateLocation();//updates location
 	}
@@ -83,26 +75,27 @@ public class Navigation {
 		
 		if(!waypointProvider.hasNext()) {
 			updateLocation();
+			
+			//stop motors
 			//We are done... do something?
 		}
-		else if(true){ //TODO: have a doNavigate boolean 
-			double distance  = getDistance(currentLocation, nextWaypoint);
-			double direction = getAngle(currentLocation, nextWaypoint);
-			double angle     = nextWaypoint.getAngle();
+		else { //TODO: have a doNavigate boolean 
+			double distance  = coordCalc.getDistance(currentLocation, nextWaypoint);
+			double direction = coordCalc.getAngle(currentLocation, nextWaypoint);
+			double angle     = drive.getGyro().getAngle();
 			
-			//Setpoint is 0
-			distancePIDInterface.errorWrite(distance);//Distance between waypoint and current location
-			double magnitude = (distancePIDInterface.pidGet()*nextWaypoint.getSpeed());
 			
-			anglePID.setSetpoint(angle);//Angle the robot needs to hold
-			anglePIDInterface.errorWrite(navX.getYaw());//The angle the robot is actually at
-			anglePID.setOutputRange(0, 360);
-			double rotation = anglePIDInterface.pidGet();//how much we need to rotate to be at the desired angle
+						
+			double magnitude = nextWaypoint.getSpeed();
+//			if(!nextWaypoint.getIsSpeedConstant()) {_
+//				distancePIDInterface.errorWrite(distance);//Distance between waypoint and current location
+//			    magnitude = (distancePIDInterface.pidGet() * coordCalc.getResultant(displaceSense.getVelocity()));
+//			} 
 			
-			drive.drivePolar(magnitude, direction, rotation);
+			drive.drivePolar(magnitude, direction, 0);//TODO: angle hold
 			updateLocation();
 			
-			if(distance < distThreshold) {//If we are at the waypoint, do the action
+			if(distance < DIST_THRESHOLD) {//If we are at the waypoint, do the action
 				//TODO: Action handler here
 				
 				if(waypointProvider.hasNext()) {//since we got to the waypoint, get the next one
@@ -119,42 +112,10 @@ public class Navigation {
 	 */
 	private void updateLocation() {
 		Coordinate location = displaceSense.getDisplacement_in();//displacement in inches
-		double velo = Math.sqrt(Math.pow(displaceSense.getVelocity().getX(), 2) + Math.pow(displaceSense.getVelocity().getY(), 2)); //combines both velo components to the velocity
 		
 		currentLocation.setX(location.getX() + initialPos.getX());
-		currentLocation.setY(location.getY() + initialPos.getY());//Uses our fun enhanced gyro class. Fix this. We arent using it. We misunderstood the gyro class.
-		currentLocation.setAngle(navX.getYaw());
-		currentLocation.setSpeed(velo);
-		
+		currentLocation.setY(location.getY() + initialPos.getY());	
 	}
 	
-	/**
-	 * Gets distance between two waypoints 
-	 * @param waypoint1 First waypoint
-	 * @param waypoint2 Second Waypoint
-	 * @return
-	 */
-	private double getDistance(Waypoint waypoint1, Waypoint waypoint2) {
-
-		double distance = 0;
-		
-		distance = Math.sqrt(Math.pow(waypoint1.getX(), 2) + Math.pow(waypoint1.getY(), 2)) ;
-		//pathagaras theorem- a^2 +b^2 = c^2
-		//^ Larry spelled it that way so we are going to keep it to shame him
-		return distance;
-	}
 	
-	/**
-	 * Gets angle based on waypoint coordinate system which is initialized at the beginning of the match with the y axis perpendicular to the back wall
-	 * @param waypoint1 First waypoint
-	 * @param waypoint2 Second waypoint
-	 * @return
-	 */
-	private double getAngle(Waypoint waypoint1, Waypoint waypoint2) {
-		double angle = 0;
-		//the x and y arguments are reversed because of the coordinate transformation between the gyro angle and the field coordinate system
-		angle = Math.atan2(waypoint2.getX()-waypoint1.getX(), waypoint2.getY()-waypoint1.getY());
-		
-		return angle;
-	}
 }

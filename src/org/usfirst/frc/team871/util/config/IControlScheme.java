@@ -39,6 +39,8 @@ public interface IControlScheme {
 	 */
 	boolean getIncreaseSetpointButton();
 	
+	boolean getManualLiftModeButton();
+	
 	/**
 	 * @return Returns the lift axis value
 	 */

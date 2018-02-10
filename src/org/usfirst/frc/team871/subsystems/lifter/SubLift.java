@@ -34,6 +34,7 @@ public class SubLift extends SendableBase implements Sendable {
 		pid = new PIDController(0, 0, 0, encoder, liftMotor);
 		pid.setOutputRange(-1, 1);
 		pid.disable();
+		ensureMode(ControlMode.Position);
 
 		pid.setName("SuperLift", "PID-" + name);
 		
@@ -57,26 +58,10 @@ public class SubLift extends SendableBase implements Sendable {
 			    pid.setInputRange(0, 0);
                 encoder.setPIDSourceType(PIDSourceType.kDisplacement);
 				break;
-			case Velocity:
-			    pid.setPID(0, 0, 0.1, 1.0 / MAX_VELOCITY);
-			    pid.setInputRange(-MAX_VELOCITY, MAX_VELOCITY);
-                encoder.setPIDSourceType(PIDSourceType.kRate);
-				break;
 			default:
 				break;
 		}
 		pid.enable();
-	}
-	
-	/**
-	 * Controls the speed of the lift.<br>
-	 * <marquee>Disables the PID.</marquee>
-	 * @param speed How fast the lift moves (-1 to 1)
-	 */
-	protected void moveLift(double speed) {
-		ensureMode(ControlMode.Velocity);
-		pid.setSetpoint(speed * MAX_VELOCITY);
-		maybeResetEncoder();
 	}
 	
 	/**

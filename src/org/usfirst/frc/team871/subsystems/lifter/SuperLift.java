@@ -76,12 +76,15 @@ public class  SuperLift extends SendableBase implements Sendable {
 	/**
 	 * Controls the speed of the lift on the superLift
 	 * 
-	 * @param speed The speed of the lift
+	 * @param position The position of the lift, in the range [-1, 1]
 	 */
-	public void moveLift(double speed) {
-		upperLift.moveLift(speed);
-		lowerLift.moveLift(speed);
+	public void moveLift(double position) {
 		lifterHeight = SetpointHeights.MANUAL;
+		double min = setpointVals.get(SetpointHeights.GROUND);
+		double max = setpointVals.get(SetpointHeights.MAXIMUM);
+		double height = ((position + 1) / 2.0) * (max - min) + min;
+		System.out.println(height);
+		setHeight(height);
 	}
 
 	/**

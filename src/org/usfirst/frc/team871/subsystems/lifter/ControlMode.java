@@ -5,5 +5,5 @@ package org.usfirst.frc.team871.subsystems.lifter;
  * @author Team871
  */
 public enum ControlMode {
-	Startup, Position, Velocity
+	Startup, Position
 }

@@ -12,6 +12,7 @@ import org.usfirst.frc.team871.util.config.IControlScheme;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.config.InitialControlScheme;
 import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
+import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 import org.usfirst.frc.team871.util.joystick.POVDirections;
 import org.usfirst.frc.team871.util.sensor.EncoderLimitSwitch;
@@ -29,7 +30,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
-		controls = InitialControlScheme.DEFAULT;
+		controls = ThrustmasterControlScheme.DEFAULT;
 		config = MainRobotConfiguration.DEFAULT;
 		drive = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
 		grabber = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
@@ -76,12 +77,16 @@ public class Robot extends IterativeRobot {
 			grabber.ejectCube();
 		}
 		
-		if(controls.getDecreaseSetpointButton()) {
-			lift.decreaseSetpoint();
-		}
-		
-		if(controls.getIncreaseSetpointButton()) {
-			lift.increaseSetpoint();
+		if(controls.getManualLiftModeButton()) {
+			lift.moveLift(controls.getLiftAxis());
+		}else {
+			if(controls.getDecreaseSetpointButton()) {
+				lift.decreaseSetpoint();
+			}
+			
+			if(controls.getIncreaseSetpointButton()) {
+				lift.increaseSetpoint();
+			}
 		}
 		
 //		if(controls.getLiftAxis() != 0) {

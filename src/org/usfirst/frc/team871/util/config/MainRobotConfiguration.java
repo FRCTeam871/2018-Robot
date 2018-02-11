@@ -1,19 +1,19 @@
 package org.usfirst.frc.team871.util.config;
 
 import org.usfirst.frc.team871.util.sensor.DigitalLimitSwitch;
-import org.usfirst.frc.team871.util.sensor.EnhancedGyro;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C.Port;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Talon;
 
 /*******************
- * Contains all var*ables of robör 
+ * Contains all var*ables of robor
  *                 *
  *******************/
 public enum MainRobotConfiguration implements IRobotConfiguration {
@@ -27,35 +27,58 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 	private final SpeedController liftMotorBtm;
 	private final AHRS gyro;
 	private final DigitalInput cubeDetect;
-	private final Encoder encoderBtm;
-	private final Encoder encoderUp;
-	private final Solenoid grabPiston;
-	private final Solenoid ejectPiston;
+	private final Encoder encoderBtm; // 256 ticks/rot
+	private final Encoder encoderUp; // 256 ticks/rot
+	private final DoubleSolenoid grabPiston;
+	private final DoubleSolenoid ejectPiston;
 	private final DigitalLimitSwitch upperUpperLimit;
 	private final DigitalLimitSwitch upperLowerLimit;
 	private final DigitalLimitSwitch lowerUpperLimit;
 	private final DigitalLimitSwitch lowerLowerLimit;
 	
-	private MainRobotConfiguration() {
+	MainRobotConfiguration() {
 		//TODO get actual pins!
-		frontLeft    = new Talon(-1); //TODO: Find port#
-		frontRight   = new Talon(-1); //TODO: Find port#
-		rearLeft     = new Talon(-1); //TODO: Find port#
-		rearRight    = new Talon(-1); //TODO: Find port#
-		liftMotorUp  = new Talon(-1); //TODO: Find port#
-		liftMotorBtm = new Talon(-1); //TODO: Find port#
-		gyro         = new EnhancedGyro(Port.kMXP); //TODO: Find port#
-		cubeDetect   = new DigitalInput(-1);//TODO: Find port#
-		encoderUp    = new Encoder(-1,-1);  //TODO: Find port#
-		encoderUp.setDistancePerPulse(-1);  //TODO: get ratio
-		encoderBtm   = new Encoder(-1,-1);  //TODO: Find port#
-		encoderBtm.setDistancePerPulse(-1); //TODO: get ratio
-		grabPiston   = new Solenoid(-1); //TODO: Find port#
-		ejectPiston  = new Solenoid(-1); //TODO: Find port#
-		upperUpperLimit = new DigitalLimitSwitch(new DigitalInput(-1)); //TODO: Find port#
-		upperLowerLimit = new DigitalLimitSwitch(new DigitalInput(-1)); //TODO: Find port#
-		lowerUpperLimit = new DigitalLimitSwitch(new DigitalInput(-1)); //TODO: Find port#
-		lowerLowerLimit = new DigitalLimitSwitch(new DigitalInput(-1)); //TODO: Find port#
+
+		frontLeft    = new WPI_VictorSPX(12);
+		frontRight   = new WPI_VictorSPX(10);
+		rearLeft     = new WPI_VictorSPX(13);
+		rearRight    = new WPI_VictorSPX(11);
+		liftMotorUp  = new WPI_TalonSRX(1);
+		liftMotorBtm = new WPI_TalonSRX(0);
+		liftMotorBtm.setInverted(true);
+		gyro         = new AHRS(Port.kMXP);
+		cubeDetect   = new DigitalInput(20); //TODO: Find port#
+
+		//41 26.5
+
+		encoderUp    = new Encoder(6,7);  //TODO: Find port#
+		// diam = 1.6
+		// circum = diam * PI
+		// ticksPerPulse = 256
+		// distPerPulse = circum / ticksPerPulse
+//		encoderUp.setDistancePerPulse(0.019634954084936);
+//		encoderUp.setDistancePerPulse(1);
+		encoderUp.setDistancePerPulse(41 / 1682.75);
+
+		//1682.75 41in
+
+		encoderBtm   = new Encoder(4,5);  //TODO: Find port#
+		// diam = 1.6
+		// circum = diam * PI
+		// ticksPerPulse = 256
+		// distPerPulse = circum / ticksPerPulse
+//		encoderBtm.setDistancePerPulse(0.019634954084936);
+//		encoderBtm.setDistancePerPulse(1);
+		encoderBtm.setDistancePerPulse(41 / 1865.75);
+		encoderBtm.setReverseDirection(true);
+		//1865.75 41
+
+		grabPiston   = new DoubleSolenoid(0, 1);
+		ejectPiston  = new DoubleSolenoid(2, 3);
+		upperUpperLimit = new DigitalLimitSwitch(new DigitalInput(2), true); //TODO: Find port#
+		upperLowerLimit = new DigitalLimitSwitch(new DigitalInput(3), true); //TODO: Find port#
+		lowerUpperLimit = new DigitalLimitSwitch(new DigitalInput(0), true); //TODO: Find port#
+		lowerLowerLimit = new DigitalLimitSwitch(new DigitalInput(1), true); //TODO: Find port#
 		
 	}
 	
@@ -108,13 +131,15 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 	public SpeedController getLiftMotorUp() {
 		return liftMotorUp;
 	}
+
 	@Override
-	public Solenoid getGrabPiston() {
+	public DoubleSolenoid getGrabPiston() {
 		// TODO Auto-generated method stub
 		return grabPiston;
 	}
+
 	@Override
-	public Solenoid getEjectPiston() {
+	public DoubleSolenoid getEjectPiston() {
 		// TODO Auto-generated method stub
 		return ejectPiston;
 	}
@@ -142,5 +167,4 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 		// TODO Auto-generated method stub
 		return lowerLowerLimit;
 	}
-	
 }

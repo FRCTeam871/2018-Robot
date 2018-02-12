@@ -3,35 +3,44 @@ package org.usfirst.frc.team871.subsystems.navigation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WaypointProvider extends ArrayList<Waypoint> implements IWaypointProvider{
+/**
+ * provides waypoints in a list one by one with no modification to the waypoints for navigation
+ *  @author Team871-TPfaffe
+ */
+public class WaypointProvider implements IWaypointProvider {
 
-	private int index;
-	
-	public WaypointProvider() {
-		index = 0;
-		
-	}
-	@Override
-	public Waypoint getNextWaypoint() {
-		return super.get(this.index++);
-	}
+    private int index;
 
-	@Override
-	public boolean hasNext() {
-		if(super.size() == index) {
-			return false;	
-		}
-		
-		return true;
-		
-	}
+    private ArrayList<Waypoint> waypointArrayList;
 
-	@Override
-	public List<Waypoint> getAvailableWaypoints() {
-		return this;
-	}
+    public WaypointProvider(Waypoint... points) {
+        index = 0;
+        waypointArrayList = new ArrayList<Waypoint>();
 
-	public int getIndex() {
-		return index;
-	}
+        for(Waypoint point: points){
+            waypointArrayList.add(point); //add all points from constructor argument
+        }
+
+    }
+
+    @Override
+    public Waypoint getNextWaypoint() {
+        return this.waypointArrayList.get(this.index++);
+    }
+
+    @Override
+    public boolean hasNext() {
+        return this.waypointArrayList.size() != index;
+
+    }
+
+    @Override
+    public List<Waypoint> getAvailableWaypoints() {
+        ArrayList<Waypoint> copyList = this.waypointArrayList;
+        return copyList;
+    }
+
+    public int getIndex() {
+        return this.index;
+    }
 }

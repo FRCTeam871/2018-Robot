@@ -12,9 +12,9 @@ public class PIDControl {
     private double kp;
     private double ki;
     private double kd;
-/**
- * @deprecated This method belongs to a deprecated class
- */
+    /**
+     * @deprecated This method belongs to a deprecated class
+     */
     public PIDControl(double Kp, double Ki, double Kd, double setpoint) {
         this.kp = Kp;
         this.ki = Ki;

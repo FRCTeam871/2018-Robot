@@ -123,5 +123,7 @@
     </orderEntry>
     <orderEntry type="library" name="WPILib" level="project" />
     <orderEntry type="library" name="CTRE_Phoenix" level="project" />
+    <orderEntry type="library" name="navx_frc" level="project" />
+    <orderEntry type="library" name="CTRE_Phoenix1" level="project" />
   </component>
 </module>

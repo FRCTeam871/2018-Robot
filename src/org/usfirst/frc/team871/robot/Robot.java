@@ -113,6 +113,9 @@ public class Robot extends IterativeRobot {
 		
 	}
 
+	public DriveTrain getDrive() {
+		return this.drive;
+	}
 
 	public Grabber getGrabber() {
 		return this.grabber;

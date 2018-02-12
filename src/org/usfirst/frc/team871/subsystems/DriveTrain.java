@@ -100,4 +100,12 @@ public class DriveTrain extends MecanumDrive implements PIDOutput {
 		headingPID.getSetpoint();
 	}
 
+	public void enableHeadingHold(){
+		headingPID.enable();
+	}
+
+	public void disableHeadingHold(){
+		headingPID.disable();
+	}
+
 }

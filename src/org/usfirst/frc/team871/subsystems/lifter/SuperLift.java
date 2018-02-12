@@ -219,12 +219,7 @@ public class  SuperLift extends SendableBase implements Sendable {
 		double height = this.getHeight();
 		double max = height+1.0;
 		double min = height-1.0;
-		
-		if((height < max) && (height > min)) {
-			return true;
-		}
-		else {
-			return false;
-		}
+
+        return (height < max) && (height > min);
 	}
 }

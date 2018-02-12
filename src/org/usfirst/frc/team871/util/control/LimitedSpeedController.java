@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.SpeedController;
 /**
  * This class is able to control the motor with the use of limit switches
  * @author Team871
- *
  */
 public class LimitedSpeedController implements SpeedController {
     private SpeedController motor;
@@ -16,7 +15,6 @@ public class LimitedSpeedController implements SpeedController {
     private ILimitSwitch lower;
     
     /**
-     *
      * @param motor The speed controller being limited
      * @param upper The upper limit switch
      * @param lower The lower limit switch
@@ -26,7 +24,7 @@ public class LimitedSpeedController implements SpeedController {
         this.motor = motor;
         this.upper = upper;
         this.lower = lower;
-
+        
         motor.setInverted(inverted);
     }
 
@@ -98,4 +96,5 @@ public class LimitedSpeedController implements SpeedController {
     public ILimitSwitch getLowerLimit() {
     	return lower;
     }
+    
 }

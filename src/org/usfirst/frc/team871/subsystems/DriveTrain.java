@@ -6,18 +6,24 @@ import org.usfirst.frc.team871.subsystems.navigation.IDisplacementSensor;
 import com.kauailabs.navx.frc.AHRS;
 import com.sun.javafx.collections.MappingChange.Map;
 
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+
 /**
  * Drive class used for driving mecanum drive with additional features.
  * @author Jack Langhorn contributed to by Scott Demarest and JR DiBenedetto
  */
-public class DriveTrain extends MecanumDrive implements IDisplacementSensor {
+public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PIDOutput {
 	
 	private long lastTimeRan, curTime, dTime;
 	private Coordinate displacement;
 	private double xSpeed, ySpeed;
 	
+	private PIDController headingPID;
+	private double pidRotation = 0;
 	private final AHRS gyro;
 	
 	private double speedProfiles[] = {0, 0, 8.796, 18.6, 29.16, 39, 58.8, 66.84, 75.96, 86.04};
@@ -27,12 +33,27 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor {
 	 * @param rearLeft The rear left speed controller
 	 * @param frontRight The front right speed controller
 	 * @param frontLeft The front left speed controller
-	 * @param gyro A Navx that is used for field oriented driving 
+	 * @param gyro A NavX that is used for field oriented driving
 	 */
 	public DriveTrain(SpeedController rearRight, SpeedController rearLeft, SpeedController frontRight, SpeedController frontLeft, AHRS gyro ) {
 		super(frontLeft, rearLeft, frontRight, rearRight);
 		this.gyro = gyro;
+
+		headingPID = new PIDController(0, 0, 0, gyro, this);
+		headingPID.setInputRange(-180, 180);
+		headingPID.setOutputRange(-1, 1);
+		headingPID.setContinuous();
+		headingPID.disable();
+		gyro.setName("DriveTrain", "Gyro");
+		headingPID.setName("Heading PID");
+		LiveWindow.add(headingPID);
+		LiveWindow.add(gyro);
+//		addChild(headingPID);
+//		addChild(gyro);
+
+		setName("DriveTrain", "DriveTrain");
 	}
+
 	/**
 	 * Drives in any direction relative to the field
 	 * @param x Drives along the X axis 
@@ -41,8 +62,9 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor {
 	 */
 	public void driveFieldOriented(double x, double y, double r) {
 		updateDisplacementCoordinate(x,y);
-		driveCartesian(y, x, r, gyro.getAngle());
+		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0), -gyro.getAngle());
 	}
+
 	/**
 	 * Drives in any direction relative to the robot
 	 * @param x Drives along the X axis
@@ -51,10 +73,14 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor {
 	 */
 	public void driveRobotOriented(double x, double y, double r) {
 		//add updateDisplacementCoordinate(x,y) that compensates for rotation
-		driveCartesian(y, x, r);
+		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0));
+	}
+
+	public void setHeadingPIDEnabled(boolean enabled) {
+		headingPID.setEnabled(enabled);
 	}
 	
-	
+
 	/**
 	 * resets gyro yaw to 0 at current yaw
 	 */
@@ -63,7 +89,7 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor {
 	}
 	
 	/**
-	 * 
+	 *
 	 * @return -s the gyro for use elsewhere
 	 */ 
 	public AHRS getGyro() {
@@ -137,4 +163,28 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor {
 		return (relative * scale) + transformation;
 	}
 	
+	@Override
+	public void pidWrite(double output) {
+		pidRotation = output;
+	}
+
+	/**
+	 * @param heading - the heading hold, in degrees
+	 */
+	public void setHeadingHold(double heading) {
+		headingPID.setSetpoint(heading);
+	}
+
+	public void getHeadingHold() {
+		headingPID.getSetpoint();
+	}
+
+	public void enableHeadingHold(){
+		headingPID.enable();
+	}
+
+	public void disableHeadingHold(){
+		headingPID.disable();
+	}
+
 }

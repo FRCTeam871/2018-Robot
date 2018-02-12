@@ -11,5 +11,5 @@ public interface ILimitSwitch {
 	 * 
 	 * @return If limit has been reached
 	 */
-    public boolean isAtLimit();
+    boolean isAtLimit();
 }

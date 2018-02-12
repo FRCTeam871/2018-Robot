@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface IWaypointProvider {
 
-	public Waypoint getNextWaypoint();
-	
-	public boolean hasNext();
-	
-	public List<Waypoint> getAvailableWaypoints();
-	
-	public int getIndex();
+    Waypoint getNextWaypoint();
+
+    boolean hasNext();
+
+    List<Waypoint> getAvailableWaypoints();
+
+    int getIndex();
 }

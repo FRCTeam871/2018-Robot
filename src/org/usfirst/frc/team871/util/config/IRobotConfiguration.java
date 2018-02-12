@@ -5,9 +5,10 @@ import org.usfirst.frc.team871.util.sensor.DigitalLimitSwitch;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedController;
+
 /**
  * Used to fetch robot components. Implementations of this interface can be swapped out for different robots
  * @author Team871
@@ -15,85 +16,82 @@ import edu.wpi.first.wpilibj.SpeedController;
  */
 public interface IRobotConfiguration {	
 	/**
-	 * The front left motor of the robot
-	 * @return
+	 * @return The front left motor of the robot
 	 */
-	public SpeedController getFrontLeftMotor();
+	SpeedController getFrontLeftMotor();
+
 	/**
-	 * The rear left motor of the robot
-	 * @return
+	 * @return The rear left motor of the robot
 	 */
-	public SpeedController getRearLeftMotor();
+	SpeedController getRearLeftMotor();
+
 	/**
-	 * The front right motor of the robot
-	 * @return
+	 * @return The front right motor of the robot
 	 */
-	public SpeedController getFrontRightMotor();
+	SpeedController getFrontRightMotor();
+
 	/**
-	 * The rear right motor of the robot
-	 * @return
+	 * @return The rear right motor of the robot
 	 */
-	public SpeedController getRearRightMotor();
+	SpeedController getRearRightMotor();
+
 	/**
-	 * The upper lift motor of the robot
-	 * @return
+	 * @return The upper lift motor of the robot
 	 */
-	public SpeedController getLiftMotorUp();	
+	SpeedController getLiftMotorUp();
+
 	/**
-	 * The lower lift motor of the robot
-	 * @return
+	 * @return The lower lift motor of the robot
 	 */
-	public SpeedController getLiftMotorBtm();
+	SpeedController getLiftMotorBtm();
+
 	/**
-	 * The gyroscope of the robot
-	 * @return
+	 * @return The gyroscope of the robot
 	 */
-	public AHRS getGyroscope();
+	AHRS getGyroscope();
+
 	/**
-	 * The cube detecting sensor of the robot
-	 * @return
+	 * @return The cube detecting sensor of the robot
 	 */
-	public DigitalInput getCubeDetector();
+	DigitalInput getCubeDetector();
+
 	/**
-	 * The upper limit sensor of the upper lift of the robot
-	 * @return
+	 * @return The upper limit sensor of the upper lift of the robot
 	 */
-	public DigitalLimitSwitch getupperUpperLimit();
+	DigitalLimitSwitch getupperUpperLimit();
+
 	/**
-	 * The lower limit sensor of the upper lift of the robot
-	 * @return
+	 * @return The lower limit sensor of the upper lift of the robot
 	 */
-	public DigitalLimitSwitch getupperLowerLimit();
+	DigitalLimitSwitch getupperLowerLimit();
+
 	/**
-	 * The  upper limit sensor of the lower lift of the robot
-	 * @return
+	 * @return The upper limit sensor of the lower lift of the robot
 	 */
-	public DigitalLimitSwitch getlowerUpperLimit();
+	DigitalLimitSwitch getlowerUpperLimit();
+
 	/**
-	 * The lower limit sensor of the lower lift of the robot
-	 * @return
+	 * @return The lower limit sensor of the lower lift of the robot
 	 */
-	public DigitalLimitSwitch getlowerLowerLimit();
+	DigitalLimitSwitch getlowerLowerLimit();
+
 	/**
-	 * The encoder sensor of the upper lift of the robot
-	 * @return
+	 * @return The encoder sensor of the upper lift of the robot
 	 */
-	public Encoder getEncoderUp();
+	Encoder getEncoderUp();
+
 	/**
-	 * The encoder sensor of the lower lift of the robot
-	 * @return
+	 * @return The encoder sensor of the lower lift of the robot
 	 */
-	public Encoder getEncoderBtm();
+	Encoder getEncoderBtm();
+
 	/**
-	 * The piston of the grabber of the robot
-	 * @return
+	 * @return The piston of the grabber of the robot
 	 */
-	public Solenoid getGrabPiston();
+	DoubleSolenoid getGrabPiston();
+
 	/**
-	 * The eject piston of the grabber of the robot
-	 * @return
+	 * @return The eject piston of the grabber of the robot
 	 */
-	public Solenoid getEjectPiston();
-	
-	
+	DoubleSolenoid getEjectPiston();
 }

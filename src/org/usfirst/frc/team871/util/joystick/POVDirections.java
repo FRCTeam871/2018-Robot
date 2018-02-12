@@ -50,6 +50,6 @@ public enum POVDirections {
 	/**
 	 * The state when the POV direction is -1 degrees 
 	 */
-	NEUTRAL;
-	
+	NEUTRAL
+
 }

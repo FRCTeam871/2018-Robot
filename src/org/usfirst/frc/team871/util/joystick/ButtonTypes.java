@@ -28,5 +28,5 @@ public enum ButtonTypes {
      * This means that the button will only read high when its raw value changes
      * state from high to low.
      */
-    FALLING;
+    FALLING
 }

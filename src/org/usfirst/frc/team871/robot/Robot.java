@@ -3,22 +3,22 @@ package org.usfirst.frc.team871.robot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.Grabber;
-import org.usfirst.frc.team871.subsystems.SuperLift;
+import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
 import org.usfirst.frc.team871.util.config.IControlScheme;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.config.InitialControlScheme;
 import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
+import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
-import org.usfirst.frc.team871.util.joystick.ButtonTypes;
-import org.usfirst.frc.team871.util.joystick.EnhancedXBoxController;
 import org.usfirst.frc.team871.util.joystick.POVDirections;
-import org.usfirst.frc.team871.util.joystick.XBoxAxes;
-import org.usfirst.frc.team871.util.joystick.XBoxButtons;
 import org.usfirst.frc.team871.util.sensor.EncoderLimitSwitch;
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
+
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -29,21 +29,21 @@ public class Robot extends IterativeRobot {
 	private Grabber grabber;
 	private SuperLift lift;
 	private IControlScheme controls;
-	
+	private AHRS navX;
+
 	@Override
 	public void robotInit() {
-		
-		controls = InitialControlScheme.DEFAULT;
-		config = MainRobotConfiguration.DEFAULT;
-		drive = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
-		grabber = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
-		
-		
-		ArrayList<ILimitSwitch> upperUpperLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getupperUpperLimit(), new EncoderLimitSwitch(config.getEncoderUp(), -1, true)));
-		ArrayList<ILimitSwitch> upperLowerLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getupperLowerLimit(), new EncoderLimitSwitch(config.getEncoderUp(), -1, false)));
-		ArrayList<ILimitSwitch> lowerUpperLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getlowerUpperLimit(), new EncoderLimitSwitch(config.getEncoderBtm(), -1, true)));
-		ArrayList<ILimitSwitch> lowerLowerLimits = new ArrayList<ILimitSwitch>(Arrays.asList(config.getlowerLowerLimit(), new EncoderLimitSwitch(config.getEncoderBtm(), -1, false)));
-		
+		controls = ThrustmasterControlScheme.DEFAULT;
+		config   = MainRobotConfiguration.DEFAULT;
+        navX     = config.getGyroscope();
+		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
+		grabber  = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
+
+
+		List<ILimitSwitch> upperUpperLimits = Arrays.asList(config.getupperUpperLimit());
+		List<ILimitSwitch> upperLowerLimits = Arrays.asList(config.getupperLowerLimit());
+		List<ILimitSwitch> lowerUpperLimits = Arrays.asList(config.getlowerUpperLimit());
+		List<ILimitSwitch> lowerLowerLimits = Arrays.asList(config.getlowerLowerLimit());
 		
 		CompositeLimitedSpeedController limitedSpeedControllerUp = new CompositeLimitedSpeedController(config.getLiftMotorUp(), 
 				upperUpperLimits, upperLowerLimits);
@@ -51,8 +51,6 @@ public class Robot extends IterativeRobot {
 				lowerUpperLimits, lowerLowerLimits);
 		
 		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm());
-		
-		
 	}
 
 	@Override
@@ -68,31 +66,38 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		if(controls.getToggleOrientationButton()) {
-			drive.driveRobotOriented(controls.getXAxis(), controls.getYAxis(), controls.getRotationAxis());
+			drive.driveRobotOriented(controls.getYAxis(), -controls.getXAxis(), controls.getRotationAxis());
 		} else {
-			drive.driveFieldOriented(controls.getXAxis(), controls.getYAxis(), controls.getRotationAxis());
+			drive.driveFieldOriented(controls.getYAxis(), -controls.getXAxis(), controls.getRotationAxis());
 		}
 		if(controls.getResetGyroButton()) {
 			drive.resetGyro();
 		}
+
 		if(controls.getToggleGrabberButton()) {
 			grabber.toggleGrabber();
 		}
+
 		if(controls.getCubeEjectButton()) {
 			grabber.ejectCube();
 		}
 		
-		if(controls.getDecreaseSetpointButton()) {
-			lift.decreaseSetpoint();
-		}
-		if(controls.getIncreaseSetpointButton()) {
-			lift.increaseSetpoint();
-		}
-		
-		if(controls.getLiftAxis() != 0) {
+		if(controls.getManualLiftModeButton()) {
 			lift.moveLift(controls.getLiftAxis());
+		}else {
+			if(controls.getDecreaseSetpointButton()) {
+				lift.decreaseSetpoint();
+			}
+
+			if(controls.getIncreaseSetpointButton()) {
+				lift.increaseSetpoint();
+			}
 		}
-		
+
+//		if(controls.getLiftAxis() != 0) {
+//		lift.moveLift(controls.getLiftAxis());
+//		}
+
 		if(controls.getPOV() ==  POVDirections.UP || controls.getPOV() ==  POVDirections.UP_RIGHT || controls.getPOV() ==  POVDirections.UP_LEFT) {
 			lift.setTop();
 		}
@@ -106,6 +111,22 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		
+	}
+
+	public DriveTrain getDrive() {
+		return this.drive;
+	}
+
+	public Grabber getGrabber() {
+		return this.grabber;
+	}
+
+	public SuperLift getLift() {
+		return this.lift;
+	}
+
+	public AHRS getNavx() {
+		return this.navX;
 	}
 	//CONTRIBUTED BY 
 }

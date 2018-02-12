@@ -3,33 +3,32 @@ package org.usfirst.frc.team871.util.config;
 import org.usfirst.frc.team871.util.joystick.ButtonTypes;
 import org.usfirst.frc.team871.util.joystick.EnhancedXBoxController;
 import org.usfirst.frc.team871.util.joystick.POVDirections;
+import org.usfirst.frc.team871.util.joystick.SaitekAxes;
+import org.usfirst.frc.team871.util.joystick.SaitekButtons;
+import org.usfirst.frc.team871.util.joystick.SaitekX52;
 import org.usfirst.frc.team871.util.joystick.XBoxAxes;
 import org.usfirst.frc.team871.util.joystick.XBoxButtons;
 
-public enum InitialControlScheme implements IControlScheme{
+public enum ThrustmasterControlScheme implements IControlScheme{
 	DEFAULT;
 	
 	private EnhancedXBoxController xbox;
-	private EnhancedXBoxController xbox2;
+	private SaitekX52 saitek;
 	
-	InitialControlScheme() {
-		System.out.println("init inital");
+	ThrustmasterControlScheme() {
+		System.out.println("init thrust");
 		xbox = new EnhancedXBoxController(0);
-		xbox2 = new EnhancedXBoxController(1);
+		saitek = new SaitekX52(1);
 		xbox.setButtonMode(XBoxButtons.START, ButtonTypes.TOGGLE);
 		xbox.setButtonMode(XBoxButtons.BACK, ButtonTypes.RISING);
 		xbox.setAxisDeadband(XBoxAxes.LEFTX, 0.2);
 		xbox.setAxisDeadband(XBoxAxes.LEFTY, 0.2);
 		xbox.setAxisDeadband(XBoxAxes.RIGHTX, 0.2);
 		xbox.setAxisDeadband(XBoxAxes.RIGHTY, 0.2);
-		xbox2.setButtonMode(XBoxButtons.A, ButtonTypes.RISING);
-		xbox2.setButtonMode(XBoxButtons.B, ButtonTypes.RISING);
-		xbox2.setButtonMode(XBoxButtons.LBUMPER, ButtonTypes.RISING);
-		xbox2.setButtonMode(XBoxButtons.RBUMPER, ButtonTypes.RISING);
-		xbox2.setAxisDeadband(XBoxAxes.LEFTX, 0.2);
-		xbox2.setAxisDeadband(XBoxAxes.LEFTY, 0.2);
-		xbox2.setAxisDeadband(XBoxAxes.RIGHTX, 0.2);
-		xbox2.setAxisDeadband(XBoxAxes.RIGHTY, 0.2);
+		saitek.setButtonMode(SaitekButtons.MOUSE, ButtonTypes.RISING);
+		saitek.setButtonMode(SaitekButtons.FUNCTION, ButtonTypes.RISING);
+		saitek.setButtonMode(SaitekButtons.D, ButtonTypes.RISING);
+		saitek.setButtonMode(SaitekButtons.I, ButtonTypes.RISING);
 	}
 	@Override
 	public boolean getToggleOrientationButton() {
@@ -43,27 +42,27 @@ public enum InitialControlScheme implements IControlScheme{
 
 	@Override
 	public boolean getToggleGrabberButton() {
-		return xbox2.getValue(XBoxButtons.A);
+		return saitek.getValue(SaitekButtons.MOUSE);
 	}
 
 	@Override
 	public boolean getCubeEjectButton() {
-		return xbox2.getValue(XBoxButtons.B);
+		return saitek.getValue(SaitekButtons.FUNCTION);
 	}
 
 	@Override
 	public boolean getDecreaseSetpointButton() {
-		return xbox2.getValue(XBoxButtons.LBUMPER);
+		return saitek.getValue(SaitekButtons.I);
 	}
 
 	@Override
 	public boolean getIncreaseSetpointButton() {
-		return xbox2.getValue(XBoxButtons.RBUMPER);
+		return saitek.getValue(SaitekButtons.D);
 	}
 
 	@Override
 	public double getLiftAxis() {
-		return xbox2.getValue(XBoxAxes.TRIGGER);
+		return -saitek.getValue(SaitekAxes.THROTTLE);
 	}
 
 	@Override
@@ -82,12 +81,24 @@ public enum InitialControlScheme implements IControlScheme{
 	}
 	@Override
 	public POVDirections getPOV() {
-		return xbox2.getEnhancedPOV();
+		return saitek.getEnhancedPOV();
 	}
 	
 	@Override
 	public boolean getManualLiftModeButton() {
-		return false;
+//		debugPrint();
+		return saitek.getValue(SaitekAxes.SLIDER) > 0;
+	}
+	
+	public void debugPrint() {
+		System.out.println("===================");
+		for(int but = 0; but < 32; but++) {
+			System.out.print(saitek.getRawButton(but) + " ");
+		}
+		System.out.println();
+//		for(int ax = 0; ax < 10; ax++) {
+//			System.out.print(saitek.getRawAxis(ax) + " ");
+//		}
 	}
 
 

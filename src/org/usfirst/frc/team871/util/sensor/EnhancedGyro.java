@@ -14,8 +14,7 @@ public class EnhancedGyro extends AHRS{
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public float getYaw() {
+	@Override public float getYaw() {
 		return super.getYaw() % 360;
 	}
 	  

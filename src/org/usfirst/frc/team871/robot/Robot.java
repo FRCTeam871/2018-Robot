@@ -30,6 +30,8 @@ public class Robot extends IterativeRobot {
 	private SuperLift lift;
 	private IControlScheme controls;
 	private AHRS navX;
+	
+	private long startTime = 0;
 
 	@Override
 	public void robotInit() {
@@ -56,6 +58,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		drive.resetSensor();
+		startTime = System.currentTimeMillis();
+		System.out.println("Robot driving started:\t"+ startTime + "\n");
 	}
 
 	@Override
@@ -63,6 +67,13 @@ public class Robot extends IterativeRobot {
 		Coordinate coord = drive.getDisplacement(DistanceUnit.INCH);
 		SmartDashboard.putNumber("dX", coord.getX());
 		SmartDashboard.putNumber("dY", coord.getY());
+		
+		if (System.currentTimeMillis() - startTime > 5000) {
+			drive.driveRobotOriented(0, 0, 0);
+			System.out.println("Robot driving ended. Final distance: (" + coord.getX() +","+coord.getY()+")");
+		} else {
+			drive.driveRobotOriented(0, 0.5, 0);
+		}
 	}
 
 	@Override

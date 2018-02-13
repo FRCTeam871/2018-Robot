@@ -31,7 +31,7 @@ public class InertialNavigationSensor extends Thread implements IDisplacementSen
     public InertialNavigationSensor(AHRS navX) {
         this.navX = navX;
 
-        UPDATE_RATE_HZ = navX.getRequestedUpdateRate();
+        UPDATE_RATE_HZ = 60;
         LOOP_TIME = (1 / UPDATE_RATE_HZ) * 1000;
         CREDIBILITY_COEFFICIENT = 0.0;//should never be above 1 unless it gets better over time, It shouldn't...
 

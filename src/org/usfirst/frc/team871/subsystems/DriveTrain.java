@@ -1,10 +1,16 @@
 package org.usfirst.frc.team871.subsystems;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.usfirst.frc.team871.subsystems.navigation.Coordinate;
-import org.usfirst.frc.team871.subsystems.navigation.IDisplacementSensor;
+import org.usfirst.frc.team871.subsystems.navigation.Sensors.IDisplacementSensor;
+import org.usfirst.frc.team871.util.units.DistanceUnit;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.sun.javafx.collections.MappingChange.Map;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -17,16 +23,29 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * @author Jack Langhorn contributed to by Scott Demarest and JR DiBenedetto
  */
 public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PIDOutput {
-	
-	private long lastTimeRan, curTime, dTime;
-	private Coordinate displacement;
-	private double xSpeed, ySpeed;
+	private volatile Coordinate displacement;
 	
 	private PIDController headingPID;
 	private double pidRotation = 0;
 	private final AHRS gyro;
+	private final long integrationRate = 20; //in milliseconds
+	private double lastXInput;
+	private double lastYInput;
 	
-	private double speedProfiles[] = {0, 0, 8.796, 18.6, 29.16, 39, 58.8, 66.84, 75.96, 86.04};
+	private boolean enableIntegration = true;
+	private Timer positionIntegrator;
+	private final List<VelocityHolder> velDataPoints = new ArrayList<>();
+	
+	private class VelocityHolder {
+		public double inputSpeed;
+		public double outputSpeed;
+		
+		VelocityHolder(double input, double output) {
+			this.inputSpeed = input;
+			this.outputSpeed = output;
+		}
+	}
+	
 	/**
 	 * 	Initializes the gyro and drive motors with the SpeedControllers
 	 * @param rearRight The rear right speed controller
@@ -38,18 +57,32 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 	public DriveTrain(SpeedController rearRight, SpeedController rearLeft, SpeedController frontRight, SpeedController frontLeft, AHRS gyro ) {
 		super(frontLeft, rearLeft, frontRight, rearRight);
 		this.gyro = gyro;
+		
+		velDataPoints.add(new VelocityHolder(0,0));
+		velDataPoints.add(new VelocityHolder(.1,0));
+		velDataPoints.add(new VelocityHolder(.2,8.796));
+		velDataPoints.add(new VelocityHolder(.3,18.6));
+		velDataPoints.add(new VelocityHolder(.4,29.16));
+		velDataPoints.add(new VelocityHolder(.5,39));
+		velDataPoints.add(new VelocityHolder(.6,49.2));
+		velDataPoints.add(new VelocityHolder(.7,58.8));
+		velDataPoints.add(new VelocityHolder(.8,66.8));
+		velDataPoints.add(new VelocityHolder(.9,76));
+		velDataPoints.add(new VelocityHolder(1,86));
 
 		headingPID = new PIDController(0, 0, 0, gyro, this);
 		headingPID.setInputRange(-180, 180);
 		headingPID.setOutputRange(-1, 1);
 		headingPID.setContinuous();
 		headingPID.disable();
+		
 		gyro.setName("DriveTrain", "Gyro");
 		headingPID.setName("Heading PID");
 		LiveWindow.add(headingPID);
 		LiveWindow.add(gyro);
-//		addChild(headingPID);
-//		addChild(gyro);
+		
+		positionIntegrator = new Timer();
+		positionIntegrator.schedule(new IntegrationTask(), 0, integrationRate);
 
 		setName("DriveTrain", "DriveTrain");
 	}
@@ -61,7 +94,6 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 	 * @param r Rotation of the Robot 
 	 */
 	public void driveFieldOriented(double x, double y, double r) {
-		updateDisplacementCoordinate(x,y);
 		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0), -gyro.getAngle());
 	}
 
@@ -72,7 +104,8 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 	 * @param r Rotation of the Robot
 	 */
 	public void driveRobotOriented(double x, double y, double r) {
-		//add updateDisplacementCoordinate(x,y) that compensates for rotation
+		lastXInput = x;
+		lastYInput = y;
 		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0));
 	}
 
@@ -96,71 +129,60 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 		return gyro;
 	}
 	
-	/**
-	 * 
-	 * @Return the displacement from the starting position in inches as stored in Coordinate displacement 
-	 */
-	@Override
-	public Coordinate getDisplacement() {
-		updateDisplacementCoordinate();
-		return displacement;
-	}
-	/**
-	 * Sets new x and y motor values to update the current location 
-	 * @param x X motor value
-	 * @param y y motor value
-	 */
-	private void updateDisplacementCoordinate(double x, double y) {
-		xSpeed = x;
-		ySpeed = y;
-		curTime = System.currentTimeMillis(); 
-		dTime =  curTime - lastTimeRan;
-		lastTimeRan = curTime;
-		//Sets the new displacement values as the change in displacement added to the last displacement
-		displacement.setX(displacement.getX()+calculateDistance(xSpeed, dTime));
-		displacement.setY(displacement.getY()+calculateDistance(ySpeed, dTime));
+	private class IntegrationTask extends TimerTask {
+		private long tPrevious = 0;
 		
-	}
-	
-	/**
-	 * Updates the displacement of the robot when x and y motor values haven't changed
-	 */
-	private void updateDisplacementCoordinate() {
-		curTime = System.currentTimeMillis(); 
-		dTime =  curTime - lastTimeRan;
-		lastTimeRan = curTime;
-		//Sets the new displacement values as the change in displacement added to the last displacement
-		displacement.setX(displacement.getX()+calculateDistance(xSpeed, dTime));
-		displacement.setY(displacement.getY()+calculateDistance(ySpeed, dTime));
+		/**
+		 * Sets new x and y motor values to update the current location 
+		 * @param x X motor value
+		 * @param y y motor value
+		 */
+		private void updatePosition() {
+			// On the first iteration do nothing
+			if(tPrevious == 0 || !enableIntegration) {
+				tPrevious = System.currentTimeMillis();
+				return;
+			}
+			
+			final long curTime = System.currentTimeMillis();
+			final long tDiff = curTime - tPrevious;
+			final double xDistance = tDiff * calculateVelocity(lastXInput);
+			final double yDistance = tDiff * calculateVelocity(lastYInput);
+			
+			// This isn't correct, it assumes that each component can be the same. In reality,
+			// It's the resultant velocity that matters...
+			displacement.setX(displacement.getX() + xDistance);
+			displacement.setY(displacement.getY() + yDistance);
+			
+			tPrevious = curTime;
+		}
 		
-	}
-	/**
-	 * Determines distance travelled between now and the last time this method was called in inches for either the x or y axes 
-	 * @param speed The -1 to 1 joystick value
-	 * @param dTime The time passed between now and last time this method was called
-	 * @return the distance travelled between now and the last time this method was called in inches
-	 */
-	private double calculateDistance(double speed, long dTime) {
+		/**
+		 * Interpolates the velocity in in/sec of the robot based off of experimental data.
+		 * This data shows the relationship between motor speeds and velocities of the robot.
+		 * @param speed The motor speed
+		 * @return The velocity in in/sec
+		 */
+		private double calculateVelocity(double speed) {
+			Optional<VelocityHolder> holderUpper = velDataPoints.stream().filter(dp -> speed >= dp.inputSpeed).findFirst();
+			Optional<VelocityHolder> holderLower = velDataPoints.stream().filter(dp -> speed <= dp.inputSpeed).findFirst();
+			
+			if(!holderUpper.isPresent() || holderLower.isPresent()) {
+				//Bad times, maybe should throw an exception
+				return 0; 
+			}
+			
+			final double relative = ((speed - holderLower.get().inputSpeed) / (holderUpper.get().inputSpeed - holderLower.get().inputSpeed));
+			final double scale = holderUpper.get().outputSpeed - holderLower.get().outputSpeed;
+			final double transformation = holderLower.get().outputSpeed;
 		
-		return speed * dTime * (calculateVelocity(speed));
-		
-	}
-	/**
-	 * Interpolates the velocity in in/sec of the robot based off of experimental data.
-	 * This data shows the relationship between motor speeds and velocities of the robot.
-	 * @param speed The motor speed
-	 * @return The velocity in in/sec
-	 */
-	private double calculateVelocity(double speed) {
-		//The motor speed points that the current motor speed lies between
-		int lowerRangeIndex = (int) ((speed)*10);
-		int upperRangeIndex = lowerRangeIndex + 1;
-		//Elements for linear interpolation of the velocity 
-		double relative = (speed - (lowerRangeIndex / 10)) / ((upperRangeIndex / 10) - (lowerRangeIndex / 10));
-		double scale = speedProfiles[upperRangeIndex] - speedProfiles[lowerRangeIndex];
-		double transformation = speedProfiles[lowerRangeIndex];
-	
-		return (relative * scale) + transformation;
+			return (relative * scale) + transformation;
+		}
+
+		@Override
+		public void run() {
+			updatePosition();
+		}
 	}
 	
 	@Override
@@ -185,6 +207,23 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 
 	public void disableHeadingHold(){
 		headingPID.disable();
+	}
+
+	@Override
+	public Coordinate getDisplacement(DistanceUnit unit) {
+		return displacement;
+	}
+
+	@Override
+	public Coordinate getVelocity(DistanceUnit unit) {
+		return new Coordinate(0,0);
+	}
+
+	@Override
+	public void resetSensor() {
+		enableIntegration = false;
+		displacement = new Coordinate(0,0);
+		enableIntegration = true;
 	}
 
 }

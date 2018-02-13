@@ -1,26 +1,26 @@
 
 package org.usfirst.frc.team871.robot;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.Grabber;
 import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
+import org.usfirst.frc.team871.subsystems.navigation.Coordinate;
 import org.usfirst.frc.team871.util.config.IControlScheme;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
-import org.usfirst.frc.team871.util.config.InitialControlScheme;
 import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
 import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 import org.usfirst.frc.team871.util.joystick.POVDirections;
-import org.usfirst.frc.team871.util.sensor.EncoderLimitSwitch;
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
+import org.usfirst.frc.team871.util.units.DistanceUnit;
 
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 		
@@ -55,12 +55,14 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-		
+		drive.resetSensor();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-
+		Coordinate coord = drive.getDisplacement(DistanceUnit.INCH);
+		SmartDashboard.putNumber("dX", coord.getX());
+		SmartDashboard.putNumber("dY", coord.getY());
 	}
 
 	@Override

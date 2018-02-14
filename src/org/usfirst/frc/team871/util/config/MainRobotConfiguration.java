@@ -31,6 +31,7 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 	private final Encoder encoderUp; // 256 ticks/rot
 	private final DoubleSolenoid grabPiston;
 	private final DoubleSolenoid ejectPiston;
+	private final DoubleSolenoid tootToot;
 	private final DigitalLimitSwitch upperUpperLimit;
 	private final DigitalLimitSwitch upperLowerLimit;
 	private final DigitalLimitSwitch lowerUpperLimit;
@@ -75,6 +76,7 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 
 		grabPiston   = new DoubleSolenoid(0, 1);
 		ejectPiston  = new DoubleSolenoid(2, 3);
+		tootToot  = new DoubleSolenoid(4, 5);
 		upperUpperLimit = new DigitalLimitSwitch(new DigitalInput(2), true); //TODO: Find port#
 		upperLowerLimit = new DigitalLimitSwitch(new DigitalInput(3), true); //TODO: Find port#
 		lowerUpperLimit = new DigitalLimitSwitch(new DigitalInput(0), true); //TODO: Find port#
@@ -142,6 +144,11 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 	public DoubleSolenoid getEjectPiston() {
 		// TODO Auto-generated method stub
 		return ejectPiston;
+	}
+
+	@Override
+	public DoubleSolenoid getTootToot() {
+		return tootToot;
 	}
 
 	@Override

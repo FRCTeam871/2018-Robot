@@ -1,6 +1,7 @@
 package org.usfirst.frc.team871.subsystems.navigation;
 
 import org.usfirst.frc.team871.robot.Robot;
+import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.navigation.Sensors.IDisplacementSensor;
 import org.usfirst.frc.team871.subsystems.navigation.actions.ActionHandler;
 import org.usfirst.frc.team871.subsystems.navigation.actions.NullAction;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj.PIDController;
 public class Navigation {
 
     private Robot robot;
+    private DriveTrain drive;
     private IDisplacementSensor displaceSense;
     private IWaypointProvider waypointProvider;
     private Coordinate initialPos;
@@ -30,12 +32,6 @@ public class Navigation {
 
     private double DIST_THRESHOLD;
     private long   MAX_ACTION_TIME;
-
-    private final double DIST_KP;
-    private final double DIST_KI;
-    private final double DIST_KD;
-    private PIDController distancePID;
-
     /**
      * @param robot robot object
      * @param displaceSense
@@ -47,48 +43,39 @@ public class Navigation {
         this.waypointProvider = waypointProvider;
         this.robot      = robot;
         this.initialPos = startLocation;
+        this.drive = robot.getDrive();
 
         coordCalc = new CoordinateCalculation();
 
-        currentLocation = new Waypoint(0.0, 0.0, 0.0, 0.0, new NullAction());
-        nextWaypoint    = new Waypoint(0.0, 0.0, 0.0, 0.0, new NullAction());
+        currentLocation = new Waypoint(0.0, 0.0, 0.0, 0.0);
+        nextWaypoint    = waypointProvider.getNextWaypoint();
 
         DIST_THRESHOLD  = 6.0;
         MAX_ACTION_TIME = 10;
-
-        DIST_KP = 0.0;
-        DIST_KI = 0.0;
-        DIST_KD = 0.0;
-        //TODO: Implement alternate way to utilize PID for Distance.
 
         actionHandler = new ActionHandler(this.robot,MAX_ACTION_TIME);
 
         this.isDone = false;
 
         updateLocation();//updates location
-        this.robot.getDrive().enableHeadingHold();//enables heading hold
+        drive.enableHeadingHold();//enables heading hold
     }
 
     /**
      * Is called on loop during autonomous phase to navigate to differing locations
      */
     public void navigate() {
-
         if (this.isDone) {
             updateLocation();
-            this.robot.getDrive().disableHeadingHold();
-            this.robot.getDrive().driveRobotOriented(0, 0, 0);//stop
-
-            //We are done... do something?
+            drive.disableHeadingHold();
+            drive.driveRobotOriented(0, 0, 0);//stop
         } else {
             double distance = coordCalc.getDistance(currentLocation, nextWaypoint);
             double direction = coordCalc.getAngle(currentLocation, nextWaypoint);
-            double angle = this.robot.getNavx().getAngle();
-
             double magnitude = nextWaypoint.getSpeed();
-            this.robot.getDrive().setHeadingHold(angle);
+            drive.setHeadingHold(direction);
 
-            this.robot.getDrive().drivePolar(magnitude, direction, 0);
+            drive.drivePolar(magnitude, 0, 0);
             updateLocation();
 
             if (distance < DIST_THRESHOLD) {//If we are at the waypoint, do the action
@@ -104,14 +91,11 @@ public class Navigation {
                 else {//action is not complete
                     actionHandler.runAction();
                 }
-
-
             }
         }
-
     }
 
-    public void stop(){
+    public void stop() {
         if(!nextWaypoint.getAction().isComplete()){
             actionHandler.stopAction(); //dont want to call an abort if we are already done!
         }
@@ -129,6 +113,4 @@ public class Navigation {
         currentLocation.setX(location.getX() + initialPos.getX());
         currentLocation.setY(location.getY() + initialPos.getY());
     }
-
-
 }

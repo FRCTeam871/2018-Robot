@@ -8,6 +8,10 @@ import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.Grabber;
 import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
 import org.usfirst.frc.team871.subsystems.navigation.Coordinate;
+import org.usfirst.frc.team871.subsystems.navigation.Navigation;
+import org.usfirst.frc.team871.subsystems.navigation.Waypoint;
+import org.usfirst.frc.team871.subsystems.navigation.WaypointProvider;
+import org.usfirst.frc.team871.subsystems.navigation.actions.TootTootAction;
 import org.usfirst.frc.team871.util.config.IControlScheme;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
@@ -30,6 +34,7 @@ public class Robot extends IterativeRobot {
 	private SuperLift lift;
 	private IControlScheme controls;
 	private AHRS navX;
+	private Navigation nav;
 	
 	private long startTime = 0;
 
@@ -53,6 +58,13 @@ public class Robot extends IterativeRobot {
 				lowerUpperLimits, lowerLowerLimits);
 		
 		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm());
+
+		// Waypoints
+		WaypointProvider squareProvider = new WaypointProvider(new Waypoint(48, 0, 0, .3),
+				new Waypoint(48,48,0,.3),
+				new Waypoint(0, 48, 0, .3),
+				new Waypoint(0,0,0,.3, new TootTootAction(config.getTootToot())));
+		nav = new Navigation(this, drive, squareProvider, new Coordinate(0,0));
 	}
 
 	@Override
@@ -68,19 +80,14 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("dX", coord.getX());
 		SmartDashboard.putNumber("dY", coord.getY());
 		
-		if(coord.getX() > 100) {
-			drive.driveRobotOriented(0, 0, 0);
-			System.out.println("Robot driving ended. Final distance: (" + coord.getX() +","+coord.getY()+")");
-		}else {
-			drive.driveRobotOriented(.512, 0, 0);
-		}
-		
-//		if (System.currentTimeMillis() - startTime > 2000) {
+//		if(coord.getX() > 100) {
 //			drive.driveRobotOriented(0, 0, 0);
 //			System.out.println("Robot driving ended. Final distance: (" + coord.getX() +","+coord.getY()+")");
 //		} else {
-//			drive.driveRobotOriented(.864, 0, 0);
+//			drive.driveRobotOriented(.512, 0, 0);
 //		}
+
+		nav.navigate();
 	}
 
 	@Override

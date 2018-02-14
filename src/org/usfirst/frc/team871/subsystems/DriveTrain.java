@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -96,6 +97,8 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 	 * @param r Rotation of the Robot 
 	 */
 	public void driveFieldOriented(double x, double y, double r) {
+		lastXInput = x;
+		lastYInput = y;
 		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0), -gyro.getAngle());
 	}
 
@@ -163,10 +166,13 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 			final double xDistance = tDiff * calculateVelocity(lastXInput);
 			final double yDistance = tDiff * calculateVelocity(lastYInput);
 			
+			Vector2d vec = new Vector2d(xDistance, yDistance);
+			vec.rotate(gyro.getAngle());
+			
 			// This isn't correct, it assumes that each component can be the same. In reality,
 			// It's the resultant velocity that matters...
-			displacement.setX(displacement.getX() + xDistance);
-			displacement.setY(displacement.getY() + yDistance);
+			displacement.setX(displacement.getX() + vec.x);
+			displacement.setY(displacement.getY() + vec.y);
 			
 			tPrevious = curTime;
 			SmartDashboard.putNumber("upd", tDiff);

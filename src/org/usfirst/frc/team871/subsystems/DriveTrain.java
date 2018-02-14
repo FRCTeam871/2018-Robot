@@ -3,6 +3,7 @@ package org.usfirst.frc.team871.subsystems;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Drive class used for driving mecanum drive with additional features.
@@ -58,17 +60,17 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 		super(frontLeft, rearLeft, frontRight, rearRight);
 		this.gyro = gyro;
 		
-		velDataPoints.add(new VelocityHolder(0,0));
-		velDataPoints.add(new VelocityHolder(.1,0));
-		velDataPoints.add(new VelocityHolder(.2,8.796));
-		velDataPoints.add(new VelocityHolder(.3,18.6));
-		velDataPoints.add(new VelocityHolder(.4,29.16));
-		velDataPoints.add(new VelocityHolder(.5,39));
-		velDataPoints.add(new VelocityHolder(.6,49.2));
-		velDataPoints.add(new VelocityHolder(.7,58.8));
-		velDataPoints.add(new VelocityHolder(.8,66.8));
-		velDataPoints.add(new VelocityHolder(.9,76));
-		velDataPoints.add(new VelocityHolder(1,86));
+		velDataPoints.add(new VelocityHolder(0,  0));
+		velDataPoints.add(new VelocityHolder(.1, 0));
+		velDataPoints.add(new VelocityHolder(.2, 15.8));
+		velDataPoints.add(new VelocityHolder(.3, 28.2));
+		velDataPoints.add(new VelocityHolder(.4, 40.95));
+		velDataPoints.add(new VelocityHolder(.5, 53.95));
+		velDataPoints.add(new VelocityHolder(.6, 64.7));
+		velDataPoints.add(new VelocityHolder(.7, 72.33));
+		velDataPoints.add(new VelocityHolder(.8, 82.34));
+		velDataPoints.add(new VelocityHolder(.9, 92.167));
+		velDataPoints.add(new VelocityHolder(1,  100));
 
 		headingPID = new PIDController(0, 0, 0, gyro, this);
 		headingPID.setInputRange(-180, 180);
@@ -138,14 +140,26 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 		 * @param y y motor value
 		 */
 		private void updatePosition() {
+			SmartDashboard.putNumber("updStart", new Random().nextDouble());
+			SmartDashboard.putBoolean("enableIntegration", enableIntegration);
+			SmartDashboard.putNumber("tPrevious", tPrevious);
+			SmartDashboard.putNumber("prevX", lastXInput);
+			SmartDashboard.putNumber("prevY", lastYInput);
 			// On the first iteration do nothing
 			if(tPrevious == 0 || !enableIntegration) {
 				tPrevious = System.currentTimeMillis();
 				return;
 			}
 			
+			if(displacement == null) {
+				displacement = new Coordinate(0, 0);
+			}
+			
+			
 			final long curTime = System.currentTimeMillis();
-			final long tDiff = curTime - tPrevious;
+			final double tDiff = (curTime - tPrevious) / 1000.0;
+			SmartDashboard.putNumber("xVel", calculateVelocity(lastXInput));
+			SmartDashboard.putNumber("yVel", calculateVelocity(lastYInput));
 			final double xDistance = tDiff * calculateVelocity(lastXInput);
 			final double yDistance = tDiff * calculateVelocity(lastYInput);
 			
@@ -155,6 +169,7 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 			displacement.setY(displacement.getY() + yDistance);
 			
 			tPrevious = curTime;
+			SmartDashboard.putNumber("upd", tDiff);
 		}
 		
 		/**
@@ -164,17 +179,35 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 		 * @return The velocity in in/sec
 		 */
 		private double calculateVelocity(double speed) {
-			Optional<VelocityHolder> holderUpper = velDataPoints.stream().filter(dp -> speed >= dp.inputSpeed).findFirst();
-			Optional<VelocityHolder> holderLower = velDataPoints.stream().filter(dp -> speed <= dp.inputSpeed).findFirst();
 			
-			if(!holderUpper.isPresent() || holderLower.isPresent()) {
-				//Bad times, maybe should throw an exception
-				return 0; 
+			VelocityHolder holderUpper = null;
+			VelocityHolder holderLower = null;
+			
+			for(int i = 0; i < velDataPoints.size(); i++) {
+				VelocityHolder vel = velDataPoints.get(i);
+				if(speed <= vel.inputSpeed && holderUpper == null) {
+					holderUpper = vel;
+					if(speed == vel.inputSpeed) {
+						holderLower = holderUpper;
+					}else {
+						holderLower = velDataPoints.get(Math.max(0, Math.min(i - 1, velDataPoints.size()-1)));
+					}
+					break;
+				}
 			}
 			
-			final double relative = ((speed - holderLower.get().inputSpeed) / (holderUpper.get().inputSpeed - holderLower.get().inputSpeed));
-			final double scale = holderUpper.get().outputSpeed - holderLower.get().outputSpeed;
-			final double transformation = holderLower.get().outputSpeed;
+			if(holderLower == null || holderUpper == null) {
+				throw new RuntimeException("YOU ARE BORKED");
+				//Bad times, maybe should throw an exception
+			}
+			
+			if(holderLower == holderUpper) {
+				return holderLower.outputSpeed;
+			}
+			
+			final double relative = ((speed - holderLower.inputSpeed) / (holderUpper.inputSpeed - holderLower.inputSpeed));
+			final double scale = holderUpper.outputSpeed - holderLower.outputSpeed;
+			final double transformation = holderLower.outputSpeed;
 		
 			return (relative * scale) + transformation;
 		}

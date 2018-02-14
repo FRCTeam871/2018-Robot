@@ -68,12 +68,19 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("dX", coord.getX());
 		SmartDashboard.putNumber("dY", coord.getY());
 		
-		if (System.currentTimeMillis() - startTime > 5000) {
+		if(coord.getX() > 100) {
 			drive.driveRobotOriented(0, 0, 0);
 			System.out.println("Robot driving ended. Final distance: (" + coord.getX() +","+coord.getY()+")");
-		} else {
-			drive.driveRobotOriented(0, 0.5, 0);
+		}else {
+			drive.driveRobotOriented(.512, 0, 0);
 		}
+		
+//		if (System.currentTimeMillis() - startTime > 2000) {
+//			drive.driveRobotOriented(0, 0, 0);
+//			System.out.println("Robot driving ended. Final distance: (" + coord.getX() +","+coord.getY()+")");
+//		} else {
+//			drive.driveRobotOriented(.864, 0, 0);
+//		}
 	}
 
 	@Override

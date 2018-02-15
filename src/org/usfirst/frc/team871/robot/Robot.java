@@ -59,17 +59,21 @@ public class Robot extends IterativeRobot {
 		
 		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm());
 
+		int size = 24;
 		// Waypoints
-		WaypointProvider squareProvider = new WaypointProvider(new Waypoint(48, 0, 0, .3),
-				new Waypoint(48,48,0,.3),
-				new Waypoint(0, 48, 0, .3),
-				new Waypoint(0,0,0,.3, new TootTootAction(config.getTootToot())));
-		nav = new Navigation(this, drive, squareProvider, new Coordinate(0,0));
+//		WaypointProvider squareProvider = new WaypointProvider(new Waypoint(1, 0, 0, .3),
+//				new Waypoint(size,size,0,.3),
+//				new Waypoint(0, size, 0, .3),
+//				new Waypoint(0,0,0,.3, new TootTootAction(config.getTootToot())));
+		WaypointProvider prov = new WaypointProvider(new Waypoint(0, 0, 0, 0.3), new Waypoint(12 * 3, 0, 0, 0.3), new Waypoint(12 * 3, -12 * 5, 0, 0.3), new Waypoint(12 * 6, -12 * 5, 0, 0.3), new Waypoint(12 * 6, -12 * 11, 0, 0.3), new Waypoint(12 * 3, -12 * 11, 0, 0.3), new Waypoint(12 * 3, -12 * 16, 0, 0.3), new Waypoint(12 * 0, -12 * 16, 0, 0.3));
+		nav = new Navigation(this, drive, prov, new Coordinate(0,0));
 	}
 
 	@Override
 	public void autonomousInit() {
 		drive.resetSensor();
+		drive.resetGyro();
+		drive.setHeadingHold(0);
 		startTime = System.currentTimeMillis();
 		System.out.println("Robot driving started:\t"+ startTime + "\n");
 	}
@@ -91,7 +95,13 @@ public class Robot extends IterativeRobot {
 	}
 
 	@Override
+	public void teleopInit() {
+		super.teleopInit();
+	}
+	
+	@Override
 	public void teleopPeriodic() {
+		
 		if(controls.getToggleOrientationButton()) {
 			drive.driveRobotOriented(controls.getYAxis(), -controls.getXAxis(), controls.getRotationAxis());
 		} else {

@@ -73,10 +73,11 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 		velDataPoints.add(new VelocityHolder(.9, 92.167));
 		velDataPoints.add(new VelocityHolder(1,  100));
 
-		headingPID = new PIDController(0, 0, 0, gyro, this);
+		headingPID = new PIDController(0.03, 0, 0.03, gyro, this);
 		headingPID.setInputRange(-180, 180);
-		headingPID.setOutputRange(-1, 1);
+		headingPID.setOutputRange(-0.5, 0.5);
 		headingPID.setContinuous();
+		headingPID.setAbsoluteTolerance(5);
 		headingPID.disable();
 		
 		gyro.setName("DriveTrain", "Gyro");
@@ -100,6 +101,13 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 		lastXInput = x;
 		lastYInput = y;
 		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0), -gyro.getAngle());
+	}
+	
+	@Override
+	public void drivePolar(double magnitude, double angle, double r) {
+		lastXInput = Math.cos(angle) * magnitude;
+		lastYInput = Math.sin(angle) * magnitude;
+		super.drivePolar(magnitude, angle, r + (headingPID.isEnabled() ? pidRotation : 0));
 	}
 
 	/**
@@ -169,6 +177,9 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 			Vector2d vec = new Vector2d(xDistance, yDistance);
 			vec.rotate(gyro.getAngle());
 			
+			SmartDashboard.putNumber("vecX", vec.x);
+			SmartDashboard.putNumber("vecY", vec.y);
+			
 			// This isn't correct, it assumes that each component can be the same. In reality,
 			// It's the resultant velocity that matters...
 			displacement.setX(displacement.getX() + vec.x);
@@ -234,10 +245,15 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 	 */
 	public void setHeadingHold(double heading) {
 		headingPID.setSetpoint(heading);
+		headingPID.enable();
 	}
-
-	public void getHeadingHold() {
-		headingPID.getSetpoint();
+	
+	public double getHeadingHold() {
+		return headingPID.getSetpoint();
+	}
+	
+	public boolean isAtSetpoint() {
+		return headingPID.onTarget();
 	}
 
 	public void enableHeadingHold(){

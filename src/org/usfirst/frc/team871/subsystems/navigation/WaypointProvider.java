@@ -25,11 +25,13 @@ public class WaypointProvider implements IWaypointProvider {
 
     @Override
     public Waypoint getNextWaypoint() {
+    	System.out.println("getNextWaypoint()");
         return this.waypointArrayList.get(this.index++);
     }
 
     @Override
     public boolean hasNext() {
+    	System.out.println("hasNext() == " + (this.waypointArrayList.size() != index));
         return this.waypointArrayList.size() != index;
 
     }

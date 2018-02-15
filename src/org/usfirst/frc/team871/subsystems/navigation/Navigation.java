@@ -9,6 +9,7 @@ import org.usfirst.frc.team871.util.CoordinateCalculation;
 import org.usfirst.frc.team871.util.units.DistanceUnit;
 
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Navigation is field oriented, so that the only point shifting between matches is the starting point of the robot.
@@ -50,7 +51,7 @@ public class Navigation {
         currentLocation = new Waypoint(0.0, 0.0, 0.0, 0.0);
         nextWaypoint    = waypointProvider.getNextWaypoint();
 
-        DIST_THRESHOLD  = 6.0;
+        DIST_THRESHOLD  = 3.0;
         MAX_ACTION_TIME = 10;
 
         actionHandler = new ActionHandler(this.robot,MAX_ACTION_TIME);
@@ -73,9 +74,22 @@ public class Navigation {
             double distance = coordCalc.getDistance(currentLocation, nextWaypoint);
             double direction = coordCalc.getAngle(currentLocation, nextWaypoint);
             double magnitude = nextWaypoint.getSpeed();
+            
+            SmartDashboard.putNumber("navDist", distance);
+            SmartDashboard.putNumber("navDir", direction);
+            SmartDashboard.putNumber("navMag", magnitude);
+            SmartDashboard.putString("navCurrLocation", currentLocation.getX() + "," + currentLocation.getY());
+            SmartDashboard.putString("navNextWaypoint", nextWaypoint.getX() + "," + nextWaypoint.getY());
+            
             drive.setHeadingHold(direction);
 
-            drive.drivePolar(magnitude, 0, 0);
+            if(drive.isAtSetpoint()) {
+            	drive.drivePolar(magnitude, 0, 0);
+            	//drive.drivePolar(0, 0, 0);
+            }else {
+            	drive.drivePolar(0, 0, 0);
+            }
+            
             updateLocation();
 
             if (distance < DIST_THRESHOLD) {//If we are at the waypoint, do the action

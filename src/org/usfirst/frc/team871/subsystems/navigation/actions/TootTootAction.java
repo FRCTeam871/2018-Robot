@@ -1,8 +1,6 @@
 package org.usfirst.frc.team871.subsystems.navigation.actions;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Timer;
-import org.usfirst.frc.team871.robot.Robot;
 
 public class TootTootAction implements IAction {
     private final DoubleSolenoid tooter;
@@ -15,7 +13,7 @@ public class TootTootAction implements IAction {
     }
 
     @Override
-    public void init(Robot robot, Timer timer) {
+    public void init() {
     	
     }
 
@@ -48,5 +46,10 @@ public class TootTootAction implements IAction {
     @Override
     public void halt() {
         tooter.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    @Override
+    public String toString() {
+        return "{ Toot toot! }";
     }
 }

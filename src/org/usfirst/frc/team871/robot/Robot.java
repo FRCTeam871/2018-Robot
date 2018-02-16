@@ -1,9 +1,9 @@
 
 package org.usfirst.frc.team871.robot;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.IterativeRobot;
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.Grabber;
 import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
@@ -22,13 +22,9 @@ import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 import org.usfirst.frc.team871.util.joystick.POVDirections;
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
-import org.usfirst.frc.team871.util.units.DistanceUnit;
 
-import com.kauailabs.navx.frc.AHRS;
-
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.Collections;
+import java.util.List;
 
 public class Robot extends IterativeRobot {
 		
@@ -50,10 +46,10 @@ public class Robot extends IterativeRobot {
 		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
 		grabber  = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
 
-		List<ILimitSwitch> upperUpperLimits = Arrays.asList(config.getupperUpperLimit());
-		List<ILimitSwitch> upperLowerLimits = Arrays.asList(config.getupperLowerLimit());
-		List<ILimitSwitch> lowerUpperLimits = Arrays.asList(config.getlowerUpperLimit());
-		List<ILimitSwitch> lowerLowerLimits = Arrays.asList(config.getlowerLowerLimit());
+		List<ILimitSwitch> upperUpperLimits = Collections.singletonList(config.getupperUpperLimit());
+		List<ILimitSwitch> upperLowerLimits = Collections.singletonList(config.getupperLowerLimit());
+		List<ILimitSwitch> lowerUpperLimits = Collections.singletonList(config.getlowerUpperLimit());
+		List<ILimitSwitch> lowerLowerLimits = Collections.singletonList(config.getlowerLowerLimit());
 		
 		CompositeLimitedSpeedController limitedSpeedControllerUp = new CompositeLimitedSpeedController(config.getLiftMotorUp(), 
 				upperUpperLimits, upperLowerLimits);
@@ -62,7 +58,6 @@ public class Robot extends IterativeRobot {
 		
 		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm());
 
-		int size = 24;
 		// Waypoints
 //		WaypointProvider squareProvider = new WaypointProvider(new Waypoint(1, 0, 0, .3),
 //				new Waypoint(size,size,0,.3),
@@ -71,10 +66,7 @@ public class Robot extends IterativeRobot {
 //		WaypointProvider prov = new WaypointProvider(new Waypoint(0, 0, 0, 0.3), new Waypoint(12 * 3, 0, 0, 0.3), new Waypoint(12 * 3, -12 * 5, 0, 0.3), new Waypoint(12 * 6, -12 * 5, 0, 0.3), new Waypoint(12 * 6, -12 * 11, 0, 0.3), new Waypoint(12 * 3, -12 * 11, 0, 0.3), new Waypoint(12 * 3, -12 * 16, 0, 0.3), new Waypoint(12 * 0, -12 * 16, 0, 0.3));
 //		WaypointProvider prov = new WaypointProvider(new Waypoint(0, 0, 0, 0.3), new Waypoint(12 * 6, 0, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.LOW_SWITCH)), new Waypoint(0, 0, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.SCALE_MID)), new Waypoint(0, 0, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND)));
 		
-		
-		//
-		
-		WaypointProvider prov = new WaypointProvider(new Waypoint(0, 0, 0, 0.3, new SetGrabberAction(grabber, true)), 
+		WaypointProvider prov = new WaypointProvider(new Waypoint(0, 0, 0, 0.3, new SetGrabberAction(grabber, true)),
 				new Waypoint(12 * 19, 0, 0, 0.6),
 				new Waypoint(12 * 19, (12 * 10) - 6, 0, 0.4, new LiftSetpointAction(lift, SetpointHeights.SCALE_MID)),
 				new Waypoint(12 * 19, 11 * 12, 0, 0.3, new SetGrabberAction(grabber, false)),
@@ -82,7 +74,8 @@ public class Robot extends IterativeRobot {
 				new Waypoint(12 * 19, 0, 0, 0.4),
 				new Waypoint(-12, 0, 0, 0.6),
 				new Waypoint(0, 0, 0, 0.3, new TootTootAction(config.getTootToot())));
-		nav = new Navigation(this, drive, prov, new Coordinate(0,0));
+
+		nav = new Navigation(drive, drive, prov, new Coordinate(0,0));
 		
 	}
 
@@ -99,17 +92,6 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousPeriodic() {
-		Coordinate coord = drive.getDisplacement(DistanceUnit.INCH);
-		SmartDashboard.putNumber("dX", coord.getX());
-		SmartDashboard.putNumber("dY", coord.getY());
-		
-//		if(coord.getX() > 100) {
-//			drive.driveRobotOriented(0, 0, 0);
-//			System.out.println("Robot driving ended. Final distance: (" + coord.getX() +","+coord.getY()+")");
-//		} else {
-//			drive.driveRobotOriented(.512, 0, 0);
-//		}
-
 		nav.navigate();
 	}
 
@@ -152,10 +134,6 @@ public class Robot extends IterativeRobot {
 			}
 		}
 
-//		if(controls.getLiftAxis() != 0) {
-//		lift.moveLift(controls.getLiftAxis());
-//		}
-
 		if(controls.getPOV() ==  POVDirections.UP || controls.getPOV() ==  POVDirections.UP_RIGHT || controls.getPOV() ==  POVDirections.UP_LEFT) {
 			lift.setTop();
 		}
@@ -165,8 +143,6 @@ public class Robot extends IterativeRobot {
 		}
 		
 		config.getTootToot().set(controls.toottoot() ? Value.kForward : Value.kReverse);
-		
-		
 	}
 
 	@Override
@@ -177,17 +153,4 @@ public class Robot extends IterativeRobot {
 	public DriveTrain getDrive() {
 		return this.drive;
 	}
-
-	public Grabber getGrabber() {
-		return this.grabber;
-	}
-
-	public SuperLift getLift() {
-		return this.lift;
-	}
-
-	public AHRS getNavx() {
-		return this.navX;
-	}
-	//CONTRIBUTED BY 
 }

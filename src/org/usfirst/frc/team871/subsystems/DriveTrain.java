@@ -133,11 +133,11 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 	public void resetGyro() {
 		gyro.zeroYaw();
 	}
-	
+
 	/**
 	 *
 	 * @return -s the gyro for use elsewhere
-	 */ 
+	 */
 	public AHRS getGyro() {
 		return gyro;
 	}
@@ -146,9 +146,7 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 		private long tPrevious = 0;
 		
 		/**
-		 * Sets new x and y motor values to update the current location 
-		 * @param x X motor value
-		 * @param y y motor value
+		 * Sets new x and y motor values to update the current location
 		 */
 		private void updatePosition() {
 			SmartDashboard.putNumber("updStart", new Random().nextDouble());

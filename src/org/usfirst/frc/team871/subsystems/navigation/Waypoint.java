@@ -3,17 +3,20 @@ package org.usfirst.frc.team871.subsystems.navigation;
 import org.usfirst.frc.team871.subsystems.navigation.actions.IAction;
 import org.usfirst.frc.team871.subsystems.navigation.actions.NullAction;
 
+import java.text.DecimalFormat;
+
 /**
  *  @author Team871-TPfaffe
  * Contains parameters for navigation to a single point.
  * Can include an Action to perform at said single point.
  */
 public class Waypoint extends Coordinate {
+    private static final DecimalFormat angleFormatter = new DecimalFormat("000.00");
+    private static final DecimalFormat speedFormatter = new DecimalFormat("0.000");
 
-    private double speed;
-    private double angle;
-    private IAction action;
-    private boolean isSpeedConstant;
+    private final double speed;
+    private final double angle;
+    private final IAction action;
 
     public Waypoint(double xVal, double yVal, double angle, double speed, IAction action) {
         super(xVal, yVal);
@@ -35,28 +38,17 @@ public class Waypoint extends Coordinate {
         return this.speed;
     }
 
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
     public double getAngle() {
         return this.angle;
-    }
-
-    public void setAngle(double angle) {
-
     }
 
     public IAction getAction() {
         return this.action;
     }
 
-    public void setAction(IAction action) {
-        this.action = action;
+    @Override
+    public String toString() {
+        return "{ Waypoint " + super.toString() + " / " + angleFormatter.format(angle) + " @ " + speedFormatter.format(speed)
+                + " Doing " + action.toString() + " }";
     }
-
-    public boolean getIsSpeedConstant() {
-        return this.isSpeedConstant;
-    }
-
 }

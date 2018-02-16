@@ -1,17 +1,15 @@
 package org.usfirst.frc.team871.subsystems.navigation.actions;
 
-import org.usfirst.frc.team871.robot.Robot;
 import org.usfirst.frc.team871.subsystems.Grabber;
-
-import edu.wpi.first.wpilibj.Timer;
 
 public class SetGrabberAction implements IAction {
 
-	private Grabber grabber;
-	private boolean grab;
+	private final Grabber grabber;
+	private final long wait;
+	private final boolean grab;
+
 	private long startTime = 0;
-	private long wait = 0;
-	
+
 	public SetGrabberAction(Grabber grabber, boolean grab, long wait) {
 		this.grabber = grabber;
 		this.grab = grab;
@@ -23,13 +21,14 @@ public class SetGrabberAction implements IAction {
 	}
 	
 	@Override
-	public void init(Robot robot, Timer timer) {
+	public void init() {
 		
 	}
 
 	@Override
 	public void execute() {
 		if(startTime == 0) {
+			System.out.print(toString() + " -- Starting");
 			startTime = System.currentTimeMillis();
 		}
 		
@@ -51,4 +50,8 @@ public class SetGrabberAction implements IAction {
 		
 	}
 
+	@Override
+	public String toString() {
+		return "{ " + (grab ? "Grab " : "Release ") + " and wait " + wait + " }";
+	}
 }

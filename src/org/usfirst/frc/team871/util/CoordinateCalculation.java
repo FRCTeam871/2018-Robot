@@ -15,9 +15,8 @@ public class CoordinateCalculation {
 	 * @param waypoint2 Second Waypoint
 	 * @return a number
 	 */
-	public double getDistance(Waypoint waypoint1, Waypoint waypoint2) {
-		
-		double distance = 0;
+	public double getDistance(Coordinate waypoint1, Coordinate waypoint2) {
+		double distance;
 		
 		double dx = waypoint2.getX() - waypoint1.getX();
 		double dy = waypoint2.getY() - waypoint1.getY();
@@ -36,16 +35,15 @@ public class CoordinateCalculation {
 	 * @param waypoint2 Second waypoint
 	 * @return
 	 */
-	public double getAngle(Waypoint waypoint1, Waypoint waypoint2) {
-		double angle = 0;
+	public double getAngle(Coordinate waypoint1, Coordinate waypoint2) {
+		double angle;
 		
 		//the x and y arguments are reversed because of the coordinate transformation between the gyro angle and the field coordinate system
 		angle = Math.atan2(waypoint2.getY()-waypoint1.getY(), waypoint2.getX()-waypoint1.getX());
 		
 		return Math.toDegrees(angle);
 	}
-	
-	
+
 	public double getResultant(Coordinate coordinate) {
 		return getResultant(coordinate.getX(), coordinate.getY());
 	}

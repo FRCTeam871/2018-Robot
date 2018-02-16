@@ -1,48 +1,51 @@
 package org.usfirst.frc.team871.subsystems.navigation;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * provides waypoints in a list one by one with no modification to the waypoints for navigation
  *  @author Team871-TPfaffe
  */
 public class WaypointProvider implements IWaypointProvider {
+    private Iterator<Waypoint> it;
+    private final List<Waypoint> waypointArrayList;
 
-    private int index;
-
-    private ArrayList<Waypoint> waypointArrayList;
+    public WaypointProvider(List<Waypoint> waypoints) {
+        this.waypointArrayList = waypoints;
+        it = waypointArrayList.iterator();
+    }
 
     public WaypointProvider(Waypoint... points) {
-        index = 0;
-        waypointArrayList = new ArrayList<Waypoint>();
-
-        for(Waypoint point: points){
-            waypointArrayList.add(point); //add all points from constructor argument
-        }
-
+        this(Arrays.asList(points));
     }
 
     @Override
     public Waypoint getNextWaypoint() {
-    	System.out.println("getNextWaypoint()");
-        return this.waypointArrayList.get(this.index++);
+        final Waypoint wp = it.next();
+
+        System.out.println("WaypointProvider: Next waypoint -> " + wp.toString());
+        return wp;
     }
 
     @Override
     public boolean hasNext() {
-    	System.out.println("hasNext() == " + (this.waypointArrayList.size() != index));
-        return this.waypointArrayList.size() != index;
-
+    	final boolean hasNext = it.hasNext();
+        System.out.println("WaypointProvider: Has next? " + hasNext);
+        return hasNext;
     }
 
     @Override
-    public List<Waypoint> getAvailableWaypoints() {
-        ArrayList<Waypoint> copyList = this.waypointArrayList;
-        return copyList;
+    public void reset() {
+        System.out.println("WaypointProvider: Resetting.");
+        it = waypointArrayList.iterator();
     }
 
-    public int getIndex() {
-        return this.index;
+    @Override
+    public IWaypointProvider reverse() {
+        System.out.println("WaypointProvider: Creating reversed provider.");
+
+        final List<Waypoint> reversed = new ArrayList<>(waypointArrayList);
+        Collections.reverse(reversed);
+        return new WaypointProvider(reversed);
     }
 }

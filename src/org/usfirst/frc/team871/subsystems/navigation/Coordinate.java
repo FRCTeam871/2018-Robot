@@ -13,11 +13,9 @@ public class Coordinate {
         this.yVal = yVal;
     }
 
-
     public double getX() {
         return this.xVal;
     }
-
 
     public void setX(double xVal) {
         this.xVal = xVal;
@@ -31,5 +29,8 @@ public class Coordinate {
         this.yVal = yVal;
     }
 
-
+    @Override
+    public String toString() {
+        return '(' + xVal + " , " + yVal + ')';
+    }
 }

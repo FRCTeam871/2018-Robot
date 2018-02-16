@@ -89,6 +89,11 @@ public enum InitialControlScheme implements IControlScheme{
 	public boolean getManualLiftModeButton() {
 		return false;
 	}
+	
+	@Override
+	public boolean toottoot() {
+		return false;
+	}
 
 
 		

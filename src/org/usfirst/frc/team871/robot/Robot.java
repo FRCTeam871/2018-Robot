@@ -7,10 +7,13 @@ import java.util.List;
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.Grabber;
 import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
+import org.usfirst.frc.team871.subsystems.lifter.SuperLift.SetpointHeights;
 import org.usfirst.frc.team871.subsystems.navigation.Coordinate;
 import org.usfirst.frc.team871.subsystems.navigation.Navigation;
 import org.usfirst.frc.team871.subsystems.navigation.Waypoint;
 import org.usfirst.frc.team871.subsystems.navigation.WaypointProvider;
+import org.usfirst.frc.team871.subsystems.navigation.actions.LiftSetpointAction;
+import org.usfirst.frc.team871.subsystems.navigation.actions.SetGrabberAction;
 import org.usfirst.frc.team871.subsystems.navigation.actions.TootTootAction;
 import org.usfirst.frc.team871.util.config.IControlScheme;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
@@ -23,6 +26,7 @@ import org.usfirst.frc.team871.util.units.DistanceUnit;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -46,7 +50,6 @@ public class Robot extends IterativeRobot {
 		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
 		grabber  = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
 
-
 		List<ILimitSwitch> upperUpperLimits = Arrays.asList(config.getupperUpperLimit());
 		List<ILimitSwitch> upperLowerLimits = Arrays.asList(config.getupperLowerLimit());
 		List<ILimitSwitch> lowerUpperLimits = Arrays.asList(config.getlowerUpperLimit());
@@ -65,12 +68,28 @@ public class Robot extends IterativeRobot {
 //				new Waypoint(size,size,0,.3),
 //				new Waypoint(0, size, 0, .3),
 //				new Waypoint(0,0,0,.3, new TootTootAction(config.getTootToot())));
-		WaypointProvider prov = new WaypointProvider(new Waypoint(0, 0, 0, 0.3), new Waypoint(12 * 3, 0, 0, 0.3), new Waypoint(12 * 3, -12 * 5, 0, 0.3), new Waypoint(12 * 6, -12 * 5, 0, 0.3), new Waypoint(12 * 6, -12 * 11, 0, 0.3), new Waypoint(12 * 3, -12 * 11, 0, 0.3), new Waypoint(12 * 3, -12 * 16, 0, 0.3), new Waypoint(12 * 0, -12 * 16, 0, 0.3));
+//		WaypointProvider prov = new WaypointProvider(new Waypoint(0, 0, 0, 0.3), new Waypoint(12 * 3, 0, 0, 0.3), new Waypoint(12 * 3, -12 * 5, 0, 0.3), new Waypoint(12 * 6, -12 * 5, 0, 0.3), new Waypoint(12 * 6, -12 * 11, 0, 0.3), new Waypoint(12 * 3, -12 * 11, 0, 0.3), new Waypoint(12 * 3, -12 * 16, 0, 0.3), new Waypoint(12 * 0, -12 * 16, 0, 0.3));
+//		WaypointProvider prov = new WaypointProvider(new Waypoint(0, 0, 0, 0.3), new Waypoint(12 * 6, 0, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.LOW_SWITCH)), new Waypoint(0, 0, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.SCALE_MID)), new Waypoint(0, 0, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND)));
+		
+		
+		//
+		
+		WaypointProvider prov = new WaypointProvider(new Waypoint(0, 0, 0, 0.3, new SetGrabberAction(grabber, true)), 
+				new Waypoint(12 * 19, 0, 0, 0.6),
+				new Waypoint(12 * 19, (12 * 10) - 6, 0, 0.4, new LiftSetpointAction(lift, SetpointHeights.SCALE_MID)),
+				new Waypoint(12 * 19, 11 * 12, 0, 0.3, new SetGrabberAction(grabber, false)),
+				new Waypoint(12 * 19, (12 * 10) - 6, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND)),
+				new Waypoint(12 * 19, 0, 0, 0.4),
+				new Waypoint(-12, 0, 0, 0.6),
+				new Waypoint(0, 0, 0, 0.3, new TootTootAction(config.getTootToot())));
 		nav = new Navigation(this, drive, prov, new Coordinate(0,0));
+		
 	}
 
 	@Override
 	public void autonomousInit() {
+		grabber.setGrab(true);
+		config.getTootToot().set(Value.kReverse);
 		drive.resetSensor();
 		drive.resetGyro();
 		drive.setHeadingHold(0);
@@ -96,6 +115,8 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		drive.disableHeadingHold();
+		config.getTootToot().set(Value.kReverse);
 		super.teleopInit();
 	}
 	
@@ -142,6 +163,9 @@ public class Robot extends IterativeRobot {
 		if(controls.getPOV() ==  POVDirections.DOWN || controls.getPOV() ==  POVDirections.DOWN_RIGHT || controls.getPOV() ==  POVDirections.DOWN_LEFT) {
 			lift.setBottom();
 		}
+		
+		config.getTootToot().set(controls.toottoot() ? Value.kForward : Value.kReverse);
+		
 		
 	}
 

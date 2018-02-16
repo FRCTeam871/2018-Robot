@@ -50,7 +50,7 @@ public class Grabber {
 	 * @param grab If true the grabber state is set to grab, If false the grabber is open
 	 */
 	public void setGrab(boolean grab) {
-		grabPiston.set(grab ? Value.kForward : Value.kReverse);
+		grabPiston.set(!grab ? Value.kForward : Value.kReverse);
 	}
 	
 	/**

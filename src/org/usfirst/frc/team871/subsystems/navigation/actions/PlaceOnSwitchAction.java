@@ -77,7 +77,7 @@ public class PlaceOnSwitchAction implements IAction {
     public void execute() {
 
         robot.getDrive().driveFieldOriented(0, 0, 0);//keep updating stop drive
-        if (robot.getLift().isAtSetpoint(SETPOINT)) {
+        if (robot.getLift().isAtSetpoint()) {
             isAtSetpoint = true;
         }
 

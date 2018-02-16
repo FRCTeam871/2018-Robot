@@ -28,7 +28,7 @@ public class  SuperLift extends SendableBase implements Sendable {
 	 * 
 	 * @author Team871
 	 */
-	private enum SetpointHeights {
+	public enum SetpointHeights {
 		GROUND,
 		LOW_SWITCH,
 		SCALE_LOW,
@@ -96,6 +96,10 @@ public class  SuperLift extends SendableBase implements Sendable {
 		setPoint /= 2;
 		upperLift.setHeight(setPoint);
 		lowerLift.setHeight(setPoint);
+	}
+	
+	public void setHeight(SetpointHeights setPoint) {
+		setHeight(getSetpointHeight(setPoint));
 	}
 
 	/**
@@ -215,11 +219,11 @@ public class  SuperLift extends SendableBase implements Sendable {
 		builder.addDoubleProperty("speed", null, this::moveLift);
 	}
 
-	public boolean isAtSetpoint(double Setpoint) {
-		double height = this.getHeight();
-		double max = height+1.0;
-		double min = height-1.0;
-
-        return (height < max) && (height > min);
+	public boolean isAtSetpoint() {
+		return lowerLift.isAtSetpoint() && upperLift.isAtSetpoint();
+	}
+	
+	public double getSetpointHeight(SetpointHeights height) {
+		return setpointVals.get(height);
 	}
 }

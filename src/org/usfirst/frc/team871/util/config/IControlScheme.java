@@ -65,4 +65,6 @@ public interface IControlScheme {
 	 * @return Returns the POV direction as a POVDirection
 	 */
 	POVDirections getPOV();
+	
+	boolean toottoot();
 }

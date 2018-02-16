@@ -4,6 +4,7 @@ import org.usfirst.frc.team871.robot.Robot;
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.navigation.Sensors.IDisplacementSensor;
 import org.usfirst.frc.team871.subsystems.navigation.actions.ActionHandler;
+import org.usfirst.frc.team871.subsystems.navigation.actions.IAction;
 import org.usfirst.frc.team871.subsystems.navigation.actions.NullAction;
 import org.usfirst.frc.team871.util.CoordinateCalculation;
 import org.usfirst.frc.team871.util.units.DistanceUnit;
@@ -81,36 +82,34 @@ public class Navigation {
             SmartDashboard.putString("navCurrLocation", currentLocation.getX() + "," + currentLocation.getY());
             SmartDashboard.putString("navNextWaypoint", nextWaypoint.getX() + "," + nextWaypoint.getY());
             
-            drive.setHeadingHold(direction);
-
-            if(drive.isAtSetpoint()) {
-            	drive.drivePolar(magnitude, 0, 0);
-            	//drive.drivePolar(0, 0, 0);
-            }else {
-            	drive.drivePolar(0, 0, 0);
+            if(distance >= DIST_THRESHOLD) {
+            	if(drive.isAtSetpoint()) {
+            		drive.drivePolar(magnitude, 0, 0);
+            	}else {
+                	drive.drivePolar(0, 0, 0);
+                }
+            	drive.setHeadingHold(direction);
             }
             
             updateLocation();
 
             if (distance < DIST_THRESHOLD) {//If we are at the waypoint, do the action
-                if(nextWaypoint.getAction().isComplete()){//if the action is complete move on
+            	drive.drivePolar(0, 0, 0);
+            	nextWaypoint.getAction().execute();
+                if(nextWaypoint.getAction().isComplete()) {//if the action is complete move on
                     if (waypointProvider.hasNext()) {//since we got to the waypoint and performed it's action, get the next one
                         nextWaypoint = waypointProvider.getNextWaypoint();
-                        actionHandler.loadNewAction(nextWaypoint.getAction());
-                    }
-                    else {
+                        nextWaypoint.getAction().init(robot, null);
+                    }else {
                         this.isDone = true; //done with navigation
                     }
-                }
-                else {//action is not complete
-                    actionHandler.runAction();
                 }
             }
         }
     }
 
     public void stop() {
-        if(!nextWaypoint.getAction().isComplete()){
+        if(!nextWaypoint.getAction().isComplete()) {
             actionHandler.stopAction(); //dont want to call an abort if we are already done!
         }
 

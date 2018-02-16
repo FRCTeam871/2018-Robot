@@ -54,7 +54,7 @@ public class SubLift extends SendableBase implements Sendable {
 		pid.disable();
 		switch(mode) {
 			case Position:
-			    pid.setPID(-0.1, 0, 0.04);
+			    pid.setPID(-0.12, 0, 0.04);
 			    pid.setInputRange(0, 0);
                 encoder.setPIDSourceType(PIDSourceType.kDisplacement);
 				break;
@@ -115,5 +115,10 @@ public class SubLift extends SendableBase implements Sendable {
 		builder.addDoubleProperty("error", pid::getError, null);
 		builder.addDoubleProperty("SetPoint", pid::getSetpoint, null);
 		builder.addDoubleProperty("Position", this::getHeight, null);
+	}
+
+	public boolean isAtSetpoint() {
+		pid.setAbsoluteTolerance(3);
+		return pid.onTarget();
 	}
 }

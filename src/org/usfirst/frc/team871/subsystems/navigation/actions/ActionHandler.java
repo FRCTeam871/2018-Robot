@@ -20,6 +20,8 @@ public class ActionHandler{
         this.robot = robot;
         this.MAX_TIME = maxTime;
         this.action   = new NullAction(); //starts it with a dummy action
+        this.timer = new Timer();
+        this.timer.start();
 
         this.firstRun = true;
     }
@@ -34,8 +36,9 @@ public class ActionHandler{
      * runs the currently loaded action
      */
     public void runAction() {
-        if(firstRun){//only do this once on first call after new load
-            firstRun = false;
+        if(firstRun){ //only do this once on first call after new load
+        	System.out.println("firstRun");
+        	firstRun = false;
             timer.reset();
             action.init(this.robot, this.timer);
         }
@@ -44,15 +47,14 @@ public class ActionHandler{
             if (action.isComplete()) {//if action says is complete with its action.
                //done with action
                 action.halt();//stop
-            }
-            else {
+            } else {
                 action.execute(); //do action
             }
         }
-
-        if (!action.isComplete()) { //if the action hasnt already been completed start halt process
-                action.halt();//will attemp to stop. If cant will abort everything.
-            }
+//
+//        if (!action.isComplete()) { //if the action hasnt already been completed start halt process
+//            action.halt();//will attemp to stop. If cant will abort everything.
+//        }
     }
 
     /**

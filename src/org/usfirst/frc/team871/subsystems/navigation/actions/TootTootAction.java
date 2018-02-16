@@ -6,7 +6,7 @@ import org.usfirst.frc.team871.robot.Robot;
 
 public class TootTootAction implements IAction {
     private final DoubleSolenoid tooter;
-    private long startTime;
+    private long startTime = 0;
     private int tootCount = 0;
     private boolean tooting = false;
 
@@ -16,15 +16,16 @@ public class TootTootAction implements IAction {
 
     @Override
     public void init(Robot robot, Timer timer) {
-        startTime = 0;
+    	
     }
 
     @Override
     public void execute() {
-        if(System.currentTimeMillis() - startTime > 500) {
+        if(System.currentTimeMillis() - startTime > 200) {
             startTime = System.currentTimeMillis();
-            tooter.set(tooting ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kOff);
             tooting = !tooting;
+            tooter.set(tooting ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+            System.out.println(tooting + " " + startTime);
 
             tootCount++;
         }
@@ -32,16 +33,20 @@ public class TootTootAction implements IAction {
 
     @Override
     public boolean isComplete() {
-        return tootCount < 3;
+    	if(tootCount > 3) {
+    		tooter.set(DoubleSolenoid.Value.kReverse);
+    	}
+    	
+        return tootCount > 3;
     }
 
     @Override
     public void abort() {
-        tooter.set(DoubleSolenoid.Value.kOff);
+        tooter.set(DoubleSolenoid.Value.kReverse);
     }
 
     @Override
     public void halt() {
-        tooter.set(DoubleSolenoid.Value.kOff);
+        tooter.set(DoubleSolenoid.Value.kReverse);
     }
 }

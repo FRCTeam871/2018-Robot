@@ -3,7 +3,6 @@ package org.usfirst.frc.team871.subsystems.navigation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.navigation.Sensors.IDisplacementSensor;
-import org.usfirst.frc.team871.util.CoordinateCalculation;
 import org.usfirst.frc.team871.util.units.DistanceUnit;
 
 /**
@@ -21,27 +20,21 @@ public class Navigation {
     private Waypoint nextWaypoint;
     private boolean isDone;
 
-    private CoordinateCalculation coordCalc;
-
-    private double DIST_THRESHOLD;
+    private double DIST_THRESHOLD = 3.0;
     /**
-     * @param displaceSense
-     * @param waypointProvider
-     * @param startLocation
+     * @param displaceSense The displacement sensor
+     * @param waypointProvider The object that provides our waypoints
+     * @param startLocation The absolute starting position of the robot on the field.
      */
     public Navigation(DriveTrain drive, IDisplacementSensor displaceSense, IWaypointProvider waypointProvider, Coordinate startLocation) {
         this.displaceSense    = displaceSense;
         this.waypointProvider = waypointProvider;
-        this.initialPos = startLocation;
-        this.drive = drive;
-        this.isDone = false;
+        this.initialPos       = startLocation;
+        this.drive            = drive;
+        this.isDone           = false;
 
-        coordCalc = new CoordinateCalculation();
-
-        currentLocation = new Coordinate(startLocation.getX(), startLocation.getY());
-        nextWaypoint    = waypointProvider.getNextWaypoint();
-
-        DIST_THRESHOLD  = 3.0;
+        currentLocation = new Coordinate(startLocation);
+        nextWaypoint = waypointProvider.getNextWaypoint();
 
         //updates location
         updateLocation();
@@ -60,9 +53,9 @@ public class Navigation {
             drive.disableHeadingHold();
             drive.driveRobotOriented(0, 0, 0);//stop
         } else {
-            double distance = coordCalc.getDistance(currentLocation, nextWaypoint);
-            double direction = coordCalc.getAngle(currentLocation, nextWaypoint);
-            double magnitude = nextWaypoint.getSpeed();
+            final double distance = currentLocation.getDistance(nextWaypoint);
+            final double direction = currentLocation.getAngle(nextWaypoint);
+            final double magnitude = nextWaypoint.getSpeed();
             
             SmartDashboard.putNumber("navDist", distance);
             SmartDashboard.putNumber("navDir", direction);
@@ -80,7 +73,6 @@ public class Navigation {
             	drive.setHeadingHold(direction);
             } else {
                 //If we are at the waypoint, do the action
-
             	drive.drivePolar(0, 0, 0);
             	nextWaypoint.getAction().execute();
 
@@ -100,11 +92,12 @@ public class Navigation {
     }
 
     public void reset() {
+        System.out.print("Navigation: Resetting!");
         stop();
         waypointProvider.reset();
+        currentLocation.copy(initialPos);
         isDone = false;
-        currentLocation.setX(initialPos.getX());
-        currentLocation.setY(initialPos.getY());
+        System.out.print("Navigation: Done Resetting!");
     }
 
     public void stop() {
@@ -120,9 +113,7 @@ public class Navigation {
      * Updates current location, angle, and speed of the robot from displace sensor
      */
     private void updateLocation() {
-        Coordinate location = displaceSense.getDisplacement(DistanceUnit.INCH);//displacement in inches
-
-        currentLocation.setX(location.getX() + initialPos.getX());
-        currentLocation.setY(location.getY() + initialPos.getY());
+        currentLocation.copy(displaceSense.getDisplacement(DistanceUnit.INCH));
+        currentLocation.plus(initialPos);
     }
 }

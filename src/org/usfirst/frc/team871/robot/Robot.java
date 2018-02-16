@@ -76,7 +76,6 @@ public class Robot extends IterativeRobot {
 				new Waypoint(0, 0, 0, 0.3, new TootTootAction(config.getTootToot())));
 
 		nav = new Navigation(drive, drive, prov, new Coordinate(0,0));
-		
 	}
 
 	@Override
@@ -148,9 +147,5 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		
-	}
-
-	public DriveTrain getDrive() {
-		return this.drive;
 	}
 }

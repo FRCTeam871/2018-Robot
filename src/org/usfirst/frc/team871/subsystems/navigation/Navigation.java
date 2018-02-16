@@ -43,6 +43,11 @@ public class Navigation {
         drive.enableHeadingHold();
     }
 
+    public void setWaypointProvider(IWaypointProvider provider) {
+        waypointProvider = provider;
+        reset();
+    }
+
     /**
      * Is called on loop during autonomous phase to navigate to differing locations
      */

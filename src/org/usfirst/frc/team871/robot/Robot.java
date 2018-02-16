@@ -7,14 +7,9 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.Grabber;
 import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
-import org.usfirst.frc.team871.subsystems.lifter.SuperLift.SetpointHeights;
 import org.usfirst.frc.team871.subsystems.navigation.Coordinate;
 import org.usfirst.frc.team871.subsystems.navigation.Navigation;
-import org.usfirst.frc.team871.subsystems.navigation.Waypoint;
-import org.usfirst.frc.team871.subsystems.navigation.WaypointProvider;
-import org.usfirst.frc.team871.subsystems.navigation.actions.LiftSetpointAction;
-import org.usfirst.frc.team871.subsystems.navigation.actions.SetGrabberAction;
-import org.usfirst.frc.team871.subsystems.navigation.actions.TootTootAction;
+import org.usfirst.frc.team871.subsystems.navigation.WaypointProviderFactory;
 import org.usfirst.frc.team871.util.config.IControlScheme;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
@@ -59,23 +54,8 @@ public class Robot extends IterativeRobot {
 		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm());
 
 		// Waypoints
-//		WaypointProvider squareProvider = new WaypointProvider(new Waypoint(1, 0, 0, .3),
-//				new Waypoint(size,size,0,.3),
-//				new Waypoint(0, size, 0, .3),
-//				new Waypoint(0,0,0,.3, new TootTootAction(config.getTootToot())));
-//		WaypointProvider prov = new WaypointProvider(new Waypoint(0, 0, 0, 0.3), new Waypoint(12 * 3, 0, 0, 0.3), new Waypoint(12 * 3, -12 * 5, 0, 0.3), new Waypoint(12 * 6, -12 * 5, 0, 0.3), new Waypoint(12 * 6, -12 * 11, 0, 0.3), new Waypoint(12 * 3, -12 * 11, 0, 0.3), new Waypoint(12 * 3, -12 * 16, 0, 0.3), new Waypoint(12 * 0, -12 * 16, 0, 0.3));
-//		WaypointProvider prov = new WaypointProvider(new Waypoint(0, 0, 0, 0.3), new Waypoint(12 * 6, 0, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.LOW_SWITCH)), new Waypoint(0, 0, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.SCALE_MID)), new Waypoint(0, 0, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND)));
-		
-		WaypointProvider prov = new WaypointProvider(new Waypoint(0, 0, 0, 0.3, new SetGrabberAction(grabber, true)),
-				new Waypoint(12 * 19, 0, 0, 0.6),
-				new Waypoint(12 * 19, (12 * 10) - 6, 0, 0.4, new LiftSetpointAction(lift, SetpointHeights.SCALE_MID)),
-				new Waypoint(12 * 19, 11 * 12, 0, 0.3, new SetGrabberAction(grabber, false)),
-				new Waypoint(12 * 19, (12 * 10) - 6, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND)),
-				new Waypoint(12 * 19, 0, 0, 0.4),
-				new Waypoint(-12, 0, 0, 0.6),
-				new Waypoint(0, 0, 0, 0.3, new TootTootAction(config.getTootToot())));
-
-		nav = new Navigation(drive, drive, prov, new Coordinate(0,0));
+		WaypointProviderFactory.DEFAULT.init(grabber, lift, config);
+		nav = new Navigation(drive, drive, WaypointProviderFactory.DEFAULT.getProvider("WoodshopDrop"), new Coordinate(0,0));
 	}
 
 	@Override

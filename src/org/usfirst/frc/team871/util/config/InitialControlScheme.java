@@ -95,6 +95,16 @@ public enum InitialControlScheme implements IControlScheme{
 		return false;
 	}
 
-
+	@Override
+	public double getLowerLiftTrim() {
+		// TODO
+		return 0;
+	}
+	
+	@Override
+	public double getUpperLiftTrim() {
+		// TODO
+		return 0;
+	}
 		
 }

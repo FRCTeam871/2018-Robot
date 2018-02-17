@@ -59,15 +59,19 @@ public class Navigation {
             drive.driveRobotOriented(0, 0, 0);//stop
         } else {
             final double distance = currentLocation.getDistance(nextWaypoint);
-            final double direction = currentLocation.getAngle(nextWaypoint);
+            double direction = currentLocation.getAngle(nextWaypoint);
             final double magnitude = nextWaypoint.getSpeed();
+            
+            if(magnitude < 0) {
+            	direction = (direction + 180) % 180;
+            }
             
             SmartDashboard.putNumber("navDist", distance);
             SmartDashboard.putNumber("navDir", direction);
             SmartDashboard.putNumber("navMag", magnitude);
             SmartDashboard.putString("navCurrLocation", currentLocation.toString());
             SmartDashboard.putString("navNextWaypoint", nextWaypoint.toString());
-            
+
             if(distance >= DIST_THRESHOLD) {
             	if(drive.isAtSetpoint()) {
             		drive.drivePolar(magnitude, 0, 0);

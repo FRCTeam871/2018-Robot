@@ -1,13 +1,16 @@
 
 package org.usfirst.frc.team871.robot;
 
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.List;
+import java.util.Queue;
+
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.Grabber;
 import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
 import org.usfirst.frc.team871.subsystems.navigation.Coordinate;
+import org.usfirst.frc.team871.subsystems.navigation.IWaypointProvider;
 import org.usfirst.frc.team871.subsystems.navigation.Navigation;
 import org.usfirst.frc.team871.subsystems.navigation.WaypointProviderFactory;
 import org.usfirst.frc.team871.util.config.IControlScheme;
@@ -18,8 +21,10 @@ import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 import org.usfirst.frc.team871.util.joystick.POVDirections;
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
-import java.util.Collections;
-import java.util.List;
+import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.IterativeRobot;
 
 public class Robot extends IterativeRobot {
 		
@@ -33,6 +38,8 @@ public class Robot extends IterativeRobot {
 	
 	private long startTime = 0;
 
+	private Queue<IWaypointProvider> navQueue = new ArrayDeque<>();
+	
 	@Override
 	public void robotInit() {
 		controls = ThrustmasterControlScheme.DEFAULT;
@@ -53,9 +60,17 @@ public class Robot extends IterativeRobot {
 		
 		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm());
 
+//		Coordinate origin = new Coordinate(0, 0);
+		Coordinate startL = new Coordinate(33/2.0, 64);
+		
 		// Waypoints
 		WaypointProviderFactory.DEFAULT.init(grabber, lift, config);
-		nav = new Navigation(drive, drive, WaypointProviderFactory.DEFAULT.getProvider("WoodshopDrop"), new Coordinate(0,0));
+		
+		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LStartLSwitch"));
+		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LSwitchLScale"));
+		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LScaleRSwitch"));
+		
+		nav = new Navigation(drive, drive, WaypointProviderFactory.DEFAULT.getProvider("LSwitchLScale"), startL);
 	}
 
 	@Override
@@ -89,6 +104,7 @@ public class Robot extends IterativeRobot {
 		} else {
 			drive.driveFieldOriented(controls.getYAxis(), -controls.getXAxis(), controls.getRotationAxis());
 		}
+		
 		if(controls.getResetGyroButton()) {
 			drive.resetGyro();
 		}
@@ -113,6 +129,8 @@ public class Robot extends IterativeRobot {
 			}
 		}
 
+		lift.setTrim(controls.getUpperLiftTrim(), controls.getLowerLiftTrim());
+		
 		if(controls.getPOV() ==  POVDirections.UP || controls.getPOV() ==  POVDirections.UP_RIGHT || controls.getPOV() ==  POVDirections.UP_LEFT) {
 			lift.setTop();
 		}

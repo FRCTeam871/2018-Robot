@@ -21,6 +21,7 @@ public class SubLift extends SendableBase implements Sendable {
 	private Encoder encoder;
 	private PIDController pid;
 	private ControlMode currentMode = ControlMode.Startup;
+	private double trim = 0;
 	
 	/**
 	 * Controls the bottom part of the lift
@@ -42,7 +43,7 @@ public class SubLift extends SendableBase implements Sendable {
 //		addChild(pid);
 //		addChild(liftMotor);
 //		addChild(encoder);
-		setName("Lifter-"+name);
+		setName("Lifter-" + name);
 	}
 	
 	private void ensureMode(ControlMode mode) {
@@ -99,7 +100,7 @@ public class SubLift extends SendableBase implements Sendable {
 	 */
 	protected void setHeight(double setPoint) {
 		ensureMode(ControlMode.Position);
-		pid.setSetpoint(setPoint);
+		pid.setSetpoint(setPoint + trim);
 //		maybeResetEncoder();
 	}
 
@@ -120,5 +121,13 @@ public class SubLift extends SendableBase implements Sendable {
 	public boolean isAtSetpoint() {
 		pid.setAbsoluteTolerance(3);
 		return pid.onTarget();
+	}
+	
+	public void setTrim(double trim) {
+		this.trim = trim;
+	}
+	
+	public double getTrim() {
+		return trim;
 	}
 }

@@ -2,6 +2,7 @@ package org.usfirst.frc.team871.subsystems.navigation;
 
 import org.usfirst.frc.team871.subsystems.Grabber;
 import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
+import org.usfirst.frc.team871.subsystems.lifter.SuperLift.SetpointHeights;
 import org.usfirst.frc.team871.subsystems.navigation.actions.LiftSetpointAction;
 import org.usfirst.frc.team871.subsystems.navigation.actions.SetGrabberAction;
 import org.usfirst.frc.team871.subsystems.navigation.actions.TootTootAction;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 public enum WaypointProviderFactory {
     DEFAULT;
+	
     private boolean initialized = false;
     private final Map<String, Waypoint[]> paths = new HashMap<>();
 
@@ -35,7 +37,35 @@ public enum WaypointProviderFactory {
         };
 
         addPath("WoodshopDrop", pts);
-
+        addPath("LSwitchLScale", new Waypoint[] {
+			new Waypoint(168, 55, 0, 0.3), new Waypoint(228.735, 36, 0, 0.3),
+			new Waypoint(324, 34, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.SCALE_HIGH)),
+			new Waypoint(324, 34 + 24, 0, 0.3, new SetGrabberAction(grabber, false)),
+			new Waypoint(324, 34, 0, -0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND))
+        });
+        
+        addPath("LSwitchRScale", new Waypoint[] {
+			new Waypoint(168, 55, 0, 0.3), new Waypoint(228.735, 36, 0, 0.3), new Waypoint(228.735, 228, 0, 0.3),
+			new Waypoint(335.65, 228, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.SCALE_HIGH)),
+			new Waypoint(335.65, 36 + 12, 0, 0.3, new SetGrabberAction(grabber, false)),
+			new Waypoint(335.65, 36, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND))
+		});
+        
+        addPath("LStartLSwitch", new Waypoint[]{
+        	new Waypoint(156, 36, 0, 0.3)
+        });
+        
+        addPath("LScaleRSwitch", new Waypoint[]{
+        	new Waypoint(12 * 27, 12 * 6, 0, 0.3),
+        	new Waypoint(12 * 18, 12 * 6, 0, 0.3),
+        	new Waypoint(12 * 18, 12 * 14 + 33/2, 0, 0.3),
+        	new Waypoint(12 * 14 , 12 * 14 + 33/2, 0, 0.3)
+        });
+        
+        addPath("TestReverse", new Waypoint[]{
+        	new Waypoint(12 * 12, 0, 0, 0.3),
+        	new Waypoint(0, 0, 0, -0.3)
+        });
         initialized = true;
     }
 

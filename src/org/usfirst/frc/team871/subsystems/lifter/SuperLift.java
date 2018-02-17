@@ -83,7 +83,6 @@ public class  SuperLift extends SendableBase implements Sendable {
 		double min = setpointVals.get(SetpointHeights.GROUND);
 		double max = setpointVals.get(SetpointHeights.MAXIMUM);
 		double height = ((position + 1) / 2.0) * (max - min) + min;
-		System.out.println(height);
 		setHeight(height);
 	}
 
@@ -226,4 +225,10 @@ public class  SuperLift extends SendableBase implements Sendable {
 	public double getSetpointHeight(SetpointHeights height) {
 		return setpointVals.get(height);
 	}
+	
+	public void setTrim(double upper, double lower) {
+		lowerLift.setTrim(lower);
+		upperLift.setTrim(upper);
+	}
+	
 }

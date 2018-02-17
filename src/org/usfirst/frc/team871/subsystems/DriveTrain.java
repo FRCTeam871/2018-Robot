@@ -164,7 +164,6 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 				displacement = new Coordinate(0, 0);
 			}
 			
-			
 			final long curTime = System.currentTimeMillis();
 			final double tDiff = (curTime - tPrevious) / 1000.0;
 			SmartDashboard.putNumber("xVel", calculateVelocity(lastXInput));
@@ -195,6 +194,11 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 		 */
 		private double calculateVelocity(double speed) {
 			
+			boolean reverse = speed < 0;
+			speed = Math.abs(speed);
+			
+			SmartDashboard.putBoolean("Reverse", reverse);
+			
 			VelocityHolder holderUpper = null;
 			VelocityHolder holderLower = null;
 			
@@ -217,14 +221,14 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 			}
 			
 			if(holderLower == holderUpper) {
-				return holderLower.outputSpeed;
+				return holderLower.outputSpeed * (reverse ? -1 : 1);
 			}
 			
 			final double relative = ((speed - holderLower.inputSpeed) / (holderUpper.inputSpeed - holderLower.inputSpeed));
 			final double scale = holderUpper.outputSpeed - holderLower.outputSpeed;
 			final double transformation = holderLower.outputSpeed;
 		
-			return (relative * scale) + transformation;
+			return ((relative * scale) + transformation) * (reverse ? -1 : 1);
 		}
 
 		@Override

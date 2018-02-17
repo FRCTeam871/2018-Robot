@@ -106,5 +106,15 @@ public enum ThrustmasterControlScheme implements IControlScheme{
 	public boolean toottoot() {
 		return xbox.getValue(XBoxButtons.Y);
 	}
+	
+	@Override
+	public double getLowerLiftTrim() {
+		return saitek.getValue(SaitekAxes.I_AXIS);
+	}
+	
+	@Override
+	public double getUpperLiftTrim() {
+		return saitek.getValue(SaitekAxes.E_AXIS);
+	}
 		
 }

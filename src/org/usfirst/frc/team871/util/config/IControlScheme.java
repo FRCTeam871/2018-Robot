@@ -67,4 +67,9 @@ public interface IControlScheme {
 	POVDirections getPOV();
 	
 	boolean toottoot();
+	
+	double getUpperLiftTrim();
+	
+	double getLowerLiftTrim();
+	
 }

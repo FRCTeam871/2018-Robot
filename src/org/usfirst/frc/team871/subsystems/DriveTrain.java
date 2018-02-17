@@ -2,7 +2,6 @@ package org.usfirst.frc.team871.subsystems;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,6 +12,7 @@ import org.usfirst.frc.team871.util.units.DistanceUnit;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -39,6 +39,8 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 	private Timer positionIntegrator;
 	private final List<VelocityHolder> velDataPoints = new ArrayList<>();
 	
+	private NetworkTable table;
+	
 	private class VelocityHolder {
 		public double inputSpeed;
 		public double outputSpeed;
@@ -56,10 +58,12 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 	 * @param frontRight The front right speed controller
 	 * @param frontLeft The front left speed controller
 	 * @param gyro A NavX that is used for field oriented driving
+	 * @param table The network table to which the displacement and rotation data will be posted
 	 */
-	public DriveTrain(SpeedController rearRight, SpeedController rearLeft, SpeedController frontRight, SpeedController frontLeft, AHRS gyro ) {
+	public DriveTrain(SpeedController rearRight, SpeedController rearLeft, SpeedController frontRight, SpeedController frontLeft, AHRS gyro, NetworkTable table) {
 		super(frontLeft, rearLeft, frontRight, rearRight);
 		this.gyro = gyro;
+		this.table = table;
 		
 		velDataPoints.add(new VelocityHolder(0,  0));
 		velDataPoints.add(new VelocityHolder(.1, 0));
@@ -284,4 +288,15 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 		enableIntegration = true;
 	}
 
+	/**
+	 * Update the dashboard data.  Should be called periodically to maintain timely values.
+	 * 
+	 * @author The Jack
+	 */
+	public void updateData() {
+		table.getEntry("displacementX").setDouble(displacement.getX());
+		table.getEntry("displacementY").setDouble(displacement.getY());
+		table.getEntry("gyroAngle").setDouble(gyro.getYaw());
+		table.getEntry("gyroTilt").setDouble(gyro.getPitch());
+	}
 }

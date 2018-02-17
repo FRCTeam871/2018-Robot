@@ -11,6 +11,9 @@ import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import java.util.HashMap;
 import java.util.Map;
 
+//Google Sheets document containing paths: https://docs.google.com/spreadsheets/d/1tjnVjhbxHG2ng1csibecWShjA-qXf1AlzuT73m69ll4/edit?usp=sharing
+
+
 public enum WaypointProviderFactory {
     DEFAULT;
 	
@@ -63,9 +66,76 @@ public enum WaypointProviderFactory {
         });
         
         addPath("TestReverse", new Waypoint[]{
-        	new Waypoint(12 * 12, 0, 0, 0.3),
-        	new Waypoint(0, 0, 0, -0.3)
+        	new Waypoint(12*12, 0, 0, 0.3),
+        	new Waypoint(0, 0, 0, -0.3),
         });
+
+        //start of new paths //TODO: these only get the robot to right next to their respective objects (switch/scale) must add actions and get closer
+        addPath("Left Position to Left Switch", new Waypoint[]{
+                new Waypoint(156, 36, 0, 0.3),
+        });
+
+        addPath("Left Positoin to Left Scale", new Waypoint[]{
+                new Waypoint(324, 36, 0, 0.3),
+        });
+
+        addPath("Right Position to Right Switch", new Waypoint[]{
+                new Waypoint(156, 288, 0, 0.3),
+        });
+
+        addPath("Right Position to Right Scale", new Waypoint[]{
+                new Waypoint(324, 288, 0, 0.3),
+        });
+
+        addPath("Left Position to Right Switch", new Waypoint[]{
+                new Waypoint(72, 36, 0, 0.3),
+                new Waypoint(72, 288, 0, 0.3),
+                new Waypoint(156, 288, 0, 0.3),
+        });
+
+        addPath("Left Postion to Right Scale", new Waypoint[]{
+                new Waypoint(72, 36, 0, 0.3),
+                new Waypoint(72, 288, 0, 0.3),
+                new Waypoint(324, 288, 0, 0.3),
+        });
+
+        addPath("Right Position to Left Switch", new Waypoint[]{
+                new Waypoint(72, 288, 0, 0.3),
+                new Waypoint(72, 36, 0, 0.3),
+                new Waypoint(156, 36, 0, 0.3),
+        });
+
+        addPath("Right Position to Left Scale", new Waypoint[]{
+                new Waypoint(72, 288, 0, 0.3),
+                new Waypoint(72, 36, 0, 0.3),
+                new Waypoint(324, 36, 0, 0.3),
+        });
+
+        addPath("Center Position To Left Switch", new Waypoint[]{
+                new Waypoint(72, 162, 0, 0.3),
+                new Waypoint(72, 36, 0, 0.3),
+                new Waypoint(156, 36, 0, 0.3),
+        });
+
+        addPath("Center Postion to Left Scale", new Waypoint[]{
+                new Waypoint(72, 162, 0, 0.3),
+                new Waypoint(72, 36, 0, 0.3),
+                new Waypoint(324, 36, 0, 0.3),
+        });
+
+        addPath("Center Position to Right Switch", new Waypoint[]{
+                new Waypoint(72, 162, 0, 0.3),
+                new Waypoint(72, 288, 0, 0.3),
+                new Waypoint(156, 288, 0, 0.3),
+        });
+
+        addPath("Center Position to Right Scale", new Waypoint[]{
+                new Waypoint(72, 162, 0, 0.3),
+                new Waypoint(72, 288, 0, 0.3),
+                new Waypoint(324, 288, 0, 0.3),
+        });
+        //end of new paths
+
         initialized = true;
     }
 
@@ -75,7 +145,7 @@ public enum WaypointProviderFactory {
 
     public IWaypointProvider getProvider(String path) {
         if(!initialized) {
-            throw new IllegalStateException("Factory has not been initialized!");
+            throw new IllegalStateException("Waypoint Factory has not been initialized!");
         }
 
         final Waypoint[] pts = paths.get(path);

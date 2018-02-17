@@ -7,8 +7,7 @@ package org.usfirst.frc.team871.subsystems.navigation.actions;
 public interface IAction {
 
     /**
-     * @param robot object so that the Action can read states
-     * @param timer syncronizes the Actions time with the handler's time
+     * does this method have a purpose now. That's a point up for contention.
      */
     void init();
 

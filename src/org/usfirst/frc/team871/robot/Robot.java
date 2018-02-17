@@ -1,23 +1,22 @@
 
 package org.usfirst.frc.team871.robot;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.usfirst.frc.team871.subsystems.DriveTrain;	
+import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.Grabber;
 import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
 import org.usfirst.frc.team871.util.config.IControlScheme;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
-import org.usfirst.frc.team871.util.config.InitialControlScheme;
 import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
 import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 import org.usfirst.frc.team871.util.joystick.POVDirections;
-import org.usfirst.frc.team871.util.sensor.EncoderLimitSwitch;
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
 public class Robot extends IterativeRobot {
@@ -27,6 +26,8 @@ public class Robot extends IterativeRobot {
 	private Grabber grabber;
 	private SuperLift lift;
 	private IControlScheme controls;
+	
+	private NetworkTable dashboardTable;
 	
 	@Override
 	public void robotInit() {
@@ -46,6 +47,12 @@ public class Robot extends IterativeRobot {
 				lowerUpperLimits, lowerLowerLimits);
 		
 		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm());
+		
+		NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
+		defaultInstance.setNetworkIdentity("Robot");
+		defaultInstance.startClientTeam(871);
+		
+		dashboardTable = defaultInstance.getTable("Dashboard");
 	}
 
 	@Override
@@ -106,5 +113,20 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		
+	}
+	
+	@Override
+	public void robotPeriodic() {
+		updateDashboard();
+	}
+	
+	/**
+	 * Update the network table containing the dashboard variables.
+	 * 
+	 * @author The Jack
+	 */
+	//TODO:  Add method call to update position and gyro data from DriveTrain
+	public void updateDashboard() {
+		lift.updateData();
 	}
 }

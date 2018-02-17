@@ -26,21 +26,21 @@ public class DriveTrain extends MecanumDrive implements PIDOutput {
 	 * @param frontLeft The front left speed controller
 	 * @param gyro A NavX that is used for field oriented driving 
 	 */
-	public DriveTrain(SpeedController rearRight, SpeedController rearLeft, SpeedController frontRight, SpeedController frontLeft, AHRS gyro ) {
+	public DriveTrain(SpeedController rearRight, SpeedController rearLeft, SpeedController frontRight, SpeedController frontLeft, AHRS gyro) {
 		super(frontLeft, rearLeft, frontRight, rearRight);
 		this.gyro = gyro;
 		
 		headingPID = new PIDController(0, 0, 0, gyro, this);
 		headingPID.setInputRange(-180, 180);
 		headingPID.setOutputRange(-1, 1);
-		headingPID.setContinuous();
-		headingPID.disable();
+		headingPID.setContinuous(); headingPID.disable();
 		gyro.setName("DriveTrain", "Gyro");
 		headingPID.setName("Heading PID");
 		LiveWindow.add(headingPID);
 		LiveWindow.add(gyro);
 //		addChild(headingPID);
 //		addChild(gyro);
+		
 
 		setName("DriveTrain", "DriveTrain");
 	}

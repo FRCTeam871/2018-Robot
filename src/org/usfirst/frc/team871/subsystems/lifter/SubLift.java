@@ -2,6 +2,7 @@ package org.usfirst.frc.team871.subsystems.lifter;
 
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSourceType;
@@ -21,15 +22,21 @@ public class SubLift extends SendableBase implements Sendable {
 	private Encoder encoder;
 	private PIDController pid;
 	private ControlMode currentMode = ControlMode.Startup;
+	private String name;
+	private NetworkTable table;
 	
 	/**
 	 * Controls the bottom part of the lift
 	 * @param liftMotor the motor that controls the lift 
 	 * @param encoder Measures the distance of the bottom part of the lift
+	 * @param table The network table to which height and encoder information will be posted.
+	 * The keys used will be [name]LiftTicks for encoder ticks and [name]LiftHeight for the height,
 	 */
-	SubLift(String name, CompositeLimitedSpeedController liftMotor, Encoder encoder) {
+	SubLift(String name, CompositeLimitedSpeedController liftMotor, Encoder encoder, NetworkTable table) {
 		this.liftMotor = liftMotor;
 		this.encoder = encoder;
+		this.name = name;
+		this.table = table;
 
 		pid = new PIDController(0, 0, 0, encoder, liftMotor);
 		pid.setOutputRange(-1, 1);
@@ -101,6 +108,16 @@ public class SubLift extends SendableBase implements Sendable {
 		ensureMode(ControlMode.Position);
 		pid.setSetpoint(setPoint);
 //		maybeResetEncoder();
+	}
+	
+	/**
+	 * Update the dashboard data.  Should be called periodically to ensure timely data.
+	 * 
+	 * @author The Jack
+	 */
+	public void updateData() {
+		table.getEntry(String.format("%sLiftTicks", name)).setNumber(encoder.getRaw());
+		table.getEntry(String.format("%sLiftHeight", name)).setNumber(getHeight());
 	}
 
 	@Override

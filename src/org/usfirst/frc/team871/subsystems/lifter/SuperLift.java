@@ -3,8 +3,10 @@ package org.usfirst.frc.team871.subsystems.lifter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.SendableBase;
@@ -22,6 +24,7 @@ public class  SuperLift extends SendableBase implements Sendable {
 	private final int baseHeight = 0; // TODO find this one
 	private SetpointHeights lifterHeight;
 	private final Map<SetpointHeights, Double> setpointVals = new HashMap<>();
+	private NetworkTable table;
 
 	/**
 	 * Describes all states of the lifts
@@ -47,12 +50,15 @@ public class  SuperLift extends SendableBase implements Sendable {
 	 *            The Motor that controls the lower part of the lift
 	 * @param lowerEncoder
 	 *            Measures the distance of the lower part of the lift
+     * @param table The network table to which state information will be posted.  Will also be passed to sublifts.
 	 */
 	public SuperLift(CompositeLimitedSpeedController upperLiftMotor, Encoder upperEncoder,
-			CompositeLimitedSpeedController lowerLiftMotor, Encoder lowerEncoder) {
+			CompositeLimitedSpeedController lowerLiftMotor, Encoder lowerEncoder, NetworkTable table) {
 
-		upperLift = new SubLift("Upper", upperLiftMotor, upperEncoder);
-		lowerLift = new SubLift("Lower", lowerLiftMotor, lowerEncoder);
+		upperLift = new SubLift("Upper", upperLiftMotor, upperEncoder, table);
+		lowerLift = new SubLift("Lower", lowerLiftMotor, lowerEncoder, table);
+		
+		this.table = table;
 
 		lifterHeight = SetpointHeights.GROUND;
 
@@ -96,6 +102,7 @@ public class  SuperLift extends SendableBase implements Sendable {
 		setPoint /= 2;
 		upperLift.setHeight(setPoint);
 		lowerLift.setHeight(setPoint);
+		table.getEntry("liftSetpoint").setDouble(setPoint);
 	}
 
 	/**
@@ -203,6 +210,17 @@ public class  SuperLift extends SendableBase implements Sendable {
 			break;
 		}
 		setHeight(setpointVals.get(lifterHeight));
+	}
+	
+	/**
+	 * Update the dashboard data.  Should be called periodically to ensure timely values.
+	 * 
+	 * @author The Jack
+	 */
+	public void updateData() {
+		lowerLift.updateData();
+		upperLift.updateData();
+		table.getEntry("liftMode").setString(ThrustmasterControlScheme.DEFAULT.getManualLiftModeButton() ? "Manual" : "Automatic");
 	}
 
 	@Override

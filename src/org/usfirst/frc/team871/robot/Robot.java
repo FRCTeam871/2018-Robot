@@ -67,9 +67,9 @@ public class Robot extends IterativeRobot {
 		WaypointProviderFactory.DEFAULT.init(grabber, lift, config);
 		
 		
-		nav = new Navigation(drive, drive, WaypointProviderFactory.DEFAULT.getProvider("LStartLSwitch"), startL);
-		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LSwitchLScale"));
-		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LScaleRSwitch"));
+		nav = new Navigation(drive, drive, WaypointProviderFactory.DEFAULT.getProvider("LStartRScale"), startL);
+//		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LSwitch"));
+//		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LScaleRSwitch"));
 	}
 
 	@Override
@@ -100,7 +100,6 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void teleopPeriodic() {
-		
 		if(controls.getToggleOrientationButton()) {
 			drive.driveRobotOriented(controls.getYAxis(), -controls.getXAxis(), controls.getRotationAxis());
 		} else {

@@ -34,7 +34,6 @@ public class Navigation {
         this.isDone           = false;
 
         currentLocation = new Coordinate(startLocation);
-        nextWaypoint = getNextWaypoint();
 
         //updates location
         updateLocation();
@@ -52,6 +51,10 @@ public class Navigation {
      * Is called on loop during autonomous phase to navigate to differing locations
      */
     public void navigate() {
+    	if(nextWaypoint == null) {
+    		nextWaypoint = getNextWaypoint();
+    	}
+    	
         updateLocation();
 
         if (this.isDone) {

@@ -28,8 +28,8 @@ public enum ThrustmasterControlScheme implements IControlScheme{
 		xbox.setAxisDeadband(XBoxAxes.RIGHTY, 0.2);
 		saitek.setButtonMode(SaitekButtons.MOUSE, ButtonTypes.RISING);
 		saitek.setButtonMode(SaitekButtons.FUNCTION, ButtonTypes.RISING);
+		saitek.setButtonMode(SaitekButtons.E, ButtonTypes.RISING);
 		saitek.setButtonMode(SaitekButtons.D, ButtonTypes.RISING);
-		saitek.setButtonMode(SaitekButtons.I, ButtonTypes.RISING);
 	}
 	@Override
 	public boolean getToggleOrientationButton() {
@@ -53,12 +53,12 @@ public enum ThrustmasterControlScheme implements IControlScheme{
 
 	@Override
 	public boolean getDecreaseSetpointButton() {
-		return saitek.getValue(SaitekButtons.I);
+		return saitek.getValue(SaitekButtons.D);
 	}
 
 	@Override
 	public boolean getIncreaseSetpointButton() {
-		return saitek.getValue(SaitekButtons.D);
+		return saitek.getValue(SaitekButtons.E);
 	}
 
 	@Override

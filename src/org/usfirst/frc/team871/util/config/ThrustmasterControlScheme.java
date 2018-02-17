@@ -21,6 +21,7 @@ public enum ThrustmasterControlScheme implements IControlScheme{
 		saitek = new SaitekX52(1);
 		xbox.setButtonMode(XBoxButtons.START, ButtonTypes.TOGGLE);
 		xbox.setButtonMode(XBoxButtons.BACK, ButtonTypes.RISING);
+		xbox.setButtonMode(XBoxButtons.Y, ButtonTypes.MOMENTARY);
 		xbox.setAxisDeadband(XBoxAxes.LEFTX, 0.2);
 		xbox.setAxisDeadband(XBoxAxes.LEFTY, 0.2);
 		xbox.setAxisDeadband(XBoxAxes.RIGHTX, 0.2);
@@ -101,6 +102,19 @@ public enum ThrustmasterControlScheme implements IControlScheme{
 //		}
 	}
 
-
+	@Override
+	public boolean toottoot() {
+		return xbox.getValue(XBoxButtons.Y);
+	}
+	
+	@Override
+	public double getLowerLiftTrim() {
+		return saitek.getValue(SaitekAxes.I_AXIS);
+	}
+	
+	@Override
+	public double getUpperLiftTrim() {
+		return saitek.getValue(SaitekAxes.E_AXIS);
+	}
 		
 }

@@ -22,6 +22,7 @@ public class SubLift extends SendableBase implements Sendable {
 	private Encoder encoder;
 	private PIDController pid;
 	private ControlMode currentMode = ControlMode.Startup;
+	private double trim = 0;
 	private String name;
 	private NetworkTable table;
 	
@@ -49,7 +50,7 @@ public class SubLift extends SendableBase implements Sendable {
 //		addChild(pid);
 //		addChild(liftMotor);
 //		addChild(encoder);
-		setName("Lifter-"+name);
+		setName("Lifter-" + name);
 	}
 	
 	private void ensureMode(ControlMode mode) {
@@ -61,7 +62,7 @@ public class SubLift extends SendableBase implements Sendable {
 		pid.disable();
 		switch(mode) {
 			case Position:
-			    pid.setPID(-0.1, 0, 0.04);
+			    pid.setPID(-0.12, 0, 0.04);
 			    pid.setInputRange(0, 0);
                 encoder.setPIDSourceType(PIDSourceType.kDisplacement);
 				break;
@@ -106,7 +107,7 @@ public class SubLift extends SendableBase implements Sendable {
 	 */
 	protected void setHeight(double setPoint) {
 		ensureMode(ControlMode.Position);
-		pid.setSetpoint(setPoint);
+		pid.setSetpoint(setPoint + trim);
 //		maybeResetEncoder();
 	}
 	
@@ -132,5 +133,18 @@ public class SubLift extends SendableBase implements Sendable {
 		builder.addDoubleProperty("error", pid::getError, null);
 		builder.addDoubleProperty("SetPoint", pid::getSetpoint, null);
 		builder.addDoubleProperty("Position", this::getHeight, null);
+	}
+
+	public boolean isAtSetpoint() {
+		pid.setAbsoluteTolerance(3);
+		return pid.onTarget();
+	}
+	
+	public void setTrim(double trim) {
+		this.trim = trim;
+	}
+	
+	public double getTrim() {
+		return trim;
 	}
 }

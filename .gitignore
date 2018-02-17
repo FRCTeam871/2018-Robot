@@ -1,8 +1,4 @@
 /build/
 /bin/
-<<<<<<< HEAD
 build/
-dist/
-=======
-.*
->>>>>>> refs/heads/Development
+dist/`

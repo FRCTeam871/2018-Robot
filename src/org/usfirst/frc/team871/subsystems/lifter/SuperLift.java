@@ -31,7 +31,7 @@ public class  SuperLift extends SendableBase implements Sendable {
 	 * 
 	 * @author Team871
 	 */
-	private enum SetpointHeights {
+	public enum SetpointHeights {
 		GROUND,
 		LOW_SWITCH,
 		SCALE_LOW,
@@ -89,7 +89,6 @@ public class  SuperLift extends SendableBase implements Sendable {
 		double min = setpointVals.get(SetpointHeights.GROUND);
 		double max = setpointVals.get(SetpointHeights.MAXIMUM);
 		double height = ((position + 1) / 2.0) * (max - min) + min;
-		System.out.println(height);
 		setHeight(height);
 	}
 
@@ -103,6 +102,10 @@ public class  SuperLift extends SendableBase implements Sendable {
 		upperLift.setHeight(setPoint);
 		lowerLift.setHeight(setPoint);
 		table.getEntry("liftSetpoint").setDouble(setPoint);
+	}
+	
+	public void setHeight(SetpointHeights setPoint) {
+		setHeight(getSetpointHeight(setPoint));
 	}
 
 	/**
@@ -233,4 +236,17 @@ public class  SuperLift extends SendableBase implements Sendable {
 		builder.addDoubleProperty("speed", null, this::moveLift);
 	}
 
+	public boolean isAtSetpoint() {
+		return lowerLift.isAtSetpoint() && upperLift.isAtSetpoint();
+	}
+	
+	public double getSetpointHeight(SetpointHeights height) {
+		return setpointVals.get(height);
+	}
+	
+	public void setTrim(double upper, double lower) {
+		lowerLift.setTrim(lower);
+		upperLift.setTrim(upper);
+	}
+	
 }

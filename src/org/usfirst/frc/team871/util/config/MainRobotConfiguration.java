@@ -31,6 +31,7 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 	private final Encoder encoderUp; // 256 ticks/rot
 	private final DoubleSolenoid grabPiston;
 	private final DoubleSolenoid ejectPiston;
+	private final DoubleSolenoid tootToot;
 	private final DigitalLimitSwitch upperUpperLimit;
 	private final DigitalLimitSwitch upperLowerLimit;
 	private final DigitalLimitSwitch lowerUpperLimit;
@@ -48,9 +49,9 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 		liftMotorBtm.setInverted(true);
 		gyro         = new AHRS(Port.kMXP);
 		cubeDetect   = new DigitalInput(20); //TODO: Find port#
-		
+
 		//41 26.5
-		
+
 		encoderUp    = new Encoder(6,7);  //TODO: Find port#
 		// diam = 1.6
 		// circum = diam * PI
@@ -59,9 +60,9 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 //		encoderUp.setDistancePerPulse(0.019634954084936);
 //		encoderUp.setDistancePerPulse(1);
 		encoderUp.setDistancePerPulse(41 / 1682.75);
-		
+
 		//1682.75 41in
-		
+
 		encoderBtm   = new Encoder(4,5);  //TODO: Find port#
 		// diam = 1.6
 		// circum = diam * PI
@@ -72,9 +73,10 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 		encoderBtm.setDistancePerPulse(41 / 1865.75);
 		encoderBtm.setReverseDirection(true);
 		//1865.75 41
-		
+
 		grabPiston   = new DoubleSolenoid(0, 1);
 		ejectPiston  = new DoubleSolenoid(2, 3);
+		tootToot  = new DoubleSolenoid(4, 5);
 		upperUpperLimit = new DigitalLimitSwitch(new DigitalInput(2), true); //TODO: Find port#
 		upperLowerLimit = new DigitalLimitSwitch(new DigitalInput(3), true); //TODO: Find port#
 		lowerUpperLimit = new DigitalLimitSwitch(new DigitalInput(0), true); //TODO: Find port#
@@ -142,6 +144,11 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 	public DoubleSolenoid getEjectPiston() {
 		// TODO Auto-generated method stub
 		return ejectPiston;
+	}
+
+	@Override
+	public DoubleSolenoid getTootToot() {
+		return tootToot;
 	}
 
 	@Override

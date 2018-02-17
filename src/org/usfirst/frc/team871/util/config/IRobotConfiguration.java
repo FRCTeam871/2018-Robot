@@ -55,7 +55,9 @@ public interface IRobotConfiguration {
 	 */
 	DigitalInput getCubeDetector();
 
-	/**
+    DoubleSolenoid getTootToot();
+
+    /**
 	 * @return The upper limit sensor of the upper lift of the robot
 	 */
 	DigitalLimitSwitch getupperUpperLimit();

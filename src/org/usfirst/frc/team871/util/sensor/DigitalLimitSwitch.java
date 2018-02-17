@@ -41,7 +41,7 @@ public class DigitalLimitSwitch implements ILimitSwitch {
 
     @Override
     public boolean isAtLimit() {
-        return (activeLow) ? !input.get() : input.get();
+        return (activeLow) != input.get();
     }
     
     /**

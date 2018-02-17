@@ -66,11 +66,10 @@ public class Robot extends IterativeRobot {
 		// Waypoints
 		WaypointProviderFactory.DEFAULT.init(grabber, lift, config);
 		
-		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LStartLSwitch"));
+		
+		nav = new Navigation(drive, drive, WaypointProviderFactory.DEFAULT.getProvider("LStartLSwitch"), startL);
 		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LSwitchLScale"));
 		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LScaleRSwitch"));
-		
-		nav = new Navigation(drive, drive, WaypointProviderFactory.DEFAULT.getProvider("LSwitchLScale"), startL);
 	}
 
 	@Override
@@ -87,6 +86,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		nav.navigate();
+		if(nav.isDone() && !navQueue.isEmpty()) {
+			nav.setWaypointProvider(navQueue.poll());
+		}
 	}
 
 	@Override

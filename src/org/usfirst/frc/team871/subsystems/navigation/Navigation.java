@@ -66,7 +66,7 @@ public class Navigation {
             final double magnitude = nextWaypoint.getSpeed();
             
             if(magnitude < 0) {
-            	direction = (direction + 180) % 180;
+            	direction = ((direction + 360) % 360) - 180; // works because magic
             }
             
             SmartDashboard.putNumber("navDist", distance);

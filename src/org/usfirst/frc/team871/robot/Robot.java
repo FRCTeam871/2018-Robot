@@ -16,6 +16,7 @@ import org.usfirst.frc.team871.subsystems.navigation.WaypointProviderFactory;
 import org.usfirst.frc.team871.util.config.IControlScheme;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
+import org.usfirst.frc.team871.util.config.SuperSaitekControlScheme;
 import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 import org.usfirst.frc.team871.util.joystick.POVDirections;
@@ -42,7 +43,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
-		controls = ThrustmasterControlScheme.DEFAULT;
+		controls = SuperSaitekControlScheme.DEFAULT;
 		config   = MainRobotConfiguration.DEFAULT;
         navX     = config.getGyroscope();
 		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
@@ -62,13 +63,15 @@ public class Robot extends IterativeRobot {
 
 //		Coordinate origin = new Coordinate(0, 0);
 		Coordinate startL = new Coordinate(33/2.0, 64);
+		Coordinate startM = new Coordinate(33/2.0, 160);
+		Coordinate startR = new Coordinate(33/2.0, 260);
 		
 		// Waypoints
 		WaypointProviderFactory.DEFAULT.init(grabber, lift, config);
 		
 		
-		nav = new Navigation(drive, drive, WaypointProviderFactory.DEFAULT.getProvider("LStartRScale"), startL);
-//		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LSwitch"));
+		nav = new Navigation(drive, drive, WaypointProviderFactory.DEFAULT.getProvider("MStartRSwitch"), startM);
+//		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("RStart"));
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LScaleRSwitch"));
 	}
 
@@ -101,9 +104,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		if(controls.getToggleOrientationButton()) {
-			drive.driveRobotOriented(controls.getYAxis(), -controls.getXAxis(), controls.getRotationAxis());
+			drive.driveRobotOriented(-controls.getYAxis(), controls.getXAxis(), controls.getRotationAxis());
 		} else {
-			drive.driveFieldOriented(controls.getYAxis(), -controls.getXAxis(), controls.getRotationAxis());
+			drive.driveFieldOriented(-controls.getYAxis(), controls.getXAxis(), controls.getRotationAxis());
 		}
 		
 		if(controls.getResetGyroButton()) {
@@ -129,16 +132,21 @@ public class Robot extends IterativeRobot {
 				lift.increaseSetpoint();
 			}
 		}
-
+		
 		lift.setTrim(controls.getUpperLiftTrim(), controls.getLowerLiftTrim());
 		
-		if(controls.getPOV() ==  POVDirections.UP || controls.getPOV() ==  POVDirections.UP_RIGHT || controls.getPOV() ==  POVDirections.UP_LEFT) {
-			lift.setTop();
+//		if(controls.getPOV() ==  POVDirections.UP || controls.getPOV() ==  POVDirections.UP_RIGHT || controls.getPOV() ==  POVDirections.UP_LEFT) {
+//			lift.setTop();
+//		}
+//		
+//		if(controls.getPOV() ==  POVDirections.DOWN || controls.getPOV() ==  POVDirections.DOWN_RIGHT || controls.getPOV() ==  POVDirections.DOWN_LEFT) {
+//			lift.setBottom();
+//		}
+		
+		if(controls.getKickButton()) {
+			grabber.ejectCube();
 		}
 		
-		if(controls.getPOV() ==  POVDirections.DOWN || controls.getPOV() ==  POVDirections.DOWN_RIGHT || controls.getPOV() ==  POVDirections.DOWN_LEFT) {
-			lift.setBottom();
-		}
 		
 		config.getTootToot().set(controls.toottoot() ? Value.kForward : Value.kReverse);
 	}

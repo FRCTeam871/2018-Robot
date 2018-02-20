@@ -66,7 +66,18 @@ public class Grabber {
 	 */
 	//open it up, push it out, retract the piston
 	public void ejectCube() {
-		toggleGrabber();
+//		toggleGrabber();
+		Timer tim = new Timer();
+		tim.schedule(new TimerTask() {
+			public void run() {
+				setGrab(false);
+			}
+		}, 100);
+		
+		kick();
+	}
+
+	public void kick() {
 		ejectPiston.set(Value.kForward);
 		Timer tim = new Timer();
 		tim.schedule(new TimerTask() {

@@ -72,4 +72,6 @@ public interface IControlScheme {
 	
 	double getLowerLiftTrim();
 	
+	boolean getKickButton();
+	
 }

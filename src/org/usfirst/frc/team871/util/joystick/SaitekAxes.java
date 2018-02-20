@@ -9,9 +9,12 @@ package org.usfirst.frc.team871.util.joystick;
  */
 public enum SaitekAxes {
    
+	X_AXIS(0),
+	Y_AXIS(1),
 	THROTTLE (2),
 	I_AXIS (3),
 	E_AXIS (4),
+	ROTATION(5),
 	SLIDER(6);
 
     private int value;

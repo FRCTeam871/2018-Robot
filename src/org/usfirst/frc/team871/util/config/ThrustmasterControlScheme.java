@@ -122,5 +122,10 @@ public enum ThrustmasterControlScheme implements IControlScheme{
 	public boolean getKickButton() {
 		return saitek.getValue(SaitekButtons.HAT_RIGHT);
 	}
-		
+
+	@Override
+	public boolean test() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

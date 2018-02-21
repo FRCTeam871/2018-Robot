@@ -74,4 +74,6 @@ public interface IControlScheme {
 	
 	boolean getKickButton();
 	
+	boolean test();
+	
 }

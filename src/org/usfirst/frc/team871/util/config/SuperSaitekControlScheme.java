@@ -23,9 +23,11 @@ public enum SuperSaitekControlScheme implements IControlScheme{
 		saitek.setButtonMode(SaitekButtons.HAT_RIGHT, ButtonTypes.RISING);
 		saitek.setButtonMode(SaitekButtons.A, ButtonTypes.TOGGLE);
 		saitek.setButtonMode(SaitekButtons.C, ButtonTypes.RISING);
+		saitek.setButtonMode(SaitekButtons.B, ButtonTypes.RISING);
 		saitek.setButtonMode(SaitekButtons.FIRE, ButtonTypes.MOMENTARY);
 		saitek.setButtonMode(SaitekButtons.TRIGGER_1, ButtonTypes.RISING);
 	}
+	
 	@Override
 	public boolean getToggleOrientationButton() {
 		return saitek.getValue(SaitekButtons.A);
@@ -115,6 +117,11 @@ public enum SuperSaitekControlScheme implements IControlScheme{
 	@Override
 	public boolean getKickButton() {
 		return saitek.getValue(SaitekButtons.HAT_RIGHT);
+	}
+
+	@Override
+	public boolean test() {
+		return saitek.getValue(SaitekButtons.B);
 	}
 		
 }

@@ -34,16 +34,16 @@ public enum WaypointProviderFactory {
         Waypoint lSwitchMiddleInner = new Waypoint(180, 80, 0, 0);
         Waypoint rSwitchMiddle = new Waypoint(180, 270, 0, 0);
         Waypoint rSwitchMiddleInner = new Waypoint(180, 270 - 24, 0, 0);
-        Waypoint rSwitchFar = new Waypoint(12 * 21, 216, 0, 0);
-        Waypoint rSwitchFarInner = new Waypoint(12 * 19, 216, 0, 0);
+        Waypoint rSwitchFar = new Waypoint(12 * 21, 226, 0, 0);
+        Waypoint rSwitchFarInner = new Waypoint(12 * 18.5, 226, 0, 0);
         Waypoint lSwitchFar = new Waypoint(12 * 21, 108, 0, 0);
         Waypoint lSwitchFarInner = new Waypoint(12 * 19, 108, 0, 0);
-        Waypoint lScale = new Waypoint(312, 34, 0, 0);
-        Waypoint lScaleInner = new Waypoint(312, 34 + 24, 0, 0);
+        Waypoint lScale = new Waypoint(316, 34, 0, 0);
+        Waypoint lScaleInner = new Waypoint(316, 34 + 24, 0, 0);
         Waypoint rScale = new Waypoint(328, 290, 0, 0);
         Waypoint rScaleInner = new Waypoint(328, 290 - 28, 0, 0);
-        Waypoint rScaleClose = new Waypoint(298 - 24, 236, 0, 0); //230 252
-        Waypoint rScaleCloseInner = new Waypoint(298, 236, 0, 0);
+        Waypoint rScaleClose = new Waypoint(316 - 24, 236, 0, 0); //230 252
+        Waypoint rScaleCloseInner = new Waypoint(316, 236, 0, 0);
         Waypoint lScaleClose = new Waypoint(320 - 24, 80, 0, 0); //230 252
         Waypoint lScaleCloseInner = new Waypoint(320, 80, 0, 0);
         
@@ -63,7 +63,7 @@ public enum WaypointProviderFactory {
 //			new Waypoint(lSwitchMiddle, 0.7, null),
 //			new Waypoint(228.735, 36, 0, 0.7),
 			new Waypoint(lScale, 0.7, null),
-			new Waypoint(312, 34 + 0.1, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.SCALE_HIGH, true)),
+			new Waypoint(316, 34 + 0.1, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.SCALE_HIGH, true)),
 			new Waypoint(lScaleInner, 0.3, new SetGrabberAction(grabber, false)),
 			new Waypoint(lScale, -0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND))
         });

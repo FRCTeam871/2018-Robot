@@ -112,5 +112,11 @@ public enum InitialControlScheme implements IControlScheme{
 		// TODO
 		return false;
 	}
+	
+	@Override
+	public boolean test() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 		
 }

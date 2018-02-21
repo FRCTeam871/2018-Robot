@@ -8,6 +8,9 @@ import java.util.Queue;
 
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.Grabber;
+import org.usfirst.frc.team871.subsystems.PixelStripMode;
+import org.usfirst.frc.team871.subsystems.Sound;
+import org.usfirst.frc.team871.subsystems.Teensy;
 import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
 import org.usfirst.frc.team871.subsystems.navigation.Coordinate;
 import org.usfirst.frc.team871.subsystems.navigation.IWaypointProvider;
@@ -24,6 +27,7 @@ import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -36,6 +40,7 @@ public class Robot extends IterativeRobot {
 	private IControlScheme controls;
 	private AHRS navX;
 	private Navigation nav;
+	private Teensy teensyWeensy;
 	
 	private long startTime = 0;
 
@@ -64,17 +69,37 @@ public class Robot extends IterativeRobot {
 //		Coordinate origin = new Coordinate(0, 0);
 		Coordinate startL = new Coordinate(33/2.0, 64);
 		Coordinate startM = new Coordinate(33/2.0, 160);
+		
 		Coordinate startR = new Coordinate(33/2.0, 260);
 		
 		// Waypoints
 		WaypointProviderFactory.DEFAULT.init(grabber, lift, config);
 		
 		
-		nav = new Navigation(drive, drive, WaypointProviderFactory.DEFAULT.getProvider("MStartRSwitch"), startM);
+		nav = new Navigation(drive, drive, WaypointProviderFactory.DEFAULT.getProvider("MStartLSwitch"), startM);
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("RStart"));
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LScaleRSwitch"));
+		
+//		CameraServer.getInstance().startAutomaticCapture(0);
+//		CameraServer.getInstance().startAutomaticCapture(1);
+		
+		teensyWeensy = new Teensy();
+		teensyWeensy.setVolume(.9);
+		teensyWeensy.playSound(Sound.LEEROY_JENKINS);
 	}
 
+	@Override
+	public void robotPeriodic() {
+		super.robotPeriodic();
+
+		if(controls.test()) {
+			teensyWeensy.setVolume(.9);
+			teensyWeensy.playSound(Sound.LEEROY_JENKINS);
+		}
+		
+		teensyWeensy.update();
+	}
+	
 	@Override
 	public void autonomousInit() {
 		grabber.setGrab(true);
@@ -103,6 +128,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void teleopPeriodic() {
+//		System.out.println(controls.getToggleOrientationButton());
 		if(controls.getToggleOrientationButton()) {
 			drive.driveRobotOriented(-controls.getYAxis(), controls.getXAxis(), controls.getRotationAxis());
 		} else {

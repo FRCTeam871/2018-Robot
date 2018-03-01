@@ -71,12 +71,12 @@ public class  SuperLift extends SendableBase implements Sendable {
 	
 	private void configureSetpoints() {
 		setpointVals.put(SetpointHeights.GROUND		,(0.0 * 12.0) + 0.00);
-		setpointVals.put(SetpointHeights.LOW_SWITCH	,(1.0 * 12.0) + 6.75);
+		setpointVals.put(SetpointHeights.LOW_SWITCH	,(2.0 * 12.0) + 6.75);
 		setpointVals.put(SetpointHeights.SCALE_LOW	,(4.0 * 12.0) + 4.00);
 		setpointVals.put(SetpointHeights.SCALE_MID	,(5.0 * 12.0) + 4.00);
 		setpointVals.put(SetpointHeights.SCALE_HIGH	,(6.0 * 12.0) + 4.00);
-		setpointVals.put(SetpointHeights.MAXIMUM	, 84.0);
-		setpointVals.put(SetpointHeights.MANUAL		,0.0);	
+		setpointVals.put(SetpointHeights.MAXIMUM	, 85.0);
+		setpointVals.put(SetpointHeights.MANUAL		, 0.0);	
 	}
 
 	/**

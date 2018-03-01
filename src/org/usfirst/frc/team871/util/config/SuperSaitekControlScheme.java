@@ -9,42 +9,38 @@ import org.usfirst.frc.team871.util.joystick.SaitekX52;
 import org.usfirst.frc.team871.util.joystick.XBoxAxes;
 import org.usfirst.frc.team871.util.joystick.XBoxButtons;
 
-public enum ThrustmasterControlScheme implements IControlScheme{
+public enum SuperSaitekControlScheme implements IControlScheme{
 	DEFAULT;
 	
-	private EnhancedXBoxController xbox;
 	private SaitekX52 saitek;
 	
-	ThrustmasterControlScheme() {
-		System.out.println("init thrust");
-		xbox = new EnhancedXBoxController(0);
+	SuperSaitekControlScheme() {
+		System.out.println("init super thrust");
 		saitek = new SaitekX52(1);
-		xbox.setButtonMode(XBoxButtons.START, ButtonTypes.TOGGLE);
-		xbox.setButtonMode(XBoxButtons.BACK, ButtonTypes.RISING);
-		xbox.setButtonMode(XBoxButtons.Y, ButtonTypes.MOMENTARY);
-		xbox.setAxisDeadband(XBoxAxes.LEFTX, 0.2);
-		xbox.setAxisDeadband(XBoxAxes.LEFTY, 0.2);
-		xbox.setAxisDeadband(XBoxAxes.RIGHTX, 0.2);
-		xbox.setAxisDeadband(XBoxAxes.RIGHTY, 0.2);
-		saitek.setButtonMode(SaitekButtons.MOUSE, ButtonTypes.RISING);
 		saitek.setButtonMode(SaitekButtons.FUNCTION, ButtonTypes.RISING);
 		saitek.setButtonMode(SaitekButtons.E, ButtonTypes.RISING);
 		saitek.setButtonMode(SaitekButtons.D, ButtonTypes.RISING);
 		saitek.setButtonMode(SaitekButtons.HAT_RIGHT, ButtonTypes.RISING);
+		saitek.setButtonMode(SaitekButtons.A, ButtonTypes.TOGGLE);
+		saitek.setButtonMode(SaitekButtons.C, ButtonTypes.RISING);
+		saitek.setButtonMode(SaitekButtons.B, ButtonTypes.RISING);
+		saitek.setButtonMode(SaitekButtons.FIRE, ButtonTypes.MOMENTARY);
+		saitek.setButtonMode(SaitekButtons.TRIGGER_1, ButtonTypes.RISING);
 	}
+	
 	@Override
 	public boolean getToggleOrientationButton() {
-		return xbox.getValue(XBoxButtons.START);
+		return saitek.getValue(SaitekButtons.A);
 	}
 
 	@Override
 	public boolean getResetGyroButton() {
-		return xbox.getValue(XBoxButtons.BACK);
+		return saitek.getValue(SaitekButtons.C);
 	}
 
 	@Override
 	public boolean getToggleGrabberButton() {
-		return saitek.getValue(SaitekButtons.MOUSE);
+		return saitek.getValue(SaitekButtons.TRIGGER_1);
 	}
 
 	@Override
@@ -69,17 +65,17 @@ public enum ThrustmasterControlScheme implements IControlScheme{
 
 	@Override
 	public double getXAxis() {
-		return xbox.getValue(XBoxAxes.LEFTX);
+		return saitek.getValue(SaitekAxes.X_AXIS);
 	}
 
 	@Override
 	public double getYAxis() {
-		return xbox.getValue(XBoxAxes.LEFTY);
+		return saitek.getValue(SaitekAxes.Y_AXIS);
 	}
 
 	@Override
 	public double getRotationAxis() {
-		return xbox.getValue(XBoxAxes.RIGHTX);
+		return saitek.getValue(SaitekAxes.ROTATION);
 	}
 	@Override
 	public POVDirections getPOV() {
@@ -105,7 +101,7 @@ public enum ThrustmasterControlScheme implements IControlScheme{
 
 	@Override
 	public boolean toottoot() {
-		return xbox.getValue(XBoxButtons.Y);
+		return saitek.getValue(SaitekButtons.FIRE);
 	}
 	
 	@Override
@@ -125,7 +121,7 @@ public enum ThrustmasterControlScheme implements IControlScheme{
 
 	@Override
 	public boolean test() {
-		// TODO Auto-generated method stub
-		return false;
+		return saitek.getValue(SaitekButtons.B);
 	}
+		
 }

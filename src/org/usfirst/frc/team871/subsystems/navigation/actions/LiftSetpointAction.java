@@ -6,20 +6,26 @@ import org.usfirst.frc.team871.subsystems.lifter.SuperLift.SetpointHeights;
 public class LiftSetpointAction implements IAction {
 	private final SuperLift lift;
 	private final SetpointHeights setpoint;
+	private boolean initMode = false;
 
 	public LiftSetpointAction(SuperLift lift, SetpointHeights setpoint) {
+		this(lift, setpoint, false);
+	}
+	
+	public LiftSetpointAction(SuperLift lift, SetpointHeights setpoint, boolean initMode) {
+		this.initMode = initMode;
 		this.lift = lift;
 		this.setpoint = setpoint;
 	}
 	
 	@Override
 	public void init() {
-		
+		if(initMode) lift.setHeight(setpoint);
 	}
 
 	@Override
 	public void execute() {
-		lift.setHeight(setpoint);
+		if(!initMode) lift.setHeight(setpoint);
 	}
 
 	@Override

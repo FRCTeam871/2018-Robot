@@ -8,6 +8,19 @@ package org.usfirst.frc.team871.util.joystick;
  *
  */
 public enum SaitekButtons {
+	
+	TRIGGER_1(1),
+	
+	FIRE(2),
+	
+	A(3),
+	
+	B(4),
+	
+	C(5),
+	
+	LOW_TRIGGER(6),
+	
     /**
      * The I button.
      */

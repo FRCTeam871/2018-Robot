@@ -141,7 +141,7 @@ public class SubLift extends SendableBase implements Sendable {
 	}
 	
 	public void setTrim(double trim) {
-		this.trim = trim;
+		this.trim = trim * 12;
 	}
 	
 	public double getTrim() {

@@ -106,5 +106,17 @@ public enum InitialControlScheme implements IControlScheme{
 		// TODO
 		return 0;
 	}
+	
+	@Override
+	public boolean getKickButton() {
+		// TODO
+		return false;
+	}
+	
+	@Override
+	public boolean test() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 		
 }

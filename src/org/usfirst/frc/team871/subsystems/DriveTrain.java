@@ -2,6 +2,7 @@ package org.usfirst.frc.team871.subsystems;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -171,10 +172,14 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 			
 			final long curTime = System.currentTimeMillis();
 			final double tDiff = (curTime - tPrevious) / 1000.0;
-			SmartDashboard.putNumber("xVel", calculateVelocity(lastXInput));
-			SmartDashboard.putNumber("yVel", calculateVelocity(lastYInput));
-			final double xDistance = tDiff * calculateVelocity(lastXInput);
-			final double yDistance = tDiff * calculateVelocity(lastYInput);
+			final double xVel = calculateVelocity(lastXInput);
+			final double yVel = calculateVelocity(lastYInput);
+			
+			SmartDashboard.putNumber("xVel", xVel);
+			SmartDashboard.putNumber("yVel", yVel);
+			
+			final double xDistance = tDiff * xVel;
+			final double yDistance = tDiff * yVel;
 			
 			Vector2d vec = new Vector2d(xDistance, yDistance);
 			vec.rotate(gyro.getAngle());
@@ -262,7 +267,11 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 	public boolean isAtSetpoint() {
 		return headingPID.onTarget();
 	}
-
+	
+	public double getHeadingError() {
+		return headingPID.getError();
+	}
+	
 	public void enableHeadingHold(){
 		headingPID.enable();
 	}

@@ -34,7 +34,6 @@ public class Navigation {
         this.isDone           = false;
 
         currentLocation = new Coordinate(startLocation);
-        nextWaypoint = waypointProvider.getNextWaypoint();
 
         //updates location
         updateLocation();
@@ -45,13 +44,17 @@ public class Navigation {
 
     public void setWaypointProvider(IWaypointProvider provider) {
         waypointProvider = provider;
-        reset();
+        resetPath();
     }
 
     /**
      * Is called on loop during autonomous phase to navigate to differing locations
      */
     public void navigate() {
+    	if(nextWaypoint == null) {
+    		nextWaypoint = getNextWaypoint();
+    	}
+    	
         updateLocation();
 
         if (this.isDone) {
@@ -63,7 +66,7 @@ public class Navigation {
             final double magnitude = nextWaypoint.getSpeed();
             
             if(magnitude < 0) {
-            	direction = (direction + 180) % 180;
+            	direction = ((direction + 360) % 360) - 180; // works because magic
             }
             
             SmartDashboard.putNumber("navDist", distance);
@@ -89,8 +92,7 @@ public class Navigation {
                 if(nextWaypoint.getAction().isComplete()) {
                     //since we got to the waypoint and performed it's action, get the next one
                     if (waypointProvider.hasNext()) {
-                        nextWaypoint = waypointProvider.getNextWaypoint();
-                        nextWaypoint.getAction().init();
+                        nextWaypoint = getNextWaypoint();
                     } else {
                         //done with navigation
                         this.isDone = true;
@@ -100,6 +102,14 @@ public class Navigation {
         }
     }
 
+    public void resetPath() {
+    	System.out.println("Navigation: Resetting Path!");
+    	stop();
+    	waypointProvider.reset();
+    	isDone = false;
+    	System.out.println("Navigation: Done Resetting Path");
+    }
+    
     public void reset() {
         System.out.print("Navigation: Resetting!");
         stop();
@@ -124,5 +134,15 @@ public class Navigation {
     private void updateLocation() {
         currentLocation.copy(displaceSense.getDisplacement(DistanceUnit.INCH));
         currentLocation.plus(initialPos);
+    }
+    
+    public boolean isDone() {
+    	return isDone;
+    }
+    
+    private Waypoint getNextWaypoint() {
+    	Waypoint p = waypointProvider.getNextWaypoint();
+    	p.getAction().init();
+    	return p;
     }
 }

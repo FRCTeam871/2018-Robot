@@ -29,6 +29,10 @@ public class Waypoint extends Coordinate {
     public Waypoint(double xVal, double yVal, double angle, double speed) {
         this(xVal, yVal, angle, speed, new NullAction());
     }
+    
+    public Waypoint(Waypoint copy, double speed, IAction action) {
+    	this(copy.getX(), copy.getY(), copy.getAngle(), speed, action == null ? copy.getAction() : action);
+    }
 
     public Waypoint(double xVal, double yVal, double angle) {
         this(xVal, yVal, angle, 1.0, new NullAction());

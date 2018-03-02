@@ -1,20 +1,23 @@
 package org.usfirst.frc.team871.subsystems.navigation;
 
 import java.util.EnumMap;
+import java.util.List;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WaypointSelector {
 
+	private EnumMap<WaypointPosition, Boolean> offLimits;
+	private EnumMap<WaypointPosition, WaypointSide> positionSides;
+	private List<WaypointArrayPositionWrapper> paths;
+	private WaypointPosition startingPosition;
+	private WaypointPosition endingPosition;
+	private NetworkTable table;
 	
-	EnumMap<WaypointPosition, Boolean> offLimits;
-	EnumMap<WaypointPosition, WaypointSide> positionSides;
-	NetworkTable table;
-	
-	public WaypointSelector(NetworkTable table) {
+	public WaypointSelector(NetworkTable table, List<WaypointArrayPositionWrapper> paths) {
 		this.table = table;
+		this.paths = paths;
 		
 		offLimits = new EnumMap<>(WaypointPosition.class);
 		for(WaypointPosition wp : WaypointPosition.values()) {
@@ -24,13 +27,58 @@ public class WaypointSelector {
 	}
 
 	public WaypointProvider choosePath() {
-		//TODO write todo message
-		return null;
+		if(startingPosition == WaypointPosition.START_L) {
+			if(!isOfflimits(WaypointPosition.SCALE_L)) {
+				endingPosition = WaypointPosition.SCALE_L;
+			}else if(!isOfflimits(WaypointPosition.SWITCH_L)) {
+				endingPosition = WaypointPosition.SWITCH_L;
+			}else {
+				if(!isOfflimits(WaypointPosition.SCALE_R)) {
+					endingPosition = WaypointPosition.SCALE_R;
+				}else if(!isOfflimits(WaypointPosition.SWITCH_R)) {
+					endingPosition = WaypointPosition.SWITCH_R;
+				}else {
+					endingPosition = WaypointPosition.AUTOLINE_L;
+				}
+			}
+		}else if(startingPosition == WaypointPosition.START_M) {
+			if(!isOfflimits(WaypointPosition.SWITCH_L)) {
+				endingPosition = WaypointPosition.SWITCH_L;
+			}else if(!isOfflimits(WaypointPosition.SWITCH_R)) {
+				endingPosition = WaypointPosition.SWITCH_R;
+			}else {
+				endingPosition = WaypointPosition.AUTOLINE_M;
+			}
+		}else if (startingPosition == WaypointPosition.START_R){
+			if(!isOfflimits(WaypointPosition.SCALE_R)) {
+				endingPosition = WaypointPosition.SCALE_R;
+			}else if(!isOfflimits(WaypointPosition.SWITCH_R)) {
+				endingPosition = WaypointPosition.SWITCH_R;
+			}else {
+				if(!isOfflimits(WaypointPosition.SCALE_L)) {
+					endingPosition = WaypointPosition.SCALE_L;
+				}else if(!isOfflimits(WaypointPosition.SWITCH_L)) {
+					endingPosition = WaypointPosition.SWITCH_L;
+				}else {
+					endingPosition = WaypointPosition.AUTOLINE_R;
+				}
+			}
+		
+		}
+		return findPath(startingPosition, endingPosition, positionSides.get(endingPosition));
 	}
 	
 	public WaypointProvider findPath(WaypointPosition start, WaypointPosition end, WaypointSide side) {
-		//TODO yes
+    	
+		for(int i = 0; ) {
+			//TODO: this loop will find the right path
+		}
+		
 		return null;
+	}
+	
+	public boolean isOfflimits(WaypointPosition wp) {
+		return offLimits.get(wp);
 	}
 	
 	public void setupConfiguration() {
@@ -40,6 +88,16 @@ public class WaypointSelector {
 		offLimits.put(WaypointPosition.SWITCH_R, config.charAt(0) == 'L');
 		offLimits.put(WaypointPosition.SCALE_L, config.charAt(0) == 'R');
 		offLimits.put(WaypointPosition.SCALE_R, config.charAt(0) == 'L');
+		
+		int startingPositionNumber = table.getEntry("lSwitchOffLimits").getNumber(0).intValue();
+		
+		if(startingPositionNumber == 0) {
+			startingPosition = WaypointPosition.START_L;
+		}else if(startingPositionNumber == 1) {
+			startingPosition = WaypointPosition.START_M;
+		}else if(startingPositionNumber == 2){
+			startingPosition = WaypointPosition.START_R;
+		}
 		
 	}
 	
@@ -63,4 +121,11 @@ public class WaypointSelector {
 		
 	}
 	
+	public void determinePreferance() {
+		
+		positionSides.put(WaypointPosition.SWITCH_R, table.getEntry("isInboradSwitchR").getBoolean(false)? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
+		positionSides.put(WaypointPosition.SWITCH_L, table.getEntry("isInboradSwitchL").getBoolean(false)? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
+		
+	}
+
 }

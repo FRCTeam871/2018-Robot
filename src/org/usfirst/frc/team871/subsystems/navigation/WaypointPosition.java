@@ -8,6 +8,9 @@ public enum WaypointPosition {
 	SWITCH_R,
 	START_L,
 	START_M,
-	START_R;
+	START_R,
+	AUTOLINE_L,
+	AUTOLINE_M,
+	AUTOLINE_R;
 	
 }

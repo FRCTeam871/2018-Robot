@@ -16,6 +16,7 @@ import org.usfirst.frc.team871.subsystems.navigation.Coordinate;
 import org.usfirst.frc.team871.subsystems.navigation.IWaypointProvider;
 import org.usfirst.frc.team871.subsystems.navigation.Navigation;
 import org.usfirst.frc.team871.subsystems.navigation.WaypointProviderFactory;
+import org.usfirst.frc.team871.subsystems.navigation.WaypointSelector;
 import org.usfirst.frc.team871.util.config.IControlScheme;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
@@ -43,6 +44,7 @@ public class Robot extends IterativeRobot {
 	private AHRS navX;
 	private Navigation nav;
 	private Teensy teensyWeensy;
+	private WaypointSelector pathFinder;
 	
 	private NetworkTable dashboardTable;
 	
@@ -58,7 +60,8 @@ public class Robot extends IterativeRobot {
 		NetworkTable nt = NetworkTableInstance.getDefault().getTable("default");
 		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope(), nt);
 		grabber  = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
-
+		
+		
 		List<ILimitSwitch> upperUpperLimits = Collections.singletonList(config.getupperUpperLimit());
 		List<ILimitSwitch> upperLowerLimits = Collections.singletonList(config.getupperLowerLimit());
 		List<ILimitSwitch> lowerUpperLimits = Collections.singletonList(config.getlowerUpperLimit());
@@ -79,7 +82,7 @@ public class Robot extends IterativeRobot {
 		
 		// Waypoints
 		WaypointProviderFactory.DEFAULT.init(grabber, lift, config);
-		
+		pathFinder = new WaypointSelector(nt, WaypointProviderFactory.DEFAULT.getWrappers());
 		
 		nav = new Navigation(drive, drive, WaypointProviderFactory.DEFAULT.getProvider("MStartLSwitch"), startM);
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("RStart"));
@@ -122,6 +125,7 @@ public class Robot extends IterativeRobot {
 		drive.setHeadingHold(0);
 		startTime = System.currentTimeMillis();
 		System.out.println("Robot driving started:\t"+ startTime + "\n");
+		
 	}
 
 	@Override

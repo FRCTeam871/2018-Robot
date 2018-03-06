@@ -70,9 +70,10 @@ public class WaypointSelector {
 	
 	public WaypointProvider findPath(WaypointPosition start, WaypointPosition end, WaypointSide side) {
     	
-		for(int i = 0; ) {
-			//TODO: this loop will find the right path
-		}
+		//TODO
+//		for(int i = 0; ) {
+//			//TODO: this loop will find the right path
+//		}
 		
 		return null;
 	}

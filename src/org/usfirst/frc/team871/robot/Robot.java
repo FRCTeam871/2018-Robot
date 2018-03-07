@@ -55,7 +55,8 @@ public class Robot extends IterativeRobot {
 		controls = SuperSaitekControlScheme.DEFAULT;
 		config   = MainRobotConfiguration.DEFAULT;
         navX     = config.getGyroscope();
-		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope());
+        NetworkTable nt = NetworkTableInstance.getDefault().getTable("default");
+		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope(), nt);
 		grabber  = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
 
 		List<ILimitSwitch> upperUpperLimits = Collections.singletonList(config.getupperUpperLimit());
@@ -68,7 +69,7 @@ public class Robot extends IterativeRobot {
 		CompositeLimitedSpeedController limitedSpeedControllerDown = new CompositeLimitedSpeedController(config.getLiftMotorBtm(), 
 				lowerUpperLimits, lowerLowerLimits);
 		
-		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm());
+		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm(), nt);
 
 //		Coordinate origin = new Coordinate(0, 0);
 		Coordinate startL = new Coordinate(33/2.0, 64);

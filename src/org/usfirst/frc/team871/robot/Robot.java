@@ -15,6 +15,7 @@ import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
 import org.usfirst.frc.team871.subsystems.navigation.Coordinate;
 import org.usfirst.frc.team871.subsystems.navigation.IWaypointProvider;
 import org.usfirst.frc.team871.subsystems.navigation.Navigation;
+import org.usfirst.frc.team871.subsystems.navigation.WaypointProvider;
 import org.usfirst.frc.team871.subsystems.navigation.WaypointProviderFactory;
 import org.usfirst.frc.team871.subsystems.navigation.WaypointSelector;
 import org.usfirst.frc.team871.util.config.IControlScheme;
@@ -118,6 +119,14 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
+		
+		pathFinder.setup();
+		
+		WaypointProvider path = pathFinder.choosePath();
+		if(path != null) {
+			nav.setWaypointProvider(path);
+		}
+		
 		grabber.setGrab(true);
 		config.getTootToot().set(Value.kReverse);
 		drive.resetSensor();
@@ -130,9 +139,11 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousPeriodic() {
-		nav.navigate();
-		if(nav.isDone() && !navQueue.isEmpty()) {
-			nav.setWaypointProvider(navQueue.poll());
+		if(nav.hasPath()) {
+			nav.navigate();
+			if(nav.isDone() && !navQueue.isEmpty()) {
+				nav.setWaypointProvider(navQueue.poll());
+			}
 		}
 	}
 

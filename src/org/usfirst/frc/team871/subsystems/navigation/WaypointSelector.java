@@ -2,6 +2,8 @@ package org.usfirst.frc.team871.subsystems.navigation;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -70,10 +72,16 @@ public class WaypointSelector {
 	
 	public WaypointProvider findPath(WaypointPosition start, WaypointPosition end, WaypointSide side) {
     	
-		//TODO
-//		for(int i = 0; ) {
-//			//TODO: this loop will find the right path
-//		}
+		Optional<WaypointArrayPositionWrapper> path = paths.stream().filter(new Predicate<WaypointArrayPositionWrapper>() {
+			@Override
+			public boolean test(WaypointArrayPositionWrapper t) {
+				return t.getStartPosition() == start && t.getEndPosition() == end && t.getSide() == side;
+			}
+		}).findFirst();
+		
+		if(path.isPresent()) {
+			return new WaypointProvider(path.get().getWaypoints());
+		}
 		
 		return null;
 	}
@@ -127,6 +135,12 @@ public class WaypointSelector {
 		positionSides.put(WaypointPosition.SWITCH_R, table.getEntry("isInboradSwitchR").getBoolean(false)? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
 		positionSides.put(WaypointPosition.SWITCH_L, table.getEntry("isInboradSwitchL").getBoolean(false)? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
 		
+	}
+	
+	public void setup() {
+		setupConfiguration();
+		determineOffLimits();
+		determinePreferance();
 	}
 
 }

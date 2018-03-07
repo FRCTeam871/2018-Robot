@@ -145,4 +145,8 @@ public class Navigation {
     	p.getAction().init();
     	return p;
     }
+
+	public boolean hasPath() {
+		return waypointProvider != null;
+	}
 }

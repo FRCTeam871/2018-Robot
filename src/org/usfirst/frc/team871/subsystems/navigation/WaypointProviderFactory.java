@@ -64,14 +64,16 @@ public enum WaypointProviderFactory {
         	new Waypoint(lSwitchMiddle, -0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND))
         }, WaypointPosition.START_L, WaypointPosition.SWITCH_L, WaypointSide.OUTBOARD));
         
+        addPath("LAutoLine", new WaypointArrayPositionWrapper(new Waypoint[] {
+        		new Waypoint(lCenterLine, 0.7, null),
+        }, WaypointPosition.START_L, WaypointPosition.AUTOLINE_L, null));
+        
         addPath("LScale", new WaypointArrayPositionWrapper(new Waypoint[] {
-//    		new Waypoint(lSwitchMiddle, 0.7, null),
-//    		new Waypoint(228.735, 36, 0, 0.7),
     		new Waypoint(lScale, 0.7, null),
     		new Waypoint(316, 34 + 0.1, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.SCALE_HIGH, true)),
     		new Waypoint(lScaleInner, 0.3, new SetGrabberAction(grabber, false)),
     		new Waypoint(lScale, -0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND))
-        },null,null,null));
+        }, WaypointPosition.START_L, WaypointPosition.SCALE_L, null));
         
         //TODO: do this one
         addPath("LSwitchRScale", new WaypointArrayPositionWrapper(new Waypoint[] {
@@ -106,6 +108,10 @@ public enum WaypointProviderFactory {
     			new Waypoint(rScale, -0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND))
         }, WaypointPosition.START_R, WaypointPosition.SCALE_R, WaypointSide.INBOARD));
 
+        addPath("RAutoLine", new WaypointArrayPositionWrapper(new Waypoint[] {
+        		new Waypoint(rCenterLine, 0.7, null),
+        }, WaypointPosition.START_R, WaypointPosition.AUTOLINE_R, null));
+        
         addPath("LStartRSwitch", new WaypointArrayPositionWrapper(new Waypoint[]{
         		new Waypoint(lCenterLine, 0.6, null),
             	new Waypoint(rSwitchFar, 0.6, new LiftSetpointAction(lift, SetpointHeights.LOW_SWITCH)),
@@ -164,6 +170,9 @@ public enum WaypointProviderFactory {
                 new Waypoint(120 + 24, 210, 0, 0.3, new SetGrabberAction(grabber, false))
         }, WaypointPosition.START_M, WaypointPosition.SWITCH_R, WaypointSide.INBOARD));
         
+        addPath("MAutoLine", new WaypointArrayPositionWrapper(new Waypoint[]{ // goes to the right
+        		new Waypoint(36, 160, 0, 0.3),
+        }, WaypointPosition.START_M, WaypointPosition.AUTOLINE_M, WaypointSide.INBOARD));
         
         // untested (not needed)
         

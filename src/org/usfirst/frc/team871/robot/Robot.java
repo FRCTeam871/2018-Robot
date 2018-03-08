@@ -8,7 +8,6 @@ import java.util.Queue;
 
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.Grabber;
-import org.usfirst.frc.team871.subsystems.PixelStripMode;
 import org.usfirst.frc.team871.subsystems.Sound;
 import org.usfirst.frc.team871.subsystems.Teensy;
 import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
@@ -18,18 +17,15 @@ import org.usfirst.frc.team871.subsystems.navigation.Navigation;
 import org.usfirst.frc.team871.subsystems.navigation.WaypointProviderFactory;
 import org.usfirst.frc.team871.util.config.IControlScheme;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
-import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
-import org.usfirst.frc.team871.util.config.SuperSaitekControlScheme;
+import org.usfirst.frc.team871.util.config.SecondRobotConfiguration;
 import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
-import org.usfirst.frc.team871.util.joystick.POVDirections;
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -52,8 +48,8 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
-		controls = SuperSaitekControlScheme.DEFAULT;
-		config   = MainRobotConfiguration.DEFAULT;
+		controls = ThrustmasterControlScheme.DEFAULT;
+		config   = SecondRobotConfiguration.DEFAULT;
         navX     = config.getGyroscope();
         NetworkTable nt = NetworkTableInstance.getDefault().getTable("default");
 		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope(), nt);
@@ -90,7 +86,7 @@ public class Robot extends IterativeRobot {
 		
 		teensyWeensy = new Teensy();
 		teensyWeensy.setVolume(.9);
-		teensyWeensy.playSound(Sound.LEEROY_JENKINS);
+		teensyWeensy.playSound(Sound.START);
 		
 		NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
 		defaultInstance.setNetworkIdentity("Robot");

@@ -40,13 +40,13 @@ public enum SecondRobotConfiguration implements IRobotConfiguration {
 	SecondRobotConfiguration() {
 		//TODO get actual pins!
 
-		frontLeft    = new WPI_VictorSPX(12);
-		frontRight   = new WPI_VictorSPX(10);
-		rearLeft     = new WPI_VictorSPX(13);
-		rearRight    = new WPI_VictorSPX(11);
-		liftMotorUp  = new WPI_TalonSRX(1);
-		liftMotorBtm = new WPI_TalonSRX(0);
-		liftMotorBtm.setInverted(true);
+		frontLeft    = new WPI_VictorSPX(16);
+		frontRight   = new WPI_VictorSPX(14);
+		rearLeft     = new WPI_VictorSPX(17);
+		rearRight    = new WPI_VictorSPX(15);
+		liftMotorUp  = new WPI_TalonSRX(4);
+		liftMotorBtm = new WPI_TalonSRX(3);
+//		liftMotorBtm.setInverted(true);
 		gyro         = new AHRS(Port.kMXP);
 		cubeDetect   = new DigitalInput(20); //TODO: Find port#
 
@@ -60,7 +60,8 @@ public enum SecondRobotConfiguration implements IRobotConfiguration {
 //		encoderUp.setDistancePerPulse(0.019634954084936);
 //		encoderUp.setDistancePerPulse(1);
 		encoderUp.setDistancePerPulse(41 / 1682.75);
-
+		encoderUp.setDistancePerPulse(1);
+		
 		//1682.75 41in
 
 		encoderBtm   = new Encoder(4,5);  //TODO: Find port#
@@ -70,7 +71,7 @@ public enum SecondRobotConfiguration implements IRobotConfiguration {
 		// distPerPulse = circum / ticksPerPulse
 //		encoderBtm.setDistancePerPulse(0.019634954084936);
 //		encoderBtm.setDistancePerPulse(1);
-		encoderBtm.setDistancePerPulse(41 / 1865.75);
+		encoderBtm.setDistancePerPulse(42.25 / 1877);
 		encoderBtm.setReverseDirection(true);
 		//1865.75 41
 

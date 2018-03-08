@@ -53,6 +53,8 @@ public class Robot extends IterativeRobot {
 
 	private Queue<IWaypointProvider> navQueue = new ArrayDeque<>();
 	
+	private boolean waypointSelectorTestMode = false;
+	
 	@Override
 	public void robotInit() {
 		
@@ -61,7 +63,6 @@ public class Robot extends IterativeRobot {
 		NetworkTable nt = NetworkTableInstance.getDefault().getTable("default");
 		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope(), nt);
 		grabber  = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
-		
 		
 		List<ILimitSwitch> upperUpperLimits = Collections.singletonList(config.getupperUpperLimit());
 		List<ILimitSwitch> upperLowerLimits = Collections.singletonList(config.getupperLowerLimit());
@@ -139,10 +140,12 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousPeriodic() {
-		if(nav.hasPath()) {
-			nav.navigate();
-			if(nav.isDone() && !navQueue.isEmpty()) {
-				nav.setWaypointProvider(navQueue.poll());
+		if(!waypointSelectorTestMode) {
+			if(nav.hasPath()) {
+				nav.navigate();
+				if(nav.isDone() && !navQueue.isEmpty()) {
+					nav.setWaypointProvider(navQueue.poll());
+				}
 			}
 		}
 	}

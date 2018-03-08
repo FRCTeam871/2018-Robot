@@ -6,6 +6,7 @@ public class WaypointArrayPositionWrapper {
 	private final WaypointPosition startPosition;
 	private final WaypointPosition endPosition;
 	private final WaypointSide side;
+	private String name;
 	
 	public WaypointArrayPositionWrapper(Waypoint[] waypoints, WaypointPosition startPosition, WaypointPosition endPosition, WaypointSide side) {
 		this.waypoints = waypoints;
@@ -28,6 +29,14 @@ public class WaypointArrayPositionWrapper {
 
 	public WaypointSide getSide() {
 		return side;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 }

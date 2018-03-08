@@ -222,6 +222,7 @@ public enum WaypointProviderFactory {
     }
 
     public void addPath(String name, WaypointArrayPositionWrapper points) {
+    	points.setName(name);
         paths2.putIfAbsent(name, points);
     }
 
@@ -242,4 +243,5 @@ public enum WaypointProviderFactory {
     public ArrayList<WaypointArrayPositionWrapper> getWrappers() {
     	return new ArrayList<WaypointArrayPositionWrapper>(paths2.values()); 
     }
+
 }

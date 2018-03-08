@@ -72,17 +72,17 @@ public class WaypointSelector {
 	
 	public WaypointProvider findPath(WaypointPosition start, WaypointPosition end, WaypointSide side) {
     	
-		Optional<WaypointArrayPositionWrapper> path = paths.stream().filter(new Predicate<WaypointArrayPositionWrapper>() {
-			@Override
-			public boolean test(WaypointArrayPositionWrapper t) {
-				return t.getStartPosition() == start && t.getEndPosition() == end && t.getSide() == side;
-			}
+		Optional<WaypointArrayPositionWrapper> path = paths.stream().filter((t) -> {
+			return t.getStartPosition() == start && t.getEndPosition() == end && t.getSide() == side;
 		}).findFirst();
 		
 		if(path.isPresent()) {
-			return new WaypointProvider(path.get().getWaypoints());
+			WaypointArrayPositionWrapper way = path.get();
+			System.out.println("findPath(" + start + ", " + end + ", " + side + ") returning " + way.getName());
+			return new WaypointProvider(way.getWaypoints());
 		}
 		
+		System.out.println("findPath(" + start + ", " + end + ", " + side + ") returning null");
 		return null;
 	}
 	

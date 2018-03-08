@@ -57,11 +57,16 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
+		NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
+		defaultInstance.setNetworkIdentity("Robot");
+		defaultInstance.startClientTeam(871);
 		
+		dashboardTable = defaultInstance.getTable("Dashboard");
+
 		controls = SuperSaitekControlScheme.DEFAULT;
 		config   = MainRobotConfiguration.DEFAULT;
-		NetworkTable nt = NetworkTableInstance.getDefault().getTable("default");
-		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope(), nt);
+        navX     = config.getGyroscope();
+		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope(), dashboardTable);
 		grabber  = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
 		
 		List<ILimitSwitch> upperUpperLimits = Collections.singletonList(config.getupperUpperLimit());
@@ -74,7 +79,7 @@ public class Robot extends IterativeRobot {
 		CompositeLimitedSpeedController limitedSpeedControllerDown = new CompositeLimitedSpeedController(config.getLiftMotorBtm(), 
 				lowerUpperLimits, lowerLowerLimits);
 		
-		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm(), nt);
+		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm(), dashboardTable);
 
 //		Coordinate origin = new Coordinate(0, 0);
 		Coordinate startL = new Coordinate(33/2.0, 64);
@@ -84,7 +89,7 @@ public class Robot extends IterativeRobot {
 		
 		// Waypoints
 		WaypointProviderFactory.DEFAULT.init(grabber, lift, config);
-		pathFinder = new WaypointSelector(nt, WaypointProviderFactory.DEFAULT.getWrappers());
+		pathFinder = new WaypointSelector(dashboardTable, WaypointProviderFactory.DEFAULT.getWrappers());
 		
 		nav = new Navigation(drive, drive, WaypointProviderFactory.DEFAULT.getProvider("MStartLSwitch"), startM);
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("RStart"));
@@ -96,13 +101,7 @@ public class Robot extends IterativeRobot {
 		teensyWeensy = new Teensy();
 		teensyWeensy.setVolume(.9);
 		teensyWeensy.playSound(Sound.LEEROY_JENKINS);
-		
-		NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
-		defaultInstance.setNetworkIdentity("Robot");
-		defaultInstance.startClientTeam(871);
-		
-		dashboardTable = defaultInstance.getTable("Dashboard");
-	}
+		}
 
 	@Override
 	public void robotPeriodic() {
@@ -218,7 +217,6 @@ public class Robot extends IterativeRobot {
 	 * 
 	 * @author The Jack
 	 */
-	//TODO:  Add method call to update position and gyro data from DriveTrain
 	public void updateDashboard() {
 		lift.updateData();
 		drive.updateData();

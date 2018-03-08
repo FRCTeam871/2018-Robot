@@ -50,10 +50,15 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		controls = ThrustmasterControlScheme.DEFAULT;
+		NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
+		defaultInstance.setNetworkIdentity("Robot");
+		defaultInstance.startClientTeam(871);
+		
+		dashboardTable = defaultInstance.getTable("Dashboard");
+
 		config   = MainRobotConfiguration.DEFAULT;
         navX     = config.getGyroscope();
-        NetworkTable nt = NetworkTableInstance.getDefault().getTable("default");
-		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope(), nt);
+		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope(), dashboardTable);
 		grabber  = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
 
 		List<ILimitSwitch> upperUpperLimits = Collections.singletonList(config.getupperUpperLimit());
@@ -66,7 +71,7 @@ public class Robot extends IterativeRobot {
 		CompositeLimitedSpeedController limitedSpeedControllerDown = new CompositeLimitedSpeedController(config.getLiftMotorBtm(), 
 				lowerUpperLimits, lowerLowerLimits);
 		
-		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm(), nt);
+		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm(), dashboardTable);
 
 //		Coordinate origin = new Coordinate(0, 0);
 		Coordinate startL = new Coordinate(33/2.0, 64);
@@ -89,11 +94,6 @@ public class Robot extends IterativeRobot {
 		teensyWeensy.setVolume(.9);
 		teensyWeensy.playSound(Sound.START);
 		
-		NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
-		defaultInstance.setNetworkIdentity("Robot");
-		defaultInstance.startClientTeam(871);
-		
-		dashboardTable = defaultInstance.getTable("Dashboard");
 	}
 
 	@Override
@@ -197,7 +197,6 @@ public class Robot extends IterativeRobot {
 	 * 
 	 * @author The Jack
 	 */
-	//TODO:  Add method call to update position and gyro data from DriveTrain
 	public void updateDashboard() {
 		lift.updateData();
 		drive.updateData();

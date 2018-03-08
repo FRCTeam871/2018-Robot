@@ -17,6 +17,7 @@ import org.usfirst.frc.team871.subsystems.navigation.Navigation;
 import org.usfirst.frc.team871.subsystems.navigation.WaypointProviderFactory;
 import org.usfirst.frc.team871.util.config.IControlScheme;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
+import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
 import org.usfirst.frc.team871.util.config.SecondRobotConfiguration;
 import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
@@ -49,7 +50,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		controls = ThrustmasterControlScheme.DEFAULT;
-		config   = SecondRobotConfiguration.DEFAULT;
+		config   = MainRobotConfiguration.DEFAULT;
         navX     = config.getGyroscope();
         NetworkTable nt = NetworkTableInstance.getDefault().getTable("default");
 		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope(), nt);

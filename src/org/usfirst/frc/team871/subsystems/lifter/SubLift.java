@@ -64,7 +64,7 @@ public class SubLift extends SendableBase implements Sendable {
 			case Position:
 			    pid.setPID(-0.12, 0, 0.04);
 			    pid.setInputRange(0, 0);
-                encoder.setPIDSourceType(PIDSourceType.kDisplacement);
+	            encoder.setPIDSourceType(PIDSourceType.kDisplacement);
 				break;
 			default:
 				break;

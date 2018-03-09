@@ -5,6 +5,7 @@ import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.Grabber;
@@ -61,7 +62,7 @@ public class Robot extends IterativeRobot {
 		
 		dashboardTable = defaultInstance.getTable("Dashboard");
 
-		config   = MainRobotConfiguration.DEFAULT;
+		config   = SecondRobotConfiguration.DEFAULT;
         navX     = config.getGyroscope();
 		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope(), dashboardTable);
 		grabber  = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
@@ -108,7 +109,15 @@ public class Robot extends IterativeRobot {
 
 		if(controls.test()) {
 			teensyWeensy.setVolume(.9);
-			teensyWeensy.playSound(Sound.LEEROY_JENKINS);
+			Sound s = null;
+			Sound[] sounds = Sound.values();
+			Random r = new Random();
+			while(s == null) {
+				s = sounds[r.nextInt(sounds.length)];
+				if(s.getPath().startsWith("music/")) s = null;
+			}
+			
+			teensyWeensy.playSound(s);
 		}
 		
 		teensyWeensy.update();

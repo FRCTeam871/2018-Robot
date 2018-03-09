@@ -88,7 +88,6 @@ public class Robot extends IterativeRobot {
 		WaypointProviderFactory.DEFAULT.init(grabber, lift, config);
 		pathFinder = new WaypointSelector(dashboardTable, WaypointProviderFactory.DEFAULT.getWrappers());
 		
-		nav = new Navigation(drive, drive, WaypointProviderFactory.DEFAULT.getProvider("MStartLSwitch"), startM);
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("RStart"));
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LScaleRSwitch"));
 		
@@ -122,7 +121,10 @@ public class Robot extends IterativeRobot {
 		
 		WaypointProvider path = pathFinder.choosePath();
 		if(path != null) {
-			nav.setWaypointProvider(path);
+			Coordinate startL = new Coordinate(33/2.0, 64);
+			Coordinate startM = new Coordinate(33/2.0, 160);
+			Coordinate startR = new Coordinate(33/2.0, 260);
+			nav = new Navigation(drive, drive, path, startM);
 		}
 		
 		grabber.setGrab(true);

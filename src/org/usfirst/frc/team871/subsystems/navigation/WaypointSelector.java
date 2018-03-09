@@ -22,6 +22,7 @@ public class WaypointSelector {
 		this.paths = paths;
 		
 		offLimits = new EnumMap<>(WaypointPosition.class);
+		positionSides = new EnumMap<>(WaypointPosition.class);
 		for(WaypointPosition wp : WaypointPosition.values()) {
 			offLimits.put(wp, false);
 			positionSides.put(wp, WaypointSide.INBOARD);

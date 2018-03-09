@@ -28,7 +28,7 @@ public class Teensy {
 	}
 	
 	public void setPixelStripMode(int strip, PixelStripMode mode) {
-		write("strip mode " + strip + " " + mode.getIndex());
+		write("led " + strip + " " + mode.getIndex());
 	}
 	
 	public void write(String str) {

@@ -133,8 +133,8 @@ public class WaypointSelector {
 	
 	public void determinePreferance() {
 		
-		positionSides.put(WaypointPosition.SWITCH_R, table.getEntry("isInboradSwitchR").getBoolean(false)? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
-		positionSides.put(WaypointPosition.SWITCH_L, table.getEntry("isInboradSwitchL").getBoolean(false)? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
+		positionSides.put(WaypointPosition.SWITCH_R, table.getEntry("isInboardSwitchR").getBoolean(false)? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
+		positionSides.put(WaypointPosition.SWITCH_L, table.getEntry("isInboardSwitchL").getBoolean(false)? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
 		
 	}
 	

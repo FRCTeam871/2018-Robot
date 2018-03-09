@@ -96,7 +96,7 @@ public class Robot extends IterativeRobot {
 		
 		teensyWeensy = new Teensy();
 		teensyWeensy.setVolume(.9);
-		teensyWeensy.playSound(Sound.START);
+		teensyWeensy.playSound(Sound.STARTUP);
 		
 	}
 

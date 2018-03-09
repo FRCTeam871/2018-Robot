@@ -1,19 +1,27 @@
 package org.usfirst.frc.team871.subsystems;
 
 public enum Sound {
-	LEEROY_JENKINS("leeroy.wav"),
-	TEST("test.wav"),
-	AHA("aha.wav"),
-	CRAZY("crazy.wav"),
-	DK1("dk1.wav"),
-	GALAGA_1("galaga1.wav"),
-	GALAGA_2("galaga2.wav"),
-	JUNGLE("jungle.wav"),
-	MARIO_1("mario1.wav"),
-	START("start.wav"),
-	TETRIS("tetris.wav");
+	TAKE_ON_ME("music/aha.wav"),
+	TETRIS_THEME("music/tetris.wav"),
+	CRAZY_TRAIN("music/crazy.wav"),
+	LUFTBALLONS("music/luft.wav"),
+	VENUS("music/venus.wav"),
+	ITS_STILL_ROCK_AND_ROLL_TO_ME("music/rnr.wav"),
+	SWEET_DREAMS("music/dreams.wav"),
+	XEVIOUS_THEME("music/xevious.wav"),
+	NEVER_GONNA_GIVE_YOU_UP("music/rick.wav"),
+	DK_UP("sfx/dk1.wav"),
+	GALAGA_SPIDER("sfx/galaga1.wav"),
+	GALAGA_CELEBRATE("sfx/galaga2"),
+	MARIO_JINGLE("sfx/mario1.wav"),
+	XEVIOUS_BOMB("sfx/xev1.wav"),
+	LEEROY_JENKINS("memes/leeroy.wav"),
+	STARTUP("memes/start.wav"),
+	IM_A_COMPUTER("memes/comp.wav"),
+	REEE("memes/ree.wav");
 
 	private String path;
+	
 	Sound(String path){
 		this.path = path;
 	}

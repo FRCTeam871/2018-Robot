@@ -76,8 +76,11 @@ public class SubLift extends SendableBase implements Sendable {
 	 * Resets the encoder if it's at the lower limit.
 	 * @return returns true if encoder is successfully reset
 	 */
-	private boolean maybeResetEncoder() {
+	protected boolean maybeResetEncoder() {
+		System.out.println("upper? " + liftMotor.isAtUpperLimit());
+		System.out.println("lower? " + liftMotor.isAtLowerLimit());
 		if(liftMotor.isAtLowerLimit()) {
+			System.out.println("Resetttttttt YAAAASSSSS");
 			encoder.reset();
 			return true;
 		}

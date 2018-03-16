@@ -19,6 +19,7 @@ import org.usfirst.frc.team871.util.config.IControlScheme;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
 import org.usfirst.frc.team871.util.config.SecondRobotConfiguration;
+import org.usfirst.frc.team871.util.config.SuperSaitekControlScheme;
 import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
@@ -49,14 +50,14 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
-		controls = ThrustmasterControlScheme.DEFAULT;
+		controls = SuperSaitekControlScheme.DEFAULT;
 		NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
 		defaultInstance.setNetworkIdentity("Robot");
 		defaultInstance.startClientTeam(871);
 		
 		dashboardTable = defaultInstance.getTable("Dashboard");
 
-		config   = MainRobotConfiguration.DEFAULT;
+		config   = SecondRobotConfiguration.DEFAULT;
         navX     = config.getGyroscope();
 		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope(), dashboardTable);
 		grabber  = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());

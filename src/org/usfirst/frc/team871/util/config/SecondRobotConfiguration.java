@@ -59,8 +59,8 @@ public enum SecondRobotConfiguration implements IRobotConfiguration {
 		// distPerPulse = circum / ticksPerPulse
 //		encoderUp.setDistancePerPulse(0.019634954084936);
 //		encoderUp.setDistancePerPulse(1);
-		encoderUp.setDistancePerPulse(41 / 1682.75);
-		encoderUp.setDistancePerPulse(1);
+		encoderUp.setDistancePerPulse(37.75 / 1674.0); // 1674
+//		encoderUp.setDistancePerPulse(1);
 		
 		//1682.75 41in
 
@@ -71,7 +71,7 @@ public enum SecondRobotConfiguration implements IRobotConfiguration {
 		// distPerPulse = circum / ticksPerPulse
 //		encoderBtm.setDistancePerPulse(0.019634954084936);
 //		encoderBtm.setDistancePerPulse(1);
-		encoderBtm.setDistancePerPulse(42.25 / 1877);
+		encoderBtm.setDistancePerPulse(42.25 / 1877.0);
 		encoderBtm.setReverseDirection(true);
 		//1865.75 41
 

@@ -22,6 +22,7 @@ import org.usfirst.frc.team871.util.config.SecondRobotConfiguration;
 import org.usfirst.frc.team871.util.config.SuperSaitekControlScheme;
 import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
+import org.usfirst.frc.team871.util.control.LimitedSpeedController;
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -48,6 +49,8 @@ public class Robot extends IterativeRobot {
 
 	private Queue<IWaypointProvider> navQueue = new ArrayDeque<>();
 	
+	public CompositeLimitedSpeedController lsc1;
+	
 	@Override
 	public void robotInit() {
 		controls = SuperSaitekControlScheme.DEFAULT;
@@ -71,6 +74,8 @@ public class Robot extends IterativeRobot {
 				upperUpperLimits, upperLowerLimits);
 		CompositeLimitedSpeedController limitedSpeedControllerDown = new CompositeLimitedSpeedController(config.getLiftMotorBtm(), 
 				lowerUpperLimits, lowerLowerLimits);
+		
+		lsc1 = limitedSpeedControllerDown;
 		
 		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm(), dashboardTable);
 

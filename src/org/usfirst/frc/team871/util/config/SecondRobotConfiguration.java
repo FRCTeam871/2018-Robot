@@ -46,7 +46,8 @@ public enum SecondRobotConfiguration implements IRobotConfiguration {
 		rearRight    = new WPI_VictorSPX(15);
 		liftMotorUp  = new WPI_TalonSRX(4);
 		liftMotorBtm = new WPI_TalonSRX(3);
-//		liftMotorBtm.setInverted(true);
+//		liftMotorUp.setInverted(false);
+		liftMotorBtm.setInverted(true);
 		gyro         = new AHRS(Port.kMXP);
 		cubeDetect   = new DigitalInput(20); //TODO: Find port#
 

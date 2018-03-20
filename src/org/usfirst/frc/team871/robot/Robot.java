@@ -106,8 +106,8 @@ public class Robot extends IterativeRobot {
 		teensyWeensy.setVolume(.9);
 		teensyWeensy.playSound(Sound.STARTUP);
 		
-		teensyWeensy.setPixelStripMode(4, PixelStripMode.PULSE_CHASE_B);
-		teensyWeensy.setPixelStripMode(5, PixelStripMode.PULSE_CHASE_B);
+		teensyWeensy.setPixelStripMode(4, PixelStripMode.DISABLED);
+		teensyWeensy.setPixelStripMode(5, PixelStripMode.DISABLED);
 		
 	}
 

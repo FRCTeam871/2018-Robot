@@ -9,6 +9,7 @@ import java.util.Random;
 
 import org.usfirst.frc.team871.subsystems.DriveTrain;
 import org.usfirst.frc.team871.subsystems.Grabber;
+import org.usfirst.frc.team871.subsystems.PixelStripMode;
 import org.usfirst.frc.team871.subsystems.Sound;
 import org.usfirst.frc.team871.subsystems.Teensy;
 import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
@@ -104,6 +105,9 @@ public class Robot extends IterativeRobot {
 		teensyWeensy = new Teensy();
 		teensyWeensy.setVolume(.9);
 		teensyWeensy.playSound(Sound.STARTUP);
+		
+		teensyWeensy.setPixelStripMode(4, PixelStripMode.PULSE_CHASE_B);
+		teensyWeensy.setPixelStripMode(5, PixelStripMode.PULSE_CHASE_B);
 		
 	}
 

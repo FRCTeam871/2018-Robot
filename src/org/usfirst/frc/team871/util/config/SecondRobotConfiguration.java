@@ -46,8 +46,8 @@ public enum SecondRobotConfiguration implements IRobotConfiguration {
 		rearRight    = new WPI_VictorSPX(15);
 		liftMotorUp  = new WPI_TalonSRX(4);
 		liftMotorBtm = new WPI_TalonSRX(3);
-//		liftMotorBtm.setInverted(true);
-		liftMotorUp.setInverted(true);
+		liftMotorBtm.setInverted(true);
+		//liftMotorUp.setInverted(true);
 		gyro         = new AHRS(Port.kMXP);
 		cubeDetect   = new DigitalInput(20); //TODO: Find port#
 
@@ -64,6 +64,7 @@ public enum SecondRobotConfiguration implements IRobotConfiguration {
 //		encoderUp.setDistancePerPulse(1);
 		
 		//1682.75 41in
+		
 
 		encoderBtm   = new Encoder(4,5);  //TODO: Find port#
 		// diam = 1.6

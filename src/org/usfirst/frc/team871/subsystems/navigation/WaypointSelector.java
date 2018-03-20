@@ -99,7 +99,7 @@ public class WaypointSelector {
 		offLimits.put(WaypointPosition.SCALE_L, config.charAt(0) == 'R');
 		offLimits.put(WaypointPosition.SCALE_R, config.charAt(0) == 'L');
 		
-		int startingPositionNumber = table.getEntry("lSwitchOffLimits").getNumber(0).intValue();
+		int startingPositionNumber = table.getEntry("startPos").getNumber(0).intValue();
 		
 		if(startingPositionNumber == 0) {
 			startingPosition = WaypointPosition.START_L;

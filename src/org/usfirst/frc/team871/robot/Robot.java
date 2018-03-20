@@ -22,14 +22,17 @@ import org.usfirst.frc.team871.util.config.IControlScheme;
 import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.config.MainRobotConfiguration;
 import org.usfirst.frc.team871.util.config.SecondRobotConfiguration;
+import org.usfirst.frc.team871.util.config.SuperSaitekControlScheme;
 import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
+import org.usfirst.frc.team871.util.control.LimitedSpeedController;
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -52,10 +55,11 @@ public class Robot extends IterativeRobot {
 	private Queue<IWaypointProvider> navQueue = new ArrayDeque<>();
 	
 	private boolean waypointSelectorTestMode = false;
+	public CompositeLimitedSpeedController lsc1;
 	
 	@Override
 	public void robotInit() {
-		controls = ThrustmasterControlScheme.DEFAULT;
+		controls = SuperSaitekControlScheme.DEFAULT;
 		NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
 		defaultInstance.setNetworkIdentity("Robot");
 		defaultInstance.startClientTeam(871);
@@ -77,6 +81,8 @@ public class Robot extends IterativeRobot {
 		CompositeLimitedSpeedController limitedSpeedControllerDown = new CompositeLimitedSpeedController(config.getLiftMotorBtm(), 
 				lowerUpperLimits, lowerLowerLimits);
 		
+		lsc1 = limitedSpeedControllerDown;
+		
 		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm(), dashboardTable);
 
 //		Coordinate origin = new Coordinate(0, 0);
@@ -92,8 +98,8 @@ public class Robot extends IterativeRobot {
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("RStart"));
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LScaleRSwitch"));
 		
-//		CameraServer.getInstance().startAutomaticCapture(0);
-//		CameraServer.getInstance().startAutomaticCapture(1);
+		CameraServer.getInstance().startAutomaticCapture(0);
+		//CameraServer.getInstance().startAutomaticCapture(1);
 		
 		teensyWeensy = new Teensy();
 		teensyWeensy.setVolume(.9);

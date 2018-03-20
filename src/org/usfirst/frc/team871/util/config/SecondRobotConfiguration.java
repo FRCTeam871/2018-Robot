@@ -79,10 +79,10 @@ public enum SecondRobotConfiguration implements IRobotConfiguration {
 		grabPiston   = new DoubleSolenoid(0, 1);
 		ejectPiston  = new DoubleSolenoid(2, 3);
 		tootToot  = new DoubleSolenoid(4, 5);
-		upperUpperLimit = new DigitalLimitSwitch(new DigitalInput(2), true); //TODO: Find port#
-		upperLowerLimit = new DigitalLimitSwitch(new DigitalInput(3), true); //TODO: Find port#
-		lowerUpperLimit = new DigitalLimitSwitch(new DigitalInput(0), true); //TODO: Find port#
-		lowerLowerLimit = new DigitalLimitSwitch(new DigitalInput(1), true); //TODO: Find port#
+		upperUpperLimit = new DigitalLimitSwitch(new DigitalInput(3), true); //TODO: Find port#
+		upperLowerLimit = new DigitalLimitSwitch(new DigitalInput(2), true); //TODO: Find port#
+		lowerUpperLimit = new DigitalLimitSwitch(new DigitalInput(1), true); //TODO: Find port#
+		lowerLowerLimit = new DigitalLimitSwitch(new DigitalInput(0), true); //TODO: Find port#
 		
 	}
 	

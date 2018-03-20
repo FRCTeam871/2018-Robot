@@ -123,5 +123,9 @@ public enum SuperSaitekControlScheme implements IControlScheme{
 	public boolean test() {
 		return saitek.getValue(SaitekButtons.B);
 	}
+	
+	public SaitekX52 getSaitek() {
+		return saitek;
+	}
 		
 }

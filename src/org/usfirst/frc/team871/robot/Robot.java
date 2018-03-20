@@ -29,6 +29,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -93,8 +94,8 @@ public class Robot extends IterativeRobot {
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("RStart"));
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LScaleRSwitch"));
 		
-//		CameraServer.getInstance().startAutomaticCapture(0);
-//		CameraServer.getInstance().startAutomaticCapture(1);
+		CameraServer.getInstance().startAutomaticCapture(0);
+		//CameraServer.getInstance().startAutomaticCapture(1);
 		
 		teensyWeensy = new Teensy();
 		teensyWeensy.setVolume(.9);

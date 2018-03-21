@@ -77,10 +77,10 @@ public class SubLift extends SendableBase implements Sendable {
 	 * @return returns true if encoder is successfully reset
 	 */
 	protected boolean maybeResetEncoder() {
-		System.out.println("upper? " + liftMotor.isAtUpperLimit());
-		System.out.println("lower? " + liftMotor.isAtLowerLimit());
+//		System.out.println("upper? " + liftMotor.isAtUpperLimit());
+//		System.out.println("lower? " + liftMotor.isAtLowerLimit());
 		if(liftMotor.isAtLowerLimit()) {
-			System.out.println("Resetttttttt YAAAASSSSS");
+//			System.out.println("Resetttttttt YAAAASSSSS");
 			encoder.reset();
 			return true;
 		}

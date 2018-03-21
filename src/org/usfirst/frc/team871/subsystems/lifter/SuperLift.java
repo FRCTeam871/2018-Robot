@@ -97,11 +97,11 @@ public class  SuperLift extends SendableBase implements Sendable {
 	 * @param setPoint Sets the height of the lift in inches above the floor
 	 */
 	public void setHeight(double setPoint) {
-		System.out.println("========================");
-		System.out.println("Lower");
+//		System.out.println("========================");
+//		System.out.println("Lower");
 		lowerLift.maybeResetEncoder();
-		System.out.println();
-		System.out.println("Upper");
+//		System.out.println();
+//		System.out.println("Upper");
 		upperLift.maybeResetEncoder();
 		
 		

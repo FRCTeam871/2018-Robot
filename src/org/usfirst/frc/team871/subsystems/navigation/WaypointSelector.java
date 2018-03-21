@@ -74,7 +74,7 @@ public class WaypointSelector {
 	public WaypointProvider findPath(WaypointPosition start, WaypointPosition end, WaypointSide side) {
     	
 		Optional<WaypointArrayPositionWrapper> path = paths.stream().filter((t) -> {
-			return t.getStartPosition() == start && t.getEndPosition() == end && t.getSide() == side;
+			return t.getStartPosition() == start && t.getEndPosition() == end && (t.getSide() == null || t.getSide() == side);
 		}).findFirst();
 		
 		if(path.isPresent()) {
@@ -87,6 +87,7 @@ public class WaypointSelector {
 		return null;
 	}
 	
+	
 	public boolean isOfflimits(WaypointPosition wp) {
 		return offLimits.get(wp);
 	}
@@ -94,12 +95,19 @@ public class WaypointSelector {
 	public void setupConfiguration() {
 		String config = DriverStation.getInstance().getGameSpecificMessage(); // LRL RLR LLL RRR
 		
+		System.out.println(config);
+		
 		offLimits.put(WaypointPosition.SWITCH_L, config.charAt(0) == 'R');
 		offLimits.put(WaypointPosition.SWITCH_R, config.charAt(0) == 'L');
-		offLimits.put(WaypointPosition.SCALE_L, config.charAt(0) == 'R');
-		offLimits.put(WaypointPosition.SCALE_R, config.charAt(0) == 'L');
+		offLimits.put(WaypointPosition.SCALE_L, config.charAt(1) == 'R');
+		offLimits.put(WaypointPosition.SCALE_R, config.charAt(1) == 'L');
 		
-		int startingPositionNumber = table.getEntry("startPos").getNumber(0).intValue();
+		for(WaypointPosition pos : offLimits.keySet()) {
+			System.out.println(pos + ": " + offLimits.get(pos));
+		}
+		
+		int startingPositionNumber = table.getEntry("startPos").getNumber(0).intValue() + 1;
+		System.out.println("start = " + startingPositionNumber);
 		
 		if(startingPositionNumber == 0) {
 			startingPosition = WaypointPosition.START_L;

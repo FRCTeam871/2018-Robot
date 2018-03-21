@@ -12,7 +12,7 @@ public enum Sound {
 	NEVER_GONNA_GIVE_YOU_UP("music/rick.wav"),
 	DK_UP("sfx/dk1.wav"),
 	GALAGA_SPIDER("sfx/galaga1.wav"),
-	GALAGA_CELEBRATE("sfx/galaga2"),
+	GALAGA_CELEBRATE("sfx/galaga2.wav"),
 	MARIO_JINGLE("sfx/mario1.wav"),
 	XEVIOUS_BOMB("sfx/xev1.wav"),
 	LEEROY_JENKINS("memes/leeroy.wav"),

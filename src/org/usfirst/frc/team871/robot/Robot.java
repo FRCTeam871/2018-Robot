@@ -27,6 +27,8 @@ import org.usfirst.frc.team871.util.config.SuperSaitekControlScheme;
 import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 import org.usfirst.frc.team871.util.control.LimitedSpeedController;
+import org.usfirst.frc.team871.util.joystick.SaitekButtons;
+import org.usfirst.frc.team871.util.joystick.SaitekX52;
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -106,8 +108,8 @@ public class Robot extends IterativeRobot {
 		teensyWeensy.setVolume(.9);
 		teensyWeensy.playSound(Sound.STARTUP);
 		
-		teensyWeensy.setPixelStripMode(4, PixelStripMode.DISABLED);
-		teensyWeensy.setPixelStripMode(5, PixelStripMode.DISABLED);
+		teensyWeensy.setPixelStripMode(4, PixelStripMode.RAINBOW);
+		teensyWeensy.setPixelStripMode(5, PixelStripMode.RAINBOW);
 		
 	}
 
@@ -129,12 +131,46 @@ public class Robot extends IterativeRobot {
 			
 			teensyWeensy.playSound(s);
 		}
+		 
+		if(controls instanceof SuperSaitekControlScheme) {
+			SaitekX52 saitek = ((SuperSaitekControlScheme) controls).getSaitek();
+				
+			if(saitek.getDebouncedButton(SaitekButtons.SOUND_L_UP)) {
+				teensyWeensy.playSound(Sound.LEEROY_JENKINS);
+			}else if(saitek.getDebouncedButton(SaitekButtons.SOUND_L_DOWN)) {
+				teensyWeensy.playSound(Sound.IM_A_COMPUTER);
+			}else if(saitek.getDebouncedButton(SaitekButtons.SOUND_M_UP)) {
+				teensyWeensy.playSound(Sound.NEVER_GONNA_GIVE_YOU_UP);
+			}else if(saitek.getDebouncedButton(SaitekButtons.SOUND_M_DOWN)) {
+				teensyWeensy.playSound(Sound.TAKE_ON_ME);
+			}else if(saitek.getDebouncedButton(SaitekButtons.SOUND_R_UP)) {
+				teensyWeensy.playSound(Sound.TETRIS_THEME);
+			}else if(saitek.getDebouncedButton(SaitekButtons.SOUND_R_DOWN)) {
+				teensyWeensy.playSound(Sound.MARIO_JINGLE);
+			}
+			
+			if(saitek.getPOV() == 0) {
+			}
+			
+		}
 		
 		teensyWeensy.update();
 	}
 
 	@Override
 	public void autonomousInit() {
+		
+		teensyWeensy.playSound(Sound.LEEROY_JENKINS);
+		
+		new Thread(() -> {
+			try {
+				Thread.sleep(4000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			teensyWeensy.playSound(Sound.TETRIS_THEME);
+		}).start();
 		
 		pathFinder.setup();
 		

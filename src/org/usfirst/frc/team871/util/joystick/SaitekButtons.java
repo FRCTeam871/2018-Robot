@@ -56,7 +56,13 @@ public enum SaitekButtons {
     /**
      * The hat right button.
      */
-    HAT_RIGHT(25);
+    HAT_RIGHT(25),
+    SOUND_L_UP(9),
+    SOUND_L_DOWN(10),
+    SOUND_M_UP(11),
+    SOUND_M_DOWN(12),
+    SOUND_R_UP(13),
+    SOUND_R_DOWN(14);
     
     /**
 	 * the value

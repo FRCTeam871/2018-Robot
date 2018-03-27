@@ -106,14 +106,23 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 	public void driveFieldOriented(double x, double y, double r) {
 		lastXInput = x;
 		lastYInput = y;
-		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0), -gyro.getAngle());
+		float offset = (float)SmartDashboard.getNumber("DB/Slider 0", 0)/5f - 0.5f;
+		offset *= Math.sqrt(x*x + y*y);
+		if(x < 0) offset *= -1;
+//		System.out.println("gyro offset = " + offset);
+		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0) + offset, -gyro.getAngle() + offset);
 	}
 	
 	@Override
 	public void drivePolar(double magnitude, double angle, double r) {
 		lastXInput = Math.cos(angle) * magnitude;
 		lastYInput = Math.sin(angle) * magnitude;
-		super.drivePolar(magnitude, angle, r + (headingPID.isEnabled() ? pidRotation : 0));
+		float offset = (float)SmartDashboard.getNumber("DB/Slider 0", 0)/5f - 0.5f;
+		
+		offset *= magnitude;
+		if(angle < -90 || angle > 90) offset *= -1;
+//		System.out.println("gyro offset = " + offset);
+		super.drivePolar(magnitude, angle, r + (headingPID.isEnabled() ? pidRotation : 0) + offset);
 	}
 
 	/**
@@ -125,7 +134,11 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 	public void driveRobotOriented(double x, double y, double r) {
 		lastXInput = x;
 		lastYInput = y;
-		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0));
+		float offset = (float)SmartDashboard.getNumber("DB/Slider 0", 0)/5f - 0.5f;
+		offset *= Math.sqrt(x*x + y*y);
+		if(x < 0) offset *= -1;
+//		System.out.println("gyro offset = " + offset);
+		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0) + offset);
 	}
 
 	public void setHeadingPIDEnabled(boolean enabled) {

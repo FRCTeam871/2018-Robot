@@ -16,6 +16,7 @@ import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
 import org.usfirst.frc.team871.subsystems.navigation.Coordinate;
 import org.usfirst.frc.team871.subsystems.navigation.IWaypointProvider;
 import org.usfirst.frc.team871.subsystems.navigation.Navigation;
+import org.usfirst.frc.team871.subsystems.navigation.RealFieldSetup;
 import org.usfirst.frc.team871.subsystems.navigation.WaypointProvider;
 import org.usfirst.frc.team871.subsystems.navigation.WaypointProviderFactory;
 import org.usfirst.frc.team871.subsystems.navigation.WaypointSelector;
@@ -96,7 +97,7 @@ public class Robot extends IterativeRobot {
 		
 		// Waypoints
 		WaypointProviderFactory.DEFAULT.init(grabber, lift, config);
-		pathFinder = new WaypointSelector(dashboardTable, WaypointProviderFactory.DEFAULT.getWrappers());
+		pathFinder = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), new RealFieldSetup(dashboardTable));
 		
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("RStart"));
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LScaleRSwitch"));

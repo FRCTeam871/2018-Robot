@@ -15,11 +15,11 @@ public class WaypointSelector {
 	private List<WaypointArrayPositionWrapper> paths;
 	private WaypointPosition startingPosition;
 	private WaypointPosition endingPosition;
-	private NetworkTable table;
+	private FieldSetup setup;
 	
-	public WaypointSelector(NetworkTable table, List<WaypointArrayPositionWrapper> paths) {
-		this.table = table;
+	public WaypointSelector(List<WaypointArrayPositionWrapper> paths, FieldSetup setup) {
 		this.paths = paths;
+		this.setup = setup;
 		
 		offLimits = new EnumMap<>(WaypointPosition.class);
 		positionSides = new EnumMap<>(WaypointPosition.class);
@@ -93,7 +93,8 @@ public class WaypointSelector {
 	}
 	
 	public void setupConfiguration() {
-		String config = DriverStation.getInstance().getGameSpecificMessage(); // LRL RLR LLL RRR
+		
+		String config = setup.getFieldConfiguration();
 		
 		System.out.println(config);
 		
@@ -106,7 +107,7 @@ public class WaypointSelector {
 			System.out.println(pos + ": " + offLimits.get(pos));
 		}
 		
-		int startingPositionNumber = table.getEntry("startPos").getNumber(0).intValue() + 1;
+		int startingPositionNumber = setup.getStartPosition();
 		System.out.println("start = " + startingPositionNumber);
 		
 		if(startingPositionNumber == 0) {
@@ -122,27 +123,27 @@ public class WaypointSelector {
 	public void determineOffLimits() {
 		
 		if(!offLimits.get(WaypointPosition.SWITCH_L)) {
-			offLimits.put(WaypointPosition.SWITCH_L, table.getEntry("lSwitchOffLimits").getBoolean(false));
+			offLimits.put(WaypointPosition.SWITCH_L, setup.getSwitchLOffLimits());
 		}
 		
 		if(!offLimits.get(WaypointPosition.SWITCH_R)) {
-			offLimits.put(WaypointPosition.SWITCH_R, table.getEntry("rSwitchOffLimits").getBoolean(false));
+			offLimits.put(WaypointPosition.SWITCH_R, setup.getSwitchROffLimits());
 		}
 		
 		if(!offLimits.get(WaypointPosition.SCALE_L)) {
-			offLimits.put(WaypointPosition.SCALE_L, table.getEntry("lScaleOffLimits").getBoolean(false));
+			offLimits.put(WaypointPosition.SCALE_L, setup.getScaleLOffLimits());
 		}
 		
 		if(!offLimits.get(WaypointPosition.SCALE_R)) {
-			offLimits.put(WaypointPosition.SCALE_R, table.getEntry("rScaleOffLimits").getBoolean(false));
+			offLimits.put(WaypointPosition.SCALE_R, setup.getScaleROffLimits());
 		}
 		
 	}
 	
 	public void determinePreferance() {
 		
-		positionSides.put(WaypointPosition.SWITCH_R, table.getEntry("isInboardSwitchR").getBoolean(false)? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
-		positionSides.put(WaypointPosition.SWITCH_L, table.getEntry("isInboardSwitchL").getBoolean(false)? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
+		positionSides.put(WaypointPosition.SWITCH_R, setup.getSwitchRInboard() ? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
+		positionSides.put(WaypointPosition.SWITCH_L, setup.getSwitchLInboard() ? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
 		
 	}
 	

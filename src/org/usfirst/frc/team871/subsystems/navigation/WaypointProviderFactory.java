@@ -24,16 +24,16 @@ public enum WaypointProviderFactory {
 
     public void init(Grabber grabber, SuperLift lift, IRobotConfiguration config) {
     	
-        Waypoint[] pts = new Waypoint[] {
-                new Waypoint(0, 0, 0, 0.3, new SetGrabberAction(grabber, true)),
-                new Waypoint(12 * 19, 0, 0, 0.6),
-                new Waypoint(12 * 19, (12 * 10) - 6, 0, 0.4, new LiftSetpointAction(lift, SuperLift.SetpointHeights.SCALE_MID)),
-                new Waypoint(12 * 19, 11 * 12, 0, 0.3, new SetGrabberAction(grabber, false)),
-                new Waypoint(12 * 19, (12 * 10) - 6, 0, 0.3, new LiftSetpointAction(lift, SuperLift.SetpointHeights.GROUND)),
-                new Waypoint(12 * 19, 0, 0, 0.4),
-                new Waypoint(-12, 0, 0, 0.6),
-                new Waypoint(0, 0, 0, 0.3, new TootTootAction(config.getTootToot()))
-        };
+//        Waypoint[] pts = new Waypoint[] {
+//                new Waypoint(0, 0, 0, 0.3, new SetGrabberAction(grabber, true)),
+//                new Waypoint(12 * 19, 0, 0, 0.6),
+//                new Waypoint(12 * 19, (12 * 10) - 6, 0, 0.4, new LiftSetpointAction(lift, SuperLift.SetpointHeights.SCALE_MID)),
+//                new Waypoint(12 * 19, 11 * 12, 0, 0.3, new SetGrabberAction(grabber, false)),
+//                new Waypoint(12 * 19, (12 * 10) - 6, 0, 0.3, new LiftSetpointAction(lift, SuperLift.SetpointHeights.GROUND)),
+//                new Waypoint(12 * 19, 0, 0, 0.4),
+//                new Waypoint(-12, 0, 0, 0.6),
+//                new Waypoint(0, 0, 0, 0.3, new TootTootAction(config.getTootToot()))
+//        };
 
         Waypoint lSwitchMiddle = new Waypoint(180, 55, 0, 0);
         Waypoint lSwitchMiddleInner = new Waypoint(180, 80, 0, 0);
@@ -56,7 +56,7 @@ public enum WaypointProviderFactory {
         Waypoint lCenterLineCloser = new Waypoint(12 * 21, 64, 0, 0);
         Waypoint rCenterLine = new Waypoint(12 * 21, 290, 0, 0);
         
-        addPath("WoodshopDrop", new WaypointArrayPositionWrapper(pts, null, null, null));
+//        addPath("WoodshopDrop", new WaypointArrayPositionWrapper(pts, null, null, null));
         
         addPath("LSwitch", new WaypointArrayPositionWrapper(new Waypoint[]{
         	new Waypoint(lSwitchMiddle, 0.7, new LiftSetpointAction(lift, SetpointHeights.LOW_SWITCH, true)),

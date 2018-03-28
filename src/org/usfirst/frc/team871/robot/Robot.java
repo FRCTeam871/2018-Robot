@@ -174,8 +174,9 @@ public class Robot extends IterativeRobot {
 		}).start();
 		
 		pathFinder.setup();
+		pathFinder.chooseEndpoint();
 		
-		WaypointProvider path = pathFinder.choosePath();
+		WaypointProvider path = pathFinder.getPath();
 		if(path != null) {
 			Coordinate startL = new Coordinate(33/2.0, 64);
 			Coordinate startM = new Coordinate(33/2.0, 160);

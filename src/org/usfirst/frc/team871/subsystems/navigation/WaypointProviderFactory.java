@@ -62,7 +62,7 @@ public enum WaypointProviderFactory {
         	new Waypoint(lSwitchMiddle, 0.7, new LiftSetpointAction(lift, SetpointHeights.LOW_SWITCH, true)),
         	new Waypoint(lSwitchMiddleInner, 0.3, new SetGrabberAction(grabber, false)),
         	new Waypoint(lSwitchMiddle, -0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND))
-        }, WaypointPosition.START_L, WaypointPosition.SWITCH_L, WaypointSide.OUTBOARD));
+        }, WaypointPosition.START_L, WaypointPosition.SWITCH_L, null));
         
         addPath("LAutoLine", new WaypointArrayPositionWrapper(new Waypoint[] {
         		new Waypoint(lCenterLine, 0.7, null),
@@ -192,31 +192,31 @@ public enum WaypointProviderFactory {
         
         //test paths
         
-        addPath("TestHome", new WaypointArrayPositionWrapper(new Waypoint[]{
-        		new Waypoint(33/2.0 - 4, 64, 0, 0.3),
-        		new Waypoint(33/2.0, 64, 0, 0.3)
-        }, null, null, null));
+//        addPath("TestHome", new WaypointArrayPositionWrapper(new Waypoint[]{
+//        		new Waypoint(33/2.0 - 4, 64, 0, 0.3),
+//        		new Waypoint(33/2.0, 64, 0, 0.3)
+//        }, null, null, null));
         
-        addPath("RStart", new WaypointArrayPositionWrapper(new Waypoint[] {
-        		new Waypoint(33/2.0, 260, 0, 0.3),
-        		new Waypoint(33/2.0 - 10, 260, 0, 0.3)
-        }, null, null, null));
+//        addPath("RStart", new WaypointArrayPositionWrapper(new Waypoint[] {
+//        		new Waypoint(33/2.0, 260, 0, 0.3),
+//        		new Waypoint(33/2.0 - 10, 260, 0, 0.3)
+//        }, null, null, null));
         
-        addPath("TestReverse", new WaypointArrayPositionWrapper(new Waypoint[]{
-        	new Waypoint(12 * 12, 0, 0, 0.3),
-        	new Waypoint(0, 0, 0, -0.3)
-        }, null, null, null));
+//        addPath("TestReverse", new WaypointArrayPositionWrapper(new Waypoint[]{
+//        	new Waypoint(12 * 12, 0, 0, 0.3),
+//        	new Waypoint(0, 0, 0, -0.3)
+//        }, null, null, null));
         
-        addPath("TestReverse2", new WaypointArrayPositionWrapper(new Waypoint[]{
-        		new Waypoint(0, 12 * 4, 0, 0.3),
-        		new Waypoint(0, 0, 0, -0.3),
-            	new Waypoint(0, -12 * 4, 0, 0.3),
-            	new Waypoint(0, 0, 0, -0.3),
-            	new Waypoint(12*3, -12 * 4, 0, 0.3),
-            	new Waypoint(0, 0, 0, -0.3),
-            	new Waypoint(12*1, 12 * 4, 0, 0.3),
-            	new Waypoint(0, 0, 0, -0.3)
-            }, null, null, null));
+//        addPath("TestReverse2", new WaypointArrayPositionWrapper(new Waypoint[]{
+//        		new Waypoint(0, 12 * 4, 0, 0.3),
+//        		new Waypoint(0, 0, 0, -0.3),
+//            	new Waypoint(0, -12 * 4, 0, 0.3),
+//            	new Waypoint(0, 0, 0, -0.3),
+//            	new Waypoint(12*3, -12 * 4, 0, 0.3),
+//            	new Waypoint(0, 0, 0, -0.3),
+//            	new Waypoint(12*1, 12 * 4, 0, 0.3),
+//            	new Waypoint(0, 0, 0, -0.3)
+//            }, null, null, null));
         
         initialized = true;
     }

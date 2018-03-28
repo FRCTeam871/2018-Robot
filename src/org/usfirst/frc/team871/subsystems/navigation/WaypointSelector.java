@@ -29,7 +29,7 @@ public class WaypointSelector {
 		}
 	}
 
-	public WaypointProvider choosePath() {
+	public WaypointPosition chooseEndpoint() {
 		if(startingPosition == WaypointPosition.START_L) {
 			if(!isOfflimits(WaypointPosition.SCALE_L)) {
 				endingPosition = WaypointPosition.SCALE_L;
@@ -68,6 +68,13 @@ public class WaypointSelector {
 			}
 		
 		}
+		
+		System.out.println("chooseEndpoint " + startingPosition + " " + endingPosition);
+		
+		return endingPosition;
+	}
+	
+	public WaypointProvider getPath() {
 		return findPath(startingPosition, endingPosition, positionSides.get(endingPosition));
 	}
 	
@@ -80,7 +87,7 @@ public class WaypointSelector {
 		if(path.isPresent()) {
 			WaypointArrayPositionWrapper way = path.get();
 			System.out.println("findPath(" + start + ", " + end + ", " + side + ") returning " + way.getName());
-			return new WaypointProvider(way.getWaypoints());
+			return new WaypointProvider(way.getName(), way.getWaypoints());
 		}
 		
 		System.out.println("findPath(" + start + ", " + end + ", " + side + ") returning null");
@@ -90,6 +97,10 @@ public class WaypointSelector {
 	
 	public boolean isOfflimits(WaypointPosition wp) {
 		return offLimits.get(wp);
+	}
+	
+	public WaypointSide getSide(WaypointPosition wp) {
+		return positionSides.get(wp);
 	}
 	
 	public void setupConfiguration() {
@@ -141,7 +152,6 @@ public class WaypointSelector {
 	}
 	
 	public void determinePreferance() {
-		
 		positionSides.put(WaypointPosition.SWITCH_R, setup.getSwitchRInboard() ? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
 		positionSides.put(WaypointPosition.SWITCH_L, setup.getSwitchLInboard() ? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
 		

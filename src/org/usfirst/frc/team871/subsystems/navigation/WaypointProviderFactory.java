@@ -162,13 +162,13 @@ public enum WaypointProviderFactory {
         		new Waypoint(36, 160, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.LOW_SWITCH, true)),
         		new Waypoint(110, 107, 0, 0.6),
                 new Waypoint(120 + 24, 107, 0, 0.3, new SetGrabberAction(grabber, false))
-        }, WaypointPosition.START_M, WaypointPosition.SWITCH_L, WaypointSide.INBOARD));
+        }, WaypointPosition.START_M, WaypointPosition.SWITCH_L, null));
 
         addPath("MStartRSwitch", new WaypointArrayPositionWrapper(new Waypoint[]{
         		new Waypoint(36, 160, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.LOW_SWITCH, true)),
         		new Waypoint(110, 210, 0, 0.6),
                 new Waypoint(120 + 24, 210, 0, 0.3, new SetGrabberAction(grabber, false))
-        }, WaypointPosition.START_M, WaypointPosition.SWITCH_R, WaypointSide.INBOARD));
+        }, WaypointPosition.START_M, WaypointPosition.SWITCH_R, null));
         
         addPath("MAutoLine", new WaypointArrayPositionWrapper(new Waypoint[]{ // goes to the right
         		new Waypoint(36, 160, 0, 0.3),
@@ -181,14 +181,14 @@ public enum WaypointProviderFactory {
         		new Waypoint(lSwitchMiddle, 0.7, new LiftSetpointAction(lift, SetpointHeights.LOW_SWITCH, true)),
         		new Waypoint(lSwitchMiddleInner, 0.3, new SetGrabberAction(grabber, false)),
         		new Waypoint(lSwitchMiddle, -0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND)),
-        }, WaypointPosition.START_M, WaypointPosition.SCALE_L, WaypointSide.INBOARD));
+        }, WaypointPosition.START_M, WaypointPosition.SCALE_L, null));
 
         addPath("MStartRScale", new WaypointArrayPositionWrapper(new Waypoint[]{
         		new Waypoint(140 - 24, 244, 0, 0.6, new LiftSetpointAction(lift, SetpointHeights.LOW_SWITCH)),
                 new Waypoint(rSwitchMiddle, 0.7, new LiftSetpointAction(lift, SetpointHeights.LOW_SWITCH, true)),
             	new Waypoint(rSwitchMiddleInner, 0.3, new SetGrabberAction(grabber, false)),
             	new Waypoint(rSwitchMiddle, -0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND)),
-        }, WaypointPosition.START_M, WaypointPosition.SCALE_R, WaypointSide.INBOARD));
+        }, WaypointPosition.START_M, WaypointPosition.SCALE_R, null));
         
         //test paths
         

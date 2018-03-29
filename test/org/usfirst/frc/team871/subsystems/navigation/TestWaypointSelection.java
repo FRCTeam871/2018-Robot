@@ -181,38 +181,70 @@ public class TestWaypointSelection {
 	}
 	
 	final List<TestCase> cases = Arrays.asList(new TestCase[] {
-			new TestCase("LLL", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 0, WaypointPosition.SCALE_L, "LScale"),
-			new TestCase("LLL", new boolean[] { true, false, false, false}, new boolean[] { false, false }, 0, WaypointPosition.SWITCH_L, "LSwitch"),
-			new TestCase("LLL", new boolean[] { true, false, true, false}, new boolean[] { false, false }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
-			new TestCase("LLL", new boolean[] { false, false, true, false}, new boolean[] { false, false }, 0, WaypointPosition.SCALE_L, "LScale"),
-			new TestCase("LLL", new boolean[] { false, false, false, false}, new boolean[] { false, true }, 0, WaypointPosition.SCALE_L, "LScale"),
-			new TestCase("LLL", new boolean[] { true, false, false, false}, new boolean[] { false, true }, 0, WaypointPosition.SWITCH_L, "LSwitch"),
-			new TestCase("LLL", new boolean[] { true, false, true, false}, new boolean[] { false, true }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
-			new TestCase("LLL", new boolean[] { false, false, true, false}, new boolean[] { false, true }, 0, WaypointPosition.SCALE_L, "LScale"),
+					//	 Field,                 LSc  , RSc  , LSw  , RSw                   , RIB,   LIB,    SP  , Correct End,             Corr Path
+			new TestCase("LLL", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 0, WaypointPosition.SCALE_L   , "LScale"),
+			new TestCase("LLL", new boolean[] { true , false, false, false}, new boolean[] { false, false }, 0, WaypointPosition.SWITCH_L  , "LSwitch"),
+			new TestCase("LLL", new boolean[] { true , false, true , false}, new boolean[] { false, false }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
+			new TestCase("LLL", new boolean[] { false, false, true , false}, new boolean[] { false, false }, 0, WaypointPosition.SCALE_L   , "LScale"),
+			new TestCase("LLL", new boolean[] { false, false, false, false}, new boolean[] { false, true  }, 0, WaypointPosition.SCALE_L   , "LScale"),
+			new TestCase("LLL", new boolean[] { true , false, false, false}, new boolean[] { false, true  }, 0, WaypointPosition.SWITCH_L  , "LSwitch"),
+			new TestCase("LLL", new boolean[] { true , false, true , false}, new boolean[] { false, true  }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
+			new TestCase("LLL", new boolean[] { false, false, true , false}, new boolean[] { false, true  }, 0, WaypointPosition.SCALE_L   , "LScale"),
 			
-			new TestCase("LLL", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 2, WaypointPosition.SCALE_L, "RStartLScale"),
-			new TestCase("LLL", new boolean[] { false, false, false, false}, new boolean[] { false, true }, 2, WaypointPosition.SCALE_L, "RStartLScale"),
-			new TestCase("LLL", new boolean[] { true, false, false, false}, new boolean[] { false, false }, 2, WaypointPosition.SWITCH_L, "RStartLSwitch"),
-			new TestCase("LLL", new boolean[] { true, false, false, false}, new boolean[] { false, true }, 2, WaypointPosition.SWITCH_L, "RStartLSwitchDirect"),
-			new TestCase("LLL", new boolean[] { true, false, true, false}, new boolean[] { false, false }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
-			new TestCase("LLL", new boolean[] { true, false, true, false}, new boolean[] { false, true }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
-			new TestCase("LLL", new boolean[] { false, false, true, false}, new boolean[] { false, false }, 2, WaypointPosition.SCALE_L, "RStartLScale"),
-			new TestCase("LLL", new boolean[] { false, false, true, false}, new boolean[] { false, true }, 2, WaypointPosition.SCALE_L, "RStartLScale"),
+			new TestCase("LLL", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 1, WaypointPosition.SWITCH_L  , "MStartLSwitch"),
+			new TestCase("LLL", new boolean[] { true , false, false, false}, new boolean[] { false, false }, 1, WaypointPosition.SWITCH_L  , "MStartLSwitch"),
+			new TestCase("LLL", new boolean[] { true , false, true , false}, new boolean[] { false, false }, 1, WaypointPosition.AUTOLINE_M, "MAutoLine"),
+			new TestCase("LLL", new boolean[] { false, false, true , false}, new boolean[] { false, false }, 1, WaypointPosition.SCALE_L   , "MStartLScale"),
+			new TestCase("LLL", new boolean[] { false, false, false, false}, new boolean[] { false, true  }, 1, WaypointPosition.SWITCH_L  , "MStartLSwitch"),
+			new TestCase("LLL", new boolean[] { true , false, false, false}, new boolean[] { false, true  }, 1, WaypointPosition.SWITCH_L  , "MStartLSwitch"),
+			new TestCase("LLL", new boolean[] { true , false, true , false}, new boolean[] { false, true  }, 1, WaypointPosition.AUTOLINE_M, "MAutoLine"),
+			new TestCase("LLL", new boolean[] { false, false, true , false}, new boolean[] { false, true  }, 1, WaypointPosition.SCALE_L   , "MStartLScale"),
 			
-			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { false, false } , 2, WaypointPosition.SCALE_R, "RScale"),
-			new TestCase("RRR", new boolean[] { false, true, false, false}, new boolean[] { false, false }  , 2, WaypointPosition.SWITCH_R, "RSwitch"),
-			new TestCase("RRR", new boolean[] { false, true, false, true}, new boolean[] { false, false }   , 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
-			new TestCase("RRR", new boolean[] { false, false, false, true}, new boolean[] { false, false }  , 2, WaypointPosition.SCALE_R, "RScale"),
+			new TestCase("LLL", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 2, WaypointPosition.SCALE_L   , "RStartLScale"),
+			new TestCase("LLL", new boolean[] { false, false, false, false}, new boolean[] { false, true  }, 2, WaypointPosition.SCALE_L   , "RStartLScale"),
+			new TestCase("LLL", new boolean[] { true , false, false, false}, new boolean[] { false, false }, 2, WaypointPosition.SWITCH_L  , "RStartLSwitch"),
+			new TestCase("LLL", new boolean[] { true , false, false, false}, new boolean[] { false, true  }, 2, WaypointPosition.SWITCH_L  , "RStartLSwitchDirect"),
+			new TestCase("LLL", new boolean[] { true , false, true , false}, new boolean[] { false, false }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
+			new TestCase("LLL", new boolean[] { true , false, true , false}, new boolean[] { false, true  }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
+			new TestCase("LLL", new boolean[] { false, false, true , false}, new boolean[] { false, false }, 2, WaypointPosition.SCALE_L   , "RStartLScale"),
+			new TestCase("LLL", new boolean[] { false, false, true , false}, new boolean[] { false, true  }, 2, WaypointPosition.SCALE_L   , "RStartLScale"),
 			
-			new TestCase("LRL", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 0, WaypointPosition.SWITCH_L, "LSwitch"),
-			new TestCase("LRL", new boolean[] { false, false, true, false}, new boolean[] { false, false }, 0, WaypointPosition.SCALE_R, "LStartRScale"),
-			new TestCase("LRL", new boolean[] { false, true, true, false}, new boolean[] { false, false }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
-			new TestCase("LRL", new boolean[] { false, true, false, false}, new boolean[] { false, false }, 0, WaypointPosition.SWITCH_L, "LSwitch"),
+			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 2, WaypointPosition.SCALE_R   , "RScale"),
+			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { false, false }, 2, WaypointPosition.SWITCH_R  , "RSwitch"),
+			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { false, false }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
+			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { false, false }, 2, WaypointPosition.SCALE_R   , "RScale"),
+			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { false, true  }, 2, WaypointPosition.SCALE_R   , "RScale"),
+			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { false, true  }, 2, WaypointPosition.SWITCH_R  , "RSwitch"),
+			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { false, true  }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
+			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { false, true  }, 2, WaypointPosition.SCALE_R   , "RScale"),
 			
-			new TestCase("RLR", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 2, WaypointPosition.SWITCH_R, "RSwitch"),
-			new TestCase("RLR", new boolean[] { false, false, false, true}, new boolean[] { false, false }, 2, WaypointPosition.SCALE_L, "RStartLScale"),
-			new TestCase("RLR", new boolean[] { true, false, false, true}, new boolean[] { false, false }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
-			new TestCase("RLR", new boolean[] { true, false, false, false}, new boolean[] { false, false }, 2, WaypointPosition.SWITCH_R, "RSwitch"),
+			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 1, WaypointPosition.SWITCH_R  , "MStartRSwitch"),
+			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { false, false }, 1, WaypointPosition.SWITCH_R  , "MStartRSwitch"),
+			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { false, false }, 1, WaypointPosition.AUTOLINE_M, "MAutoLine"),
+			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { false, false }, 1, WaypointPosition.SCALE_R   , "MStartRScale"),
+			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { false, true  }, 1, WaypointPosition.SWITCH_R  , "MStartRSwitch"),
+			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { false, true  }, 1, WaypointPosition.SWITCH_R  , "MStartRSwitch"),
+			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { false, true  }, 1, WaypointPosition.AUTOLINE_M, "MAutoLine"),
+			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { false, true  }, 1, WaypointPosition.SCALE_R   , "MStartRScale"),
+			
+			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 0, WaypointPosition.SCALE_R   , "LStartRScale"),
+			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { false, false }, 0, WaypointPosition.SWITCH_R  , "LStartRSwitch"),
+			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { false, false }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
+			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { false, false }, 0, WaypointPosition.SCALE_R   , "LStartRScale"),
+			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { false, true  }, 0, WaypointPosition.SCALE_R   , "LStartRScale"),
+			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { false, true  }, 0, WaypointPosition.SWITCH_R  , "LStartRSwitchDirect"),
+			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { false, true  }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
+			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { false, true  }, 0, WaypointPosition.SCALE_R   , "LStartRScale"),
+			
+			new TestCase("LRL", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 0, WaypointPosition.SWITCH_L  , "LSwitch"),
+			new TestCase("LRL", new boolean[] { false, false, true , false}, new boolean[] { false, false }, 0, WaypointPosition.SCALE_R   , "LStartRScale"),
+			new TestCase("LRL", new boolean[] { false, true , true , false}, new boolean[] { false, false }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
+			new TestCase("LRL", new boolean[] { false, true , false, false}, new boolean[] { false, false }, 0, WaypointPosition.SWITCH_L  , "LSwitch"),
+			
+			new TestCase("RLR", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 2, WaypointPosition.SWITCH_R  , "RSwitch"),
+			new TestCase("RLR", new boolean[] { false, false, false, true }, new boolean[] { false, false }, 2, WaypointPosition.SCALE_L   , "RStartLScale"),
+			new TestCase("RLR", new boolean[] { true , false, false, true }, new boolean[] { false, false }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
+			new TestCase("RLR", new boolean[] { true , false, false, false}, new boolean[] { false, false }, 2, WaypointPosition.SWITCH_R  , "RSwitch"),
 	});
 	
 	@Test
@@ -224,6 +256,7 @@ public class TestWaypointSelection {
 			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
 			ws1.setup();
 			Assert.assertEquals(t.end, ws1.chooseEndpoint());
+			Assert.assertNotNull(ws1.getPath());
 			Assert.assertEquals(t.path, ws1.getPath().getName());
 		}
 		

@@ -47,9 +47,13 @@ public class WaypointSelector {
 		}else if(startingPosition == WaypointPosition.START_M) {
 			if(!isOfflimits(WaypointPosition.SWITCH_L)) {
 				endingPosition = WaypointPosition.SWITCH_L;
-			}else if(!isOfflimits(WaypointPosition.SWITCH_R)) {
+			} else if(!isOfflimits(WaypointPosition.SWITCH_R)) {
 				endingPosition = WaypointPosition.SWITCH_R;
-			}else {
+			} else if(!isOfflimits(WaypointPosition.SCALE_L)) {
+				endingPosition = WaypointPosition.SCALE_L;
+			} else if(!isOfflimits(WaypointPosition.SCALE_R)) {
+				endingPosition = WaypointPosition.SCALE_R;
+			} else {
 				endingPosition = WaypointPosition.AUTOLINE_M;
 			}
 		}else if (startingPosition == WaypointPosition.START_R){

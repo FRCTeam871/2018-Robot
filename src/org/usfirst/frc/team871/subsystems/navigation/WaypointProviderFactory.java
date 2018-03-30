@@ -99,14 +99,14 @@ public enum WaypointProviderFactory {
         		new Waypoint(rSwitchMiddle, 0.7, new LiftSetpointAction(lift, SetpointHeights.LOW_SWITCH, true)),
             	new Waypoint(rSwitchMiddleInner, 0.3, new SetGrabberAction(grabber, false)),
             	new Waypoint(rSwitchMiddle, -0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND))
-        }, WaypointPosition.START_R, WaypointPosition.SWITCH_R, WaypointSide.OUTBOARD));
+        }, WaypointPosition.START_R, WaypointPosition.SWITCH_R, null));
 
         addPath("RScale", new WaypointArrayPositionWrapper(new Waypoint[]{ //y=287
         		new Waypoint(rScale, 0.7, null),
     			new Waypoint(328, 324 - 40, 0, 0.3, new LiftSetpointAction(lift, SetpointHeights.SCALE_HIGH, true)),
     			new Waypoint(rScaleInner, 0.3, new SetGrabberAction(grabber, false)),
     			new Waypoint(rScale, -0.3, new LiftSetpointAction(lift, SetpointHeights.GROUND))
-        }, WaypointPosition.START_R, WaypointPosition.SCALE_R, WaypointSide.INBOARD));
+        }, WaypointPosition.START_R, WaypointPosition.SCALE_R, null));
 
         addPath("RAutoLine", new WaypointArrayPositionWrapper(new Waypoint[] {
         		new Waypoint(rCenterLine, 0.7, null),
@@ -172,7 +172,7 @@ public enum WaypointProviderFactory {
         
         addPath("MAutoLine", new WaypointArrayPositionWrapper(new Waypoint[]{ // goes to the right
         		new Waypoint(36, 160, 0, 0.3),
-        }, WaypointPosition.START_M, WaypointPosition.AUTOLINE_M, WaypointSide.INBOARD));
+        }, WaypointPosition.START_M, WaypointPosition.AUTOLINE_M, null));
         
         // untested (not needed)
         

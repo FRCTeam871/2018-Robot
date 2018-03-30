@@ -158,7 +158,6 @@ public class WaypointSelector {
 	public void determinePreferance() {
 		positionSides.put(WaypointPosition.SWITCH_R, setup.getSwitchRInboard() ? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
 		positionSides.put(WaypointPosition.SWITCH_L, setup.getSwitchLInboard() ? WaypointSide.INBOARD : WaypointSide.OUTBOARD);
-		
 	}
 	
 	public void setup() {

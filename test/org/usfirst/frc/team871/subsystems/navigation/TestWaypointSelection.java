@@ -213,38 +213,82 @@ public class TestWaypointSelection {
 			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { false, false }, 2, WaypointPosition.SWITCH_R  , "RSwitch"),
 			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { false, false }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
 			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { false, false }, 2, WaypointPosition.SCALE_R   , "RScale"),
-			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { false, true  }, 2, WaypointPosition.SCALE_R   , "RScale"),
-			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { false, true  }, 2, WaypointPosition.SWITCH_R  , "RSwitch"),
-			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { false, true  }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
-			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { false, true  }, 2, WaypointPosition.SCALE_R   , "RScale"),
+			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { true, false  }, 2, WaypointPosition.SCALE_R   , "RScale"),
+			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { true, false  }, 2, WaypointPosition.SWITCH_R  , "RSwitch"),
+			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { true, false  }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
+			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { true, false  }, 2, WaypointPosition.SCALE_R   , "RScale"),
 			
 			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 1, WaypointPosition.SWITCH_R  , "MStartRSwitch"),
 			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { false, false }, 1, WaypointPosition.SWITCH_R  , "MStartRSwitch"),
 			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { false, false }, 1, WaypointPosition.AUTOLINE_M, "MAutoLine"),
 			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { false, false }, 1, WaypointPosition.SCALE_R   , "MStartRScale"),
-			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { false, true  }, 1, WaypointPosition.SWITCH_R  , "MStartRSwitch"),
-			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { false, true  }, 1, WaypointPosition.SWITCH_R  , "MStartRSwitch"),
-			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { false, true  }, 1, WaypointPosition.AUTOLINE_M, "MAutoLine"),
-			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { false, true  }, 1, WaypointPosition.SCALE_R   , "MStartRScale"),
+			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { true , false }, 1, WaypointPosition.SWITCH_R  , "MStartRSwitch"),
+			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { true , false }, 1, WaypointPosition.SWITCH_R  , "MStartRSwitch"),
+			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { true , false }, 1, WaypointPosition.AUTOLINE_M, "MAutoLine"),
+			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { true , false }, 1, WaypointPosition.SCALE_R   , "MStartRScale"),
 			
 			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 0, WaypointPosition.SCALE_R   , "LStartRScale"),
 			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { false, false }, 0, WaypointPosition.SWITCH_R  , "LStartRSwitch"),
 			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { false, false }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
 			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { false, false }, 0, WaypointPosition.SCALE_R   , "LStartRScale"),
-			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { false, true  }, 0, WaypointPosition.SCALE_R   , "LStartRScale"),
-			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { false, true  }, 0, WaypointPosition.SWITCH_R  , "LStartRSwitchDirect"),
-			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { false, true  }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
-			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { false, true  }, 0, WaypointPosition.SCALE_R   , "LStartRScale"),
+			new TestCase("RRR", new boolean[] { false, false, false, false}, new boolean[] { true , false }, 0, WaypointPosition.SCALE_R   , "LStartRScale"),
+			new TestCase("RRR", new boolean[] { false, true , false, false}, new boolean[] { true , false }, 0, WaypointPosition.SWITCH_R  , "LStartRSwitchDirect"),
+			new TestCase("RRR", new boolean[] { false, true , false, true }, new boolean[] { true , false }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
+			new TestCase("RRR", new boolean[] { false, false, false, true }, new boolean[] { true , false }, 0, WaypointPosition.SCALE_R   , "LStartRScale"),
 			
 			new TestCase("LRL", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 0, WaypointPosition.SWITCH_L  , "LSwitch"),
 			new TestCase("LRL", new boolean[] { false, false, true , false}, new boolean[] { false, false }, 0, WaypointPosition.SCALE_R   , "LStartRScale"),
 			new TestCase("LRL", new boolean[] { false, true , true , false}, new boolean[] { false, false }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
-			new TestCase("LRL", new boolean[] { false, true , false, false}, new boolean[] { false, false }, 0, WaypointPosition.SWITCH_L  , "LSwitch"),
+			new TestCase("LRL", new boolean[] { false, true , false, false}, new boolean[] { false, false }, 0, WaypointPosition.SWITCH_L  , "LSwitch"),			
+			new TestCase("LRL", new boolean[] { false, false, false, false}, new boolean[] { false, true  }, 0, WaypointPosition.SWITCH_L  , "LSwitch"),
+			new TestCase("LRL", new boolean[] { false, false, true , false}, new boolean[] { false, true  }, 0, WaypointPosition.SCALE_R   , "LStartRScale"),
+			new TestCase("LRL", new boolean[] { false, true , true , false}, new boolean[] { false, true  }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
+			new TestCase("LRL", new boolean[] { false, true , false, false}, new boolean[] { false, true  }, 0, WaypointPosition.SWITCH_L  , "LSwitch"),
+			
+			new TestCase("LRL", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 1, WaypointPosition.SWITCH_L  , "MStartLSwitch"),
+			new TestCase("LRL", new boolean[] { false, false, true , false}, new boolean[] { false, false }, 1, WaypointPosition.SCALE_R   , "MStartRScale"),
+			new TestCase("LRL", new boolean[] { false, true , true , false}, new boolean[] { false, false }, 1, WaypointPosition.AUTOLINE_M, "MAutoLine"),
+			new TestCase("LRL", new boolean[] { false, true , false, false}, new boolean[] { false, false }, 1, WaypointPosition.SWITCH_L  , "MStartLSwitch"),			
+			new TestCase("LRL", new boolean[] { false, false, false, false}, new boolean[] { false, true  }, 1, WaypointPosition.SWITCH_L  , "MStartLSwitch"),
+			new TestCase("LRL", new boolean[] { false, false, true , false}, new boolean[] { false, true  }, 1, WaypointPosition.SCALE_R   , "MStartRScale"),
+			new TestCase("LRL", new boolean[] { false, true , true , false}, new boolean[] { false, true  }, 1, WaypointPosition.AUTOLINE_M, "MAutoLine"),
+			new TestCase("LRL", new boolean[] { false, true , false, false}, new boolean[] { false, true  }, 1, WaypointPosition.SWITCH_L  , "MStartLSwitch"),
+			
+			new TestCase("LRL", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 2, WaypointPosition.SCALE_R   , "RScale"),
+			new TestCase("LRL", new boolean[] { false, false, true , false}, new boolean[] { false, false }, 2, WaypointPosition.SCALE_R   , "RScale"),
+			new TestCase("LRL", new boolean[] { false, true , true , false}, new boolean[] { false, false }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
+			new TestCase("LRL", new boolean[] { false, true , false, false}, new boolean[] { false, false }, 2, WaypointPosition.SWITCH_L  , "RStartLSwitch"),			
+			new TestCase("LRL", new boolean[] { false, false, false, false}, new boolean[] { false, true  }, 2, WaypointPosition.SCALE_R   , "RScale"),
+			new TestCase("LRL", new boolean[] { false, false, true , false}, new boolean[] { false, true  }, 2, WaypointPosition.SCALE_R   , "RScale"),
+			new TestCase("LRL", new boolean[] { false, true , true , false}, new boolean[] { false, true  }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
+			new TestCase("LRL", new boolean[] { false, true , false, false}, new boolean[] { false, true  }, 2, WaypointPosition.SWITCH_L  , "RStartLSwitchDirect"),
 			
 			new TestCase("RLR", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 2, WaypointPosition.SWITCH_R  , "RSwitch"),
 			new TestCase("RLR", new boolean[] { false, false, false, true }, new boolean[] { false, false }, 2, WaypointPosition.SCALE_L   , "RStartLScale"),
 			new TestCase("RLR", new boolean[] { true , false, false, true }, new boolean[] { false, false }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
 			new TestCase("RLR", new boolean[] { true , false, false, false}, new boolean[] { false, false }, 2, WaypointPosition.SWITCH_R  , "RSwitch"),
+			new TestCase("RLR", new boolean[] { false, false, false, false}, new boolean[] { true, false  }, 2, WaypointPosition.SWITCH_R  , "RSwitch"),
+			new TestCase("RLR", new boolean[] { false, false, false, true }, new boolean[] { true, false  }, 2, WaypointPosition.SCALE_L   , "RStartLScale"),
+			new TestCase("RLR", new boolean[] { true , false, false, true }, new boolean[] { true, false  }, 2, WaypointPosition.AUTOLINE_R, "RAutoLine"),
+			new TestCase("RLR", new boolean[] { true , false, false, false}, new boolean[] { true, false  }, 2, WaypointPosition.SWITCH_R  , "RSwitch"),
+			
+			new TestCase("RLR", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 1, WaypointPosition.SWITCH_R  , "MStartRSwitch"),
+			new TestCase("RLR", new boolean[] { false, false, false, true }, new boolean[] { false, false }, 1, WaypointPosition.SCALE_L   , "MStartLScale"),
+			new TestCase("RLR", new boolean[] { true , false, false, true }, new boolean[] { false, false }, 1, WaypointPosition.AUTOLINE_M, "MAutoLine"),
+			new TestCase("RLR", new boolean[] { true , false, false, false}, new boolean[] { false, false }, 1, WaypointPosition.SWITCH_R  , "MStartRSwitch"),
+			new TestCase("RLR", new boolean[] { false, false, false, false}, new boolean[] { true, false  }, 1, WaypointPosition.SWITCH_R  , "MStartRSwitch"),
+			new TestCase("RLR", new boolean[] { false, false, false, true }, new boolean[] { true, false  }, 1, WaypointPosition.SCALE_L   , "MStartLScale"),
+			new TestCase("RLR", new boolean[] { true , false, false, true }, new boolean[] { true, false  }, 1, WaypointPosition.AUTOLINE_M, "MAutoLine"),
+			new TestCase("RLR", new boolean[] { true , false, false, false}, new boolean[] { true, false  }, 1, WaypointPosition.SWITCH_R  , "MStartRSwitch"),
+			
+			new TestCase("RLR", new boolean[] { false, false, false, false}, new boolean[] { false, false }, 0, WaypointPosition.SCALE_L  , "LScale"),
+			new TestCase("RLR", new boolean[] { false, false, false, true }, new boolean[] { false, false }, 0, WaypointPosition.SCALE_L   , "LScale"),
+			new TestCase("RLR", new boolean[] { true , false, false, true }, new boolean[] { false, false }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
+			new TestCase("RLR", new boolean[] { true , false, false, false}, new boolean[] { false, false }, 0, WaypointPosition.SWITCH_R  , "LStartRSwitch"),
+			new TestCase("RLR", new boolean[] { false, false, false, false}, new boolean[] { true, false  }, 0, WaypointPosition.SCALE_L  , "LScale"),
+			new TestCase("RLR", new boolean[] { false, false, false, true }, new boolean[] { true, false  }, 0, WaypointPosition.SCALE_L  , "LScale"),
+			new TestCase("RLR", new boolean[] { true , false, false, true }, new boolean[] { true, false  }, 0, WaypointPosition.AUTOLINE_L, "LAutoLine"),
+			new TestCase("RLR", new boolean[] { true , false, false, false}, new boolean[] { true, false  }, 0, WaypointPosition.SWITCH_R  , "LStartRSwitchDirect"),
 	});
 	
 	@Test
@@ -259,295 +303,6 @@ public class TestWaypointSelection {
 			Assert.assertNotNull(ws1.getPath());
 			Assert.assertEquals(t.path, ws1.getPath().getName());
 		}
-		
-//		// Start L
-//		
-//		 // LLL
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LLL", false, false, false, false, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SCALE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LScale", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LLL", true, false, false, false, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SWITCH_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LSwitch", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LLL", false, false, true, false, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SCALE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LScale", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LLL", true, false, true, false, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LAutoLine", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LLL", true, true, true, false, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LAutoLine", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LLL", true, false, true, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LAutoLine", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LLL", true, true, true, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LAutoLine", ws1.getPath().getName());
-//		}
-//		
-//		 // RRR
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RRR", false, true, false, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LAutoLine", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RRR", false, true, false, false, true, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SWITCH_R, ws1.chooseEndpoint());
-//			Assert.assertEquals("LStartRSwitchDirect", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RRR", false, false, false, false, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SCALE_R, ws1.chooseEndpoint());
-//			Assert.assertEquals("LStartRScale", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RRR", false, true, false, false, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SWITCH_R, ws1.chooseEndpoint());
-//			Assert.assertEquals("LStartRSwitch", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RRR", false, true, false, false, true, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SWITCH_R, ws1.chooseEndpoint());
-//			Assert.assertEquals("LStartRSwitchDirect", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RRR", false, false, false, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SCALE_R, ws1.chooseEndpoint());
-//			Assert.assertEquals("LStartRScale", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RRR", false, true, false, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LAutoLine", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RRR", true, true, false, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LAutoLine", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RRR", false, true, true, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LAutoLine", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RRR", true, true, true, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LAutoLine", ws1.getPath().getName());
-//		}
-//		
-//		 // LRL
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LRL", false, true, true, false, false, true, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LAutoLine", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LRL", false, false, false, true, false, true, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SWITCH_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LSwitch", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LRL", false, false, false, false, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SWITCH_L, ws1.chooseEndpoint());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LRL", false, false, true, false, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SCALE_R, ws1.chooseEndpoint());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LRL", false, true, false, false, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SWITCH_L, ws1.chooseEndpoint());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LRL", false, true, true, false, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LRL", true, true, true, false, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LRL", false, true, true, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("LRL", true, true, true, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//		}
-//		
-//		 // RLR
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RLR", true, false, false, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LAutoLine", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RLR", false, false, false, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SCALE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LScale", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RLR", true, false, false, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//			Assert.assertEquals("LAutoLine", ws1.getPath().getName());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RLR", false, false, false, false, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SCALE_L, ws1.chooseEndpoint());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RLR", true, false, false, false, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SWITCH_R, ws1.chooseEndpoint());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RLR", false, false, false, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.SCALE_L, ws1.chooseEndpoint());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RLR", true, false, false, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RLR", true, true, false, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RLR", true, false, true, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//		}
-//		
-//		{
-//			FieldSetup setup1 = new ManualFieldSetup("RLR", true, true, true, true, false, false, 0);
-//			WaypointSelector ws1 = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), setup1);
-//			ws1.setup();
-//			Assert.assertEquals(WaypointPosition.AUTOLINE_L, ws1.chooseEndpoint());
-//		}
-//		
-//		// Start M
-//		
-//		// Start R
-//		
 	}
 	
 	

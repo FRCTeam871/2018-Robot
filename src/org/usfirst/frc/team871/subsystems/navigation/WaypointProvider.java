@@ -9,14 +9,24 @@ import java.util.*;
 public class WaypointProvider implements IWaypointProvider {
     private Iterator<Waypoint> it;
     private final List<Waypoint> waypointArrayList;
+    private String name;
 
-    public WaypointProvider(List<Waypoint> waypoints) {
+    public WaypointProvider(String name, List<Waypoint> waypoints) {
         this.waypointArrayList = waypoints;
         it = waypointArrayList.iterator();
+        this.name = name;
     }
-
+    
+    public WaypointProvider(List<Waypoint> waypoints) {
+    	this("No Name", waypoints);
+    }
+    
     public WaypointProvider(Waypoint... points) {
-        this(Arrays.asList(points));
+        this("No Name", Arrays.asList(points));
+    }
+    
+    public WaypointProvider(String name, Waypoint... points) {
+        this(name, Arrays.asList(points));
     }
 
     @Override
@@ -47,5 +57,9 @@ public class WaypointProvider implements IWaypointProvider {
         final List<Waypoint> reversed = new ArrayList<>(waypointArrayList);
         Collections.reverse(reversed);
         return new WaypointProvider(reversed);
+    }
+    
+    public String getName() {
+    	return name;
     }
 }

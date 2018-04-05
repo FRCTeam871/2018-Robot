@@ -15,6 +15,7 @@ import org.usfirst.frc.team871.subsystems.Teensy;
 import org.usfirst.frc.team871.subsystems.lifter.SuperLift;
 import org.usfirst.frc.team871.subsystems.navigation.Coordinate;
 import org.usfirst.frc.team871.subsystems.navigation.IWaypointProvider;
+import org.usfirst.frc.team871.subsystems.navigation.ManualFieldSetup;
 import org.usfirst.frc.team871.subsystems.navigation.Navigation;
 import org.usfirst.frc.team871.subsystems.navigation.RealFieldSetup;
 import org.usfirst.frc.team871.subsystems.navigation.WaypointProvider;
@@ -97,12 +98,14 @@ public class Robot extends IterativeRobot {
 		
 		// Waypoints
 		WaypointProviderFactory.DEFAULT.init(grabber, lift, config);
-		pathFinder = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), new RealFieldSetup(dashboardTable));
+		
+		pathFinder = new WaypointSelector(WaypointProviderFactory.DEFAULT.getWrappers(), new RealFieldSetup(dashboardTable)); 
 		
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("RStart"));
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LScaleRSwitch"));
 		
-		CameraServer.getInstance().startAutomaticCapture(0);
+		
+		CameraServer.getInstance().startAutomaticCapture(0); 
 		//CameraServer.getInstance().startAutomaticCapture(1);
 		
 		teensyWeensy = new Teensy();
@@ -174,8 +177,9 @@ public class Robot extends IterativeRobot {
 		}).start();
 		
 		pathFinder.setup();
+		pathFinder.chooseEndpoint();
 		
-		WaypointProvider path = pathFinder.choosePath();
+		WaypointProvider path = pathFinder.getPath();
 		if(path != null) {
 			Coordinate startL = new Coordinate(33/2.0, 64);
 			Coordinate startM = new Coordinate(33/2.0, 160);

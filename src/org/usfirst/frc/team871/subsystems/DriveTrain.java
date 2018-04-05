@@ -14,6 +14,7 @@ import org.usfirst.frc.team871.util.units.DistanceUnit;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -104,12 +105,14 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 	 * @param r Rotation of the Robot 
 	 */
 	public void driveFieldOriented(double x, double y, double r) {
+		table.getEntry("driveMode").setString("field oriented");
 		lastXInput = x;
 		lastYInput = y;
-		float offset = (float)SmartDashboard.getNumber("DB/Slider 0", 0)/5f - 0.5f;
+		double offset = table.getEntry("robotTrim").getDouble(0.0)/5f - .5;
 		offset *= Math.sqrt(x*x + y*y);
 		if(x < 0) offset *= -1;
-//		System.out.println("gyro offset = " + offset);
+		//System.out.println("gyro offset = " + offset);
+		offset = 0;
 		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0) + offset, -gyro.getAngle() + offset);
 	}
 	
@@ -122,6 +125,7 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 		offset *= magnitude;
 		if(angle < -90 || angle > 90) offset *= -1;
 //		System.out.println("gyro offset = " + offset);
+		offset = 0;
 		super.drivePolar(magnitude, angle, r + (headingPID.isEnabled() ? pidRotation : 0) + offset);
 	}
 
@@ -132,12 +136,15 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 	 * @param r Rotation of the Robot
 	 */
 	public void driveRobotOriented(double x, double y, double r) {
+		table.getEntry("driveMode").setString("robot oriented");
 		lastXInput = x;
 		lastYInput = y;
-		float offset = (float)SmartDashboard.getNumber("DB/Slider 0", 0)/5f - 0.5f;
+//		float offset = (float)SmartDashboard.getNumber("DB/Slider 0", 0)/5f - 0.5f;
+		double offset = table.getEntry("robotTrim").getDouble(0.0)/5f - .5;
 		offset *= Math.sqrt(x*x + y*y);
 		if(x < 0) offset *= -1;
-//		System.out.println("gyro offset = " + offset);
+		//System.out.println("gyro offset = " + offset);
+		offset = 0;
 		driveCartesian(y, x, r + (headingPID.isEnabled() ? pidRotation : 0) + offset);
 	}
 
@@ -168,6 +175,7 @@ public class DriveTrain extends MecanumDrive implements IDisplacementSensor, PID
 		 * Sets new x and y motor values to update the current location
 		 */
 		private void updatePosition() {
+			
 			SmartDashboard.putNumber("updStart", new Random().nextDouble());
 			SmartDashboard.putBoolean("enableIntegration", enableIntegration);
 			SmartDashboard.putNumber("tPrevious", tPrevious);

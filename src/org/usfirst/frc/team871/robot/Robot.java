@@ -158,6 +158,8 @@ public class Robot extends IterativeRobot {
 			
 		}
 		
+		
+		
 		teensyWeensy.update();
 	}
 
@@ -251,14 +253,6 @@ public class Robot extends IterativeRobot {
 		
 		lift.setTrim(controls.getUpperLiftTrim(), controls.getLowerLiftTrim());
 		
-//		if(controls.getPOV() ==  POVDirections.UP || controls.getPOV() ==  POVDirections.UP_RIGHT || controls.getPOV() ==  POVDirections.UP_LEFT) {
-//			lift.setTop();
-//		}
-//		
-//		if(controls.getPOV() ==  POVDirections.DOWN || controls.getPOV() ==  POVDirections.DOWN_RIGHT || controls.getPOV() ==  POVDirections.DOWN_LEFT) {
-//			lift.setBottom();
-//		}
-		
 		if(controls.getKickButton()) {
 			grabber.ejectCube();
 		}
@@ -279,6 +273,7 @@ public class Robot extends IterativeRobot {
 	 */
 	public void updateDashboard() {
 		lift.updateData();
+		dashboardTable.getEntry("liftMode").setString(controls.getManualLiftModeButton() ? "Manual" : "Automatic");
 		drive.updateData();
 	}
 }

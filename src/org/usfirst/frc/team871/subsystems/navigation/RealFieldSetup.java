@@ -17,13 +17,13 @@ public class RealFieldSetup implements FieldSetup {
 	}
 
 	@Override
-	public boolean getScaleLOffLimits() {
+	public boolean getScaleROffLimits() {
 		return table.getEntry("rScaleOffLimits").getBoolean(false);
 	}
 
 	@Override
-	public boolean getScaleROffLimits() {
-		return table.getEntry("rScaleOffLimits").getBoolean(false);
+	public boolean getScaleLOffLimits() {
+		return table.getEntry("lScaleOffLimits").getBoolean(false);
 	}
 
 	@Override

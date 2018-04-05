@@ -231,7 +231,7 @@ public class  SuperLift extends SendableBase implements Sendable {
 	public void updateData() {
 		lowerLift.updateData();
 		upperLift.updateData();
-		table.getEntry("liftMode").setString(ThrustmasterControlScheme.DEFAULT.getManualLiftModeButton() ? "Manual" : "Automatic");
+		
 	}
 
 	@Override

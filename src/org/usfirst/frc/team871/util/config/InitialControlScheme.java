@@ -118,5 +118,11 @@ public enum InitialControlScheme implements IControlScheme{
 		// TODO Auto-generated method stub
 		return false;
 	}
-		
+
+	@Override
+	public boolean getLifterResetButton() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 }

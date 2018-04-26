@@ -1,5 +1,6 @@
 package org.usfirst.frc.team871.subsystems.lifter;
 
+import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -25,6 +26,7 @@ public class SubLift extends SendableBase implements Sendable {
 	private double trim = 0;
 	private String name;
 	private NetworkTable table;
+	private IRobotConfiguration config;
 	
 	/**
 	 * Controls the bottom part of the lift
@@ -33,7 +35,8 @@ public class SubLift extends SendableBase implements Sendable {
 	 * @param table The network table to which height and encoder information will be posted.
 	 * The keys used will be [name]LiftTicks for encoder ticks and [name]LiftHeight for the height,
 	 */
-	SubLift(String name, CompositeLimitedSpeedController liftMotor, Encoder encoder, NetworkTable table) {
+	SubLift(String name, CompositeLimitedSpeedController liftMotor, Encoder encoder, NetworkTable table, IRobotConfiguration config) {
+		this.config = config;
 		this.liftMotor = liftMotor;
 		this.encoder = encoder;
 		this.name = name;
@@ -76,10 +79,10 @@ public class SubLift extends SendableBase implements Sendable {
 	 * Resets the encoder if it's at the lower limit.
 	 * @return returns true if encoder is successfully reset
 	 */
-	protected boolean maybeResetEncoder() {
+	protected boolean maybeResetEncoder(boolean pressed) {
 //		System.out.println("upper? " + liftMotor.isAtUpperLimit());
 //		System.out.println("lower? " + liftMotor.isAtLowerLimit());
-		if(liftMotor.isAtLowerLimit()) {
+		if(pressed) {
 //			System.out.println("Resetttttttt YAAAASSSSS");
 			encoder.reset();
 			return true;
@@ -139,7 +142,7 @@ public class SubLift extends SendableBase implements Sendable {
 	}
 
 	public boolean isAtSetpoint() {
-		pid.setAbsoluteTolerance(3);
+		pid.setAbsoluteTolerance(5);
 		return pid.onTarget();
 	}
 	
@@ -150,4 +153,5 @@ public class SubLift extends SendableBase implements Sendable {
 	public double getTrim() {
 		return trim;
 	}
+	
 }

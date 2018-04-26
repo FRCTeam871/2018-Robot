@@ -165,5 +165,9 @@ public class WaypointSelector {
 		determineOffLimits();
 		determinePreferance();
 	}
+	
+	public FieldSetup getFieldSetup() {
+		return setup;
+	}
 
 }

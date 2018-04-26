@@ -136,13 +136,11 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 
 	@Override
 	public DoubleSolenoid getGrabPiston() {
-		// TODO Auto-generated method stub
 		return grabPiston;
 	}
 
 	@Override
 	public DoubleSolenoid getEjectPiston() {
-		// TODO Auto-generated method stub
 		return ejectPiston;
 	}
 
@@ -153,25 +151,32 @@ public enum MainRobotConfiguration implements IRobotConfiguration {
 
 	@Override
 	public DigitalLimitSwitch getupperUpperLimit() {
-		// TODO Auto-generated method stub
 		return upperUpperLimit;
 	}
 
 	@Override
 	public DigitalLimitSwitch getupperLowerLimit() {
-		// TODO Auto-generated method stub
 		return upperLowerLimit;
 	}
 
 	@Override
 	public DigitalLimitSwitch getlowerUpperLimit() {
-		// TODO Auto-generated method stub
 		return lowerUpperLimit;
 	}
 
 	@Override
 	public DigitalLimitSwitch getlowerLowerLimit() {
-		// TODO Auto-generated method stub
 		return lowerLowerLimit;
 	}
+
+	@Override
+	public boolean getResetUpperEncoderSwitch() {
+		return upperUpperLimit.isAtLimit();
+	}
+	
+	@Override
+	public boolean getResetLowerEncoderSwitch() {
+		return lowerUpperLimit.isAtLimit();
+	}
+	
 }

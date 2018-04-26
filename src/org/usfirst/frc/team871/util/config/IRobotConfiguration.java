@@ -96,4 +96,7 @@ public interface IRobotConfiguration {
 	 * @return The eject piston of the grabber of the robot
 	 */
 	DoubleSolenoid getEjectPiston();
+
+	boolean getResetUpperEncoderSwitch();
+	boolean getResetLowerEncoderSwitch();
 }

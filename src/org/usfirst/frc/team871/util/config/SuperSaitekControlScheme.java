@@ -26,6 +26,7 @@ public enum SuperSaitekControlScheme implements IControlScheme{
 		saitek.setButtonMode(SaitekButtons.B, ButtonTypes.RISING);
 		saitek.setButtonMode(SaitekButtons.FIRE, ButtonTypes.MOMENTARY);
 		saitek.setButtonMode(SaitekButtons.TRIGGER_1, ButtonTypes.RISING);
+		saitek.setButtonMode(SaitekButtons.MOUSE, ButtonTypes.TOGGLE);
 	}
 	
 	@Override
@@ -127,5 +128,9 @@ public enum SuperSaitekControlScheme implements IControlScheme{
 	public SaitekX52 getSaitek() {
 		return saitek;
 	}
-		
+
+	public boolean getLifterResetButton() {
+		return saitek.getValue(SaitekButtons.MOUSE);
+	}
+	
 }

@@ -29,8 +29,11 @@ import org.usfirst.frc.team871.util.config.SuperSaitekControlScheme;
 import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 import org.usfirst.frc.team871.util.control.LimitedSpeedController;
+import org.usfirst.frc.team871.util.joystick.EnhancedXBoxController;
+import org.usfirst.frc.team871.util.joystick.POVDirections;
 import org.usfirst.frc.team871.util.joystick.SaitekButtons;
 import org.usfirst.frc.team871.util.joystick.SaitekX52;
+import org.usfirst.frc.team871.util.joystick.XBoxButtons;
 import org.usfirst.frc.team871.util.sensor.ILimitSwitch;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -38,6 +41,8 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -62,16 +67,20 @@ public class Robot extends IterativeRobot {
 	private boolean waypointSelectorTestMode = false;
 	public CompositeLimitedSpeedController lsc1;
 	
+	long lastLEDWrite = 0;
+	
+	POVDirections lastPOV = null;
+	
 	@Override
 	public void robotInit() {
-		controls = SuperSaitekControlScheme.DEFAULT;
+		controls = ThrustmasterControlScheme.DEFAULT;
 		NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
 		defaultInstance.setNetworkIdentity("Robot");
 		defaultInstance.startClientTeam(871);
 		
 		dashboardTable = defaultInstance.getTable("Dashboard");
 
-		config   = SecondRobotConfiguration.DEFAULT;
+		config   = MainRobotConfiguration.DEFAULT;
         navX     = config.getGyroscope();
 		drive    = new DriveTrain(config.getRearRightMotor(), config.getRearLeftMotor(), config.getFrontRightMotor(), config.getFrontLeftMotor(), config.getGyroscope(), dashboardTable);
 		grabber  = new Grabber(config.getGrabPiston(), config.getEjectPiston(), config.getCubeDetector());
@@ -88,10 +97,9 @@ public class Robot extends IterativeRobot {
 		
 		lsc1 = limitedSpeedControllerDown;
 		
-		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm(), dashboardTable);
+		lift = new SuperLift(limitedSpeedControllerUp, config.getEncoderUp(), limitedSpeedControllerDown, config.getEncoderBtm(), dashboardTable, config);
 
 //		Coordinate origin = new Coordinate(0, 0);
-		Coordinate startL = new Coordinate(33/2.0, 64);
 		Coordinate startM = new Coordinate(33/2.0, 160);
 		
 		Coordinate startR = new Coordinate(33/2.0, 260);
@@ -105,15 +113,21 @@ public class Robot extends IterativeRobot {
 //		navQueue.add(WaypointProviderFactory.DEFAULT.getProvider("LScaleRSwitch"));
 		
 		
-		CameraServer.getInstance().startAutomaticCapture(0); 
+		//CameraServer.getInstance().startAutomaticCapture(0); 
 		//CameraServer.getInstance().startAutomaticCapture(1);
 		
 		teensyWeensy = new Teensy();
-		teensyWeensy.setVolume(.9);
-		teensyWeensy.playSound(Sound.STARTUP);
+		teensyWeensy.setVolume(1);
 		
+		if(controls instanceof ThrustmasterControlScheme) {
+			EnhancedXBoxController xbox = ((ThrustmasterControlScheme)controls).getXbox();
+			
+			if(!xbox.getValue(XBoxButtons.START)) teensyWeensy.playSound(Sound.STARTUP);
+		}else {
+			teensyWeensy.playSound(Sound.STARTUP);
+		}
 		teensyWeensy.setPixelStripMode(4, PixelStripMode.RAINBOW);
-		teensyWeensy.setPixelStripMode(5, PixelStripMode.RAINBOW);
+		teensyWeensy.setPixelStripMode(6, PixelStripMode.RAINBOW);
 		
 	}
 
@@ -142,19 +156,43 @@ public class Robot extends IterativeRobot {
 			if(saitek.getDebouncedButton(SaitekButtons.SOUND_L_UP)) {
 				teensyWeensy.playSound(Sound.LEEROY_JENKINS);
 			}else if(saitek.getDebouncedButton(SaitekButtons.SOUND_L_DOWN)) {
-				teensyWeensy.playSound(Sound.IM_A_COMPUTER);
+				teensyWeensy.playSound(Sound.GALAGA_SPIDER);
 			}else if(saitek.getDebouncedButton(SaitekButtons.SOUND_M_UP)) {
-				teensyWeensy.playSound(Sound.NEVER_GONNA_GIVE_YOU_UP);
-			}else if(saitek.getDebouncedButton(SaitekButtons.SOUND_M_DOWN)) {
-				teensyWeensy.playSound(Sound.TAKE_ON_ME);
-			}else if(saitek.getDebouncedButton(SaitekButtons.SOUND_R_UP)) {
-				teensyWeensy.playSound(Sound.TETRIS_THEME);
-			}else if(saitek.getDebouncedButton(SaitekButtons.SOUND_R_DOWN)) {
 				teensyWeensy.playSound(Sound.MARIO_JINGLE);
+			}else if(saitek.getDebouncedButton(SaitekButtons.SOUND_M_DOWN)) {
+				teensyWeensy.playSound(Sound.TETRIS_THEME);
+			}else if(saitek.getDebouncedButton(SaitekButtons.SOUND_R_UP)) {
+				teensyWeensy.playSound(Sound.NEVER_GONNA_GIVE_YOU_UP);
+			}else if(saitek.getDebouncedButton(SaitekButtons.SOUND_R_DOWN)) {
+				teensyWeensy.playSound(Sound.TAKE_ON_ME);
 			}
 			
-			if(saitek.getPOV() == 0) {
+		}else if(controls instanceof ThrustmasterControlScheme) {
+			EnhancedXBoxController xbox = ((ThrustmasterControlScheme)controls).getXbox();
+			
+			POVDirections dir = xbox.getEnhancedPOV();
+			
+			if(lastPOV != dir) {
+				if(dir == POVDirections.UP) {
+					teensyWeensy.playSound(Sound.LEEROY_JENKINS);
+				}else if(dir == POVDirections.UP_RIGHT) {
+					teensyWeensy.playSound(Sound.TETRIS_THEME);
+				}else if(dir == POVDirections.RIGHT) {
+					teensyWeensy.playSound(Sound.GALAGA_SPIDER);
+				}else if(dir == POVDirections.DOWN_RIGHT) {
+					teensyWeensy.playSound(Sound.MARIO_JINGLE);
+				}else if(dir == POVDirections.DOWN) {
+					teensyWeensy.playSound(Sound.NEVER_GONNA_GIVE_YOU_UP);
+				}else if(dir == POVDirections.DOWN_LEFT) {
+					teensyWeensy.playSound(Sound.IM_A_COMPUTER);
+				}else if(dir == POVDirections.LEFT) {
+					teensyWeensy.playSound(Sound.ITS_STILL_ROCK_AND_ROLL_TO_ME);
+				}else if(dir == POVDirections.UP_LEFT) {
+					teensyWeensy.playSound(Sound.TAKE_ON_ME);
+				}
 			}
+			
+			lastPOV = dir;
 			
 		}
 		
@@ -167,6 +205,8 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		
 		teensyWeensy.playSound(Sound.LEEROY_JENKINS);
+		teensyWeensy.setPixelStripMode(4, PixelStripMode.CHASE_B_FAST);
+		teensyWeensy.setPixelStripMode(6, PixelStripMode.CHASE_B_FAST);
 		
 		new Thread(() -> {
 			try {
@@ -186,7 +226,22 @@ public class Robot extends IterativeRobot {
 			Coordinate startL = new Coordinate(33/2.0, 64);
 			Coordinate startM = new Coordinate(33/2.0, 160);
 			Coordinate startR = new Coordinate(33/2.0, 260);
-			nav = new Navigation(drive, drive, path, startM);
+			
+			Coordinate start = startM;
+			
+			switch(pathFinder.getFieldSetup().getStartPosition()) {
+			case 0:
+				start = startL;
+				break;
+			case 1:
+				start = startM;
+				break;
+			case 2:
+				start = startR;
+				break;
+			}
+			
+			nav = new Navigation(drive, drive, path, start);
 		}
 		
 		grabber.setGrab(true);
@@ -215,6 +270,9 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		drive.disableHeadingHold();
 		config.getTootToot().set(Value.kReverse);
+		
+		
+		
 		super.teleopInit();
 	}
 
@@ -275,5 +333,42 @@ public class Robot extends IterativeRobot {
 		lift.updateData();
 		dashboardTable.getEntry("liftMode").setString(controls.getManualLiftModeButton() ? "Manual" : "Automatic");
 		drive.updateData();
+	}
+	
+	@Override
+	public void disabledInit() {
+		
+		teensyWeensy.setPixelStripMode(4, PixelStripMode.RAINBOW);
+		teensyWeensy.setPixelStripMode(6, PixelStripMode.RAINBOW);
+//		teensyWeensy.setPixelStripMode(4, PixelStripMode.PULSE_R);
+//		teensyWeensy.setPixelStripMode(6, PixelStripMode.PULSE_R);
+		teensyWeensy.stopSound();
+	}
+	
+	@Override
+	public void disabledPeriodic() {
+		
+
+		
+		long now = System.currentTimeMillis();
+		
+		if(now - lastLEDWrite > 500) {
+			lastLEDWrite = now;
+			
+//			teensyWeensy.setPixelStripMode(4, PixelStripMode.RAINBOW);
+//			teensyWeensy.setPixelStripMode(6, PixelStripMode.RAINBOW);
+			
+
+			teensyWeensy.setPixelStripMode(4, PixelStripMode.RAINBOW);
+			teensyWeensy.setPixelStripMode(6, PixelStripMode.RAINBOW);
+			
+//			if(DriverStation.getInstance().getAlliance() == Alliance.Blue) {
+//				teensyWeensy.setPixelStripMode(4, PixelStripMode.PULSE_CHASE_B_FAST);
+//				teensyWeensy.setPixelStripMode(6, PixelStripMode.PULSE_CHASE_B_FAST);
+//			}else {
+//				teensyWeensy.setPixelStripMode(4, PixelStripMode.PULSE_CHASE_R_FAST);
+//				teensyWeensy.setPixelStripMode(6, PixelStripMode.PULSE_CHASE_R_FAST);
+//			}
+		}
 	}
 }

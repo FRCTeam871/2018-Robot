@@ -51,7 +51,7 @@ public class Teensy {
 				str = queue.get(0);
 				queue.remove(0);
 				
-				System.out.println("Writing: " + str);
+//				System.out.println("Writing: " + str);
 				port.writeString(str + "\n");
 				port.flush();
 				

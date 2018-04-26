@@ -128,4 +128,14 @@ public enum ThrustmasterControlScheme implements IControlScheme{
 	public boolean test() {
 		return xbox.getValue(XBoxButtons.X);
 	}
+
+	@Override
+	public boolean getLifterResetButton() {
+		return false;
+	}
+	
+	public EnhancedXBoxController getXbox() {
+		return xbox;
+	}
+	
 }

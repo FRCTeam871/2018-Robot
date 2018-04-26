@@ -177,4 +177,16 @@ public enum SecondRobotConfiguration implements IRobotConfiguration {
 		// TODO Auto-generated method stub
 		return lowerLowerLimit;
 	}
+	
+	@Override
+	public boolean getResetLowerEncoderSwitch() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+@Override
+	public boolean getResetUpperEncoderSwitch() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

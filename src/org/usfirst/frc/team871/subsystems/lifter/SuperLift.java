@@ -3,6 +3,7 @@ package org.usfirst.frc.team871.subsystems.lifter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.usfirst.frc.team871.util.config.IRobotConfiguration;
 import org.usfirst.frc.team871.util.config.ThrustmasterControlScheme;
 import org.usfirst.frc.team871.util.control.CompositeLimitedSpeedController;
 
@@ -25,6 +26,7 @@ public class  SuperLift extends SendableBase implements Sendable {
 	private SetpointHeights lifterHeight;
 	private final Map<SetpointHeights, Double> setpointVals = new HashMap<>();
 	private NetworkTable table;
+	private IRobotConfiguration config;
 
 	/**
 	 * Describes all states of the lifts
@@ -53,11 +55,11 @@ public class  SuperLift extends SendableBase implements Sendable {
      * @param table The network table to which state information will be posted.  Will also be passed to sublifts.
 	 */
 	public SuperLift(CompositeLimitedSpeedController upperLiftMotor, Encoder upperEncoder,
-			CompositeLimitedSpeedController lowerLiftMotor, Encoder lowerEncoder, NetworkTable table) {
+			CompositeLimitedSpeedController lowerLiftMotor, Encoder lowerEncoder, NetworkTable table, IRobotConfiguration config) {
 
-		upperLift = new SubLift("Upper", upperLiftMotor, upperEncoder, table);
-		lowerLift = new SubLift("Lower", lowerLiftMotor, lowerEncoder, table);
-		
+		upperLift = new SubLift("Upper", upperLiftMotor, upperEncoder, table, config);
+		lowerLift = new SubLift("Lower", lowerLiftMotor, lowerEncoder, table, config);
+		this.config = config;
 		this.table = table;
 
 		lifterHeight = SetpointHeights.GROUND;
@@ -97,13 +99,15 @@ public class  SuperLift extends SendableBase implements Sendable {
 	 * @param setPoint Sets the height of the lift in inches above the floor
 	 */
 	public void setHeight(double setPoint) {
-//		System.out.println("========================");
-//		System.out.println("Lower");
-		lowerLift.maybeResetEncoder();
-//		System.out.println();
-//		System.out.println("Upper");
-		upperLift.maybeResetEncoder();
-		
+		boolean doEncoderReset = false;
+		if(doEncoderReset) {
+	//		System.out.println("========================");
+	//		System.out.println("Lower");
+			lowerLift.maybeResetEncoder(config.getResetLowerEncoderSwitch());
+	//		System.out.println();
+	//		System.out.println("Upper");
+			upperLift.maybeResetEncoder(config.getResetUpperEncoderSwitch());
+		}
 		
 		setPoint -= baseHeight;
 		setPoint /= 2;

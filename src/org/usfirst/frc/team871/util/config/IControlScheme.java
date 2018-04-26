@@ -74,6 +74,8 @@ public interface IControlScheme {
 	
 	boolean getKickButton();
 	
+	boolean getLifterResetButton();
+	
 	boolean test();
 	
 }

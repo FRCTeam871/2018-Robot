@@ -22,8 +22,11 @@ public class Waypoint extends Coordinate {
         super(xVal, yVal);
         this.speed = speed;
         this.angle = angle;
-        this.action = action;
-
+        if(action == null) {
+        	this.action = new NullAction();
+        }else {
+        	this.action = action;
+        }
     }
 
     public Waypoint(double xVal, double yVal, double angle, double speed) {
@@ -53,6 +56,6 @@ public class Waypoint extends Coordinate {
     @Override
     public String toString() {
         return "{ Waypoint " + super.toString() + " / " + angleFormatter.format(angle) + " @ " + speedFormatter.format(speed)
-                + " Doing " + action.toString() + " }";
+                + " Doing " + (action != null ? action.toString() : "null") + " }";
     }
 }
